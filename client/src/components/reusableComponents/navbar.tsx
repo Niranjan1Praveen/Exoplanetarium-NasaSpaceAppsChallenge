@@ -5,7 +5,8 @@ import { twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
 import { ModeToggle } from "./modeToggle";
 import { NavigationMenuDemo } from "./navigationMenu";
-import { Earth, Satellite } from "lucide-react";
+import { Earth } from "lucide-react";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,10 +16,10 @@ export default function Navbar() {
         <div className="container max-w-7xl">
           <div className="rounded-md">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-2 items-center px-4 md:pr-2">
-              <div className="flex items-center gap-2">
+              <Link className="flex items-center gap-2" href={"/"}>
                 <Earth/>
                 <p className="text-2xl md:flex hidden">Exoplanetarium</p>
-              </div>
+              </Link>
 
               <div className="flex justify-end gap-4">
                 <div className="lg:flex justify-center items-center hidden">

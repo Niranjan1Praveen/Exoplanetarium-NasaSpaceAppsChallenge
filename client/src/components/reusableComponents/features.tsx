@@ -64,7 +64,7 @@ export default function Features() {
             return (
               <div
                 key={feature.title}
-                className="flex flex-col items-start space-y-2"
+                className="flex flex-col items-start space-y-2" 
               >
                 <Icon className="h-6 w-6" aria-hidden="true" />
                 <h3 className="text-lg font-semibold">{feature.title}</h3>

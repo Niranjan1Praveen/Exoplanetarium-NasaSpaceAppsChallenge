@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
+import Navbar from "@/components/reusableComponents/navbar";
+import Footer from "@/components/reusableComponents/footer";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +24,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Navbar />
+          <ScrollProgress className="lg:top-[68px] md:top-[68px] top-[56px] z-100" />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

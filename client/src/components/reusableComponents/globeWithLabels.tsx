@@ -7,8 +7,12 @@ import { motion, AnimatePresence } from "framer-motion"
 const labels = [
   "Stellar radius",
   "Temperature",
+  "Potential habitability?",
   "Distance from Earth",
   "Orbital period",
+  "Atmospheric composition",
+  "Surface gravity",
+  "Escape velocity",
 ]
 
 export default function GlobeWithLabels() {
@@ -22,10 +26,14 @@ export default function GlobeWithLabels() {
   }, [])
 
   const positions = [
-    { top: "5%", left: "50%", transform: "translateX(-50%)" },
-    { top: "50%", left: "5%", transform: "translateY(-50%)" },
-    { bottom: "5%", left: "50%", transform: "translateX(-50%)" },
-    { top: "50%", right: "5%", transform: "translateY(-50%)" },
+    { top: "5%", left: "50%", transform: "translateX(-45%)" },
+    { top: "50%", left: "5%", transform: "translateY(-20%)" },
+    { top: "10%", left: "50%", transform: "translateX(-33%)" },
+    { top: "50%", right: "5%", transform: "translateY(-46%)" },
+    { top: "5%", left: "50%", transform: "translateX(-45%)" },
+    { top: "50%", left: "5%", transform: "translateY(-20%)" },
+    { top: "10%", left: "50%", transform: "translateX(-33%)" },
+    { top: "50%", right: "5%", transform: "translateY(-46%)" },
   ]
 
   return (
@@ -42,7 +50,7 @@ export default function GlobeWithLabels() {
           className="absolute flex flex-col items-center text-sm text-muted-foreground"
           style={positions[index]}
         >
-          <span>{labels[index]}</span>
+          <span className="italic">{labels[index]}</span>
         </motion.div>
       </AnimatePresence>
     </div>

@@ -17,8 +17,7 @@ export default function Home() {
       <div className="absolute overflow-hidden h-[1000px] w-full">
         <Meteors number={20} minDelay={3}/>
       </div>
-      <Navbar />
-      <ScrollProgress className="lg:top-[68px] md:top-[68px] top-[56px] z-100" />
+      {/* <Navbar /> */}
       <Hero />
       <HeroVideo />
       <Features />
@@ -27,7 +26,7 @@ export default function Home() {
       <Testimonial />
       <About />
       {/* <FooterCta /> */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
