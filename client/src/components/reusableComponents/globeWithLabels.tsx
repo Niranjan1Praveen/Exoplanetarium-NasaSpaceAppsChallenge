@@ -10,7 +10,6 @@ const labels = [
   "Potential habitability?",
   "Distance from Earth",
   "Orbital period",
-  "Atmospheric composition",
   "Surface gravity",
   "Escape velocity",
 ]
@@ -26,14 +25,13 @@ export default function GlobeWithLabels() {
   }, [])
 
   const positions = [
-    { top: "5%", left: "50%", transform: "translateX(-45%)" },
+    { top: "5%", left: "50%", transform: "translateX(-50%)" },
     { top: "50%", left: "5%", transform: "translateY(-20%)" },
-    { top: "10%", left: "50%", transform: "translateX(-33%)" },
-    { top: "50%", right: "5%", transform: "translateY(-46%)" },
-    { top: "5%", left: "50%", transform: "translateX(-45%)" },
-    { top: "50%", left: "5%", transform: "translateY(-20%)" },
-    { top: "10%", left: "50%", transform: "translateX(-33%)" },
-    { top: "50%", right: "5%", transform: "translateY(-46%)" },
+    { top: "10%", left: "50%", transform: "translateX(-30%)" },
+    { top: "50%", right: "2%", transform: "translateY(-50%)" },
+    { top: "5%", left: "50%", transform: "translateX(-50%)" },
+    { top: "10%", left: "50%", transform: "translateX(-40%)" },
+    { top: "50%", right: "5%", transform: "translateY(-50%)" },
   ]
 
   return (
