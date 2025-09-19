@@ -6,7 +6,7 @@ import { Reviews } from "./reviews";
 
 export function Testimonial() {
   return (
-    <section className="flex items-center justify-center py-10">
+    <section className="flex items-center justify-center py-16 sm:px-6 lg:px-8">
       <div className="max-w-7xl relative w-full flex flex-col items-center justify-center text-center px-4 py-16 overflow-hidden">
         {/* <Particles className="absolute inset-0 -z-10" quantity={50} /> */}
         <div className="mt-8">

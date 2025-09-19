@@ -1,4 +1,5 @@
 import About from "@/components/reusableComponents/about";
+import Faqs from "@/components/reusableComponents/faqs";
 import Features from "@/components/reusableComponents/features";
 import Footer from "@/components/reusableComponents/footer";
 import { FooterCta } from "@/components/reusableComponents/footerCta";
@@ -8,6 +9,7 @@ import Navbar from "@/components/reusableComponents/navbar";
 import Pricing from "@/components/reusableComponents/pricing";
 import { Testimonial } from "@/components/reusableComponents/testimonial";
 import { Workflow } from "@/components/reusableComponents/workflow";
+import Working from "@/components/reusableComponents/working";
 import { Meteors } from "@/components/ui/meteors";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 
@@ -22,7 +24,9 @@ export default function Home() {
       <HeroVideo />
       <Features />
       <Workflow />
+      <Working/>
       <Testimonial />
+      <Faqs/>
       <About />
       {/* <FooterCta /> */}
       {/* <Footer /> */}

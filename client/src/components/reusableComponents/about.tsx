@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 export default function About() {
   return (
-    <section className="flex relative items-center justify-center py-10 overflow-hidden">
+    <section className="flex relative items-center justify-center py-16 sm:px-6 lg:px-8 overflow-hidden">
       <section className="container flex max-w-7xl flex-col items-center justify-center text-center ">
         {/* Background Particles */}
         <Particles
