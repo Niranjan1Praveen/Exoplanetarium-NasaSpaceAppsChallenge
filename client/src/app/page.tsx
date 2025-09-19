@@ -22,7 +22,6 @@ export default function Home() {
       <HeroVideo />
       <Features />
       <Workflow />
-      <Pricing />
       <Testimonial />
       <About />
       {/* <FooterCta /> */}
