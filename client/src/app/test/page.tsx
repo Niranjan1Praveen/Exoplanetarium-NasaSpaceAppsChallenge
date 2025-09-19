@@ -9,8 +9,6 @@ import { GLTF } from "three-stdlib";
 type GLTFResult = GLTF & {
   scene: THREE.Group;
   animations: THREE.AnimationClip[];
-  scene: THREE.Group;
-  animations: THREE.AnimationClip[];
 };
 
 function Model() {
