@@ -56,7 +56,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="flex items-center justify-center py-16">
+    <section className="flex items-center justify-center py-16 sm:px-6 lg:px-8">
       <div className="relative max-w-5xl px-4 border-l border-r py-2">
         <div className="grid gap-8 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => {
