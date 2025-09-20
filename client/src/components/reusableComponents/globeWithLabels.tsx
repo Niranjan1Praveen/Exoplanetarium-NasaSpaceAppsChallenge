@@ -43,7 +43,7 @@ export default function GlobeWithLabels() {
     >
       <Globe className="top-[10px]" />
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.div
           key={index}
           initial={{ opacity: 0, filter: "blur(6px)" }}
