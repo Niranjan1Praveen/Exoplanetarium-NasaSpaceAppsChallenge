@@ -34,8 +34,8 @@ function Model() {
       mixer.current = new THREE.AnimationMixer(scene);
       animations.forEach((clip) => {
         const action = mixer.current!.clipAction(clip);
-        action.setLoop(THREE.LoopOnce, 0); // play only once
-        action.clampWhenFinished = true; // stop at last frame
+        action.setLoop(THREE.LoopOnce, 0); 
+        action.clampWhenFinished = true; 
         action.play();
       });
     }
