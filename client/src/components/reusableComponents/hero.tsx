@@ -1,9 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { IconCloudDemo } from "./iconCloud";
 import { BlurFade } from "../ui/blur-fade";
-import { Globe } from "../ui/globe";
 import GlobeWithLabels from "./globeWithLabels";
 
 export function Hero() {
