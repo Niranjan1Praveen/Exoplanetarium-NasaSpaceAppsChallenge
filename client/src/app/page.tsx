@@ -1,4 +1,6 @@
 import About from "@/components/reusableComponents/about";
+import ExoplanetProblem from "@/components/reusableComponents/exoplanetProblem";
+import ExoplanetSection from "@/components/reusableComponents/exoplanetSection";
 import Faqs from "@/components/reusableComponents/faqs";
 import Features from "@/components/reusableComponents/features";
 import Footer from "@/components/reusableComponents/footer";
@@ -23,6 +25,8 @@ export default function Home() {
       <Hero />
       <HeroVideo />
       <Features />
+      <ExoplanetSection/>
+      <ExoplanetProblem/>
       <Workflow />
       <Working/>
       <Testimonial />
