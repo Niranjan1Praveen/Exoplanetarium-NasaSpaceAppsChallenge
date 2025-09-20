@@ -5,6 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTF } from "three-stdlib";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 type GLTFResult = GLTF & {
   scene: THREE.Group;
@@ -34,8 +35,8 @@ function Model() {
       mixer.current = new THREE.AnimationMixer(scene);
       animations.forEach((clip) => {
         const action = mixer.current!.clipAction(clip);
-        action.setLoop(THREE.LoopOnce, 0); 
-        action.clampWhenFinished = true; 
+        action.setLoop(THREE.LoopOnce, 0);
+        action.clampWhenFinished = true;
         action.play();
       });
     }
