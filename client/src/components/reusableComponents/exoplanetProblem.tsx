@@ -2,6 +2,8 @@
 
 import { motion, useScroll } from "motion/react";
 import { useRef } from "react";
+import { Particles } from "../ui/particles";
+import ExoplanetModel from "./exoplanetModel";
 
 function Item({
   title,
@@ -25,10 +27,11 @@ function Item({
         className={`w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center`}
       >
         <div
-          className={`w-full h-48 md:h-64 bg-muted-foreground rounded-lg ${
+          className={`w-full h-48 md:h-64 rounded-lg ${
             reverse ? "md:order-2" : ""
           }`}
-        ></div>
+        >
+        </div>
 
         <div
           className={`flex items-start gap-4 ${reverse ? "md:order-1" : ""}`}
@@ -73,7 +76,14 @@ function Item({
 
 export default function ExoplanetProblem() {
   return (
-    <section className="py-16 sm:px-6 lg:px-8">
+    <section className="relative py-16 sm:px-6 lg:px-8">
+      <Particles
+        className="absolute inset-0"
+        quantity={100}
+        size={0.1}
+        ease={80}
+        refresh
+      />
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold leading-snug text-center mb-12">
           Why is it so hard to classify Exoplanets?

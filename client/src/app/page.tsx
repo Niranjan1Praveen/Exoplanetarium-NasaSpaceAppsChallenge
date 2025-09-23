@@ -21,7 +21,7 @@ export default function Home() {
       <Features />
       <ExoplanetSection/>
       <ExoplanetProblem/>
-      <Workflow />
+      {/* <Workflow /> */}
       <Working/>
       <Testimonial />
       <Faqs/>
