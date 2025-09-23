@@ -9,6 +9,10 @@ import ExoplanetModel from "./exoplanetModel";
 export default function ExoplanetSection() {
   const planetModels = [
     {
+      modelPath: "/models/Kepler-186_f.glb",
+      fov: 50,
+    },
+    {
       modelPath: "/models/volcano.glb",
       fov: 50,
     },
