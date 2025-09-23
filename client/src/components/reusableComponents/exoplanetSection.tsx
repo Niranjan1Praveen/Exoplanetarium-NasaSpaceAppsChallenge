@@ -5,6 +5,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import ExoplanetModel from "./exoplanetModel";
+import { BlurFade } from "../ui/blur-fade";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Particles } from "../ui/particles";
+
 
 export default function ExoplanetSection() {
   const planetModels = [
@@ -35,21 +39,32 @@ export default function ExoplanetSection() {
   ];
 
   return (
-    <section className="py-16 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+    <section className="relative py-16 sm:px-6 px-4 lg:px-8">
+      <Particles
+          className="absolute inset-0"
+          quantity={100}
+          size={0.1}
+          ease={80}
+          refresh
+        />
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-12">
         <div className="md:w-1/2 space-y-4 text-center md:text-left">
-          <h2 className="text-4xl md:text-5xl font-bold leading-snug">
-            Exoplanets Come in All Shapes, Sizes, and Colors
-          </h2>
+          <BlurFade delay={0.25} inView>
+            <h2 className="text-3xl md:text-4xl font-bold leading-snug">
+              Exoplanets Come in All Shapes, Sizes, and Colors
+            </h2>
+          </BlurFade>
 
-          <p className="text-lg text-muted-foreground">
-            From scorching hot Jupiters to rocky super-Earths, these distant
-            worlds reveal the diversity of planets that exist beyond our solar
-            system.
-          </p>
+          <BlurFade delay={0.25 * 2} inView>
+            <p className="text-lg text-muted-foreground">
+              From scorching hot Jupiters to rocky super-Earths, these distant
+              worlds reveal the diversity of planets that exist beyond our solar
+              system.
+            </p>
+          </BlurFade>
         </div>
 
-        <div className="md:w-1/2 h-[400px]">
+        <motion.div className="md:w-1/2 h-[400px] hidden lg:flex" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} viewport={{ once: true }}>
           <Swiper
             spaceBetween={30}
             slidesPerView={1}
@@ -71,7 +86,7 @@ export default function ExoplanetSection() {
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
