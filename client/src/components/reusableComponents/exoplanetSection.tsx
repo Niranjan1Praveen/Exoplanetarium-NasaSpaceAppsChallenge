@@ -9,19 +9,24 @@ import ExoplanetModel from "./exoplanetModel";
 export default function ExoplanetSection() {
   const planetModels = [
     {
-      modelPath: "/models/ringed_gas_giant_planet.glb",
+      modelPath: "/models/Kepler-186_f.glb",
       fov: 50,
-      position: [0, 0, 0], // default position
+    },
+    {
+      modelPath: "/models/ringedGasGiant.glb",
+      fov: 50,
     },
     {
       modelPath: "/models/rocky.glb",
       fov: 50,
-      position: [0, 0, 0],
     },
     {
       modelPath: "/models/lp_791-18d.glb",
       fov: 55,
-      position: [0, 0, 0],
+    },
+    {
+      modelPath: "/models/blueGasGiant.glb",
+      fov: 50,
     },
   ];
 

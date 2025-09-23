@@ -33,7 +33,7 @@ export default function ExoplanetModel({ modelPath, fov = 45, position }: Exopla
       <Suspense fallback={null}>
         <Model modelPath={modelPath} position={position} />
       </Suspense>
-      <OrbitControls />
+      <OrbitControls enableZoom={false}/>
     </Canvas>
   );
 }
