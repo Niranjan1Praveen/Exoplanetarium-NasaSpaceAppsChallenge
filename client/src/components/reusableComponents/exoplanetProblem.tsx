@@ -1,18 +1,25 @@
 "use client";
 
 import { motion, useScroll } from "motion/react";
-import { useRef } from "react";
+import { useRef, ReactNode } from "react";
 import { Particles } from "../ui/particles";
-import ExoplanetModel from "./exoplanetModel";
+import VastDistanceSignal from "./vastDistanceSignal";
+import OverlappingPlanets from "./overlappingPlanets";
+import AtmosphericChallenges from "./atmopshericChallenges";
+import LimitedObservationalData from "./limitedObservationalData";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 function Item({
   title,
   description,
   reverse = false,
+  content,
 }: {
   title: string;
   description: string;
   reverse?: boolean;
+  content?: ReactNode;
 }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -24,49 +31,36 @@ function Item({
     <section className="h-screen max-h-[400px] flex items-center justify-center px-4">
       <div
         ref={ref}
-        className={`w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center`}
+        className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
       >
         <div
-          className={`w-full h-48 md:h-64 rounded-lg ${
+          className={`w-full h-48 md:h-64 rounded-lg flex items-center justify-center ${
             reverse ? "md:order-2" : ""
           }`}
         >
+          {content ? (
+            content
+          ) : (
+            <div className="relative flex w-full items-center justify-center">
+              <div className="absolute z-[-10] h-32 w-32 rounded-full bg-muted" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-24 w-24 fill-primary/30"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 0L24 6v12l-12 6-12-6V6z" />
+              </svg>
+            </div>
+          )}
         </div>
 
         <div
           className={`flex items-start gap-4 ${reverse ? "md:order-1" : ""}`}
         >
-          <figure className="sticky top-0 w-16 h-16 shrink-0">
-            <svg
-              className="-rotate-90"
-              width="75"
-              height="75"
-              viewBox="0 0 100 100"
-            >
-              <circle
-                className="opacity-20 stroke-pink-500"
-                cx="50"
-                cy="50"
-                r="30"
-                pathLength="1"
-                strokeWidth="5"
-                fill="none"
-              />
-              <motion.circle
-                cx="50"
-                cy="50"
-                r="30"
-                pathLength="1"
-                style={{ pathLength: scrollYProgress }}
-                strokeWidth="5"
-                fill="none"
-                className="stroke-pink-500"
-              />
-            </svg>
-          </figure>
           <div>
             <h3 className="text-lg font-semibold">{title}</h3>
-            <p className="text-sm text-muted-foreground mt-2">{description}</p>
+            <p className="text-md text-muted-foreground mt-2">{description}</p>
+            <Link href={"/"} className="flex gap-1 items-center mt-2 hover:underline">Read More<ArrowRight className="size-4"/></Link>
           </div>
         </div>
       </div>
@@ -90,27 +84,32 @@ export default function ExoplanetProblem() {
         </h2>
       </div>
 
-      {/* 1st - normal */}
       <Item
         title="Vast Distances & Weak Signals"
         description="Exoplanets are light-years away, making their signals extremely faint and often lost in the glare of their host stars."
+        content={<VastDistanceSignal />}
       />
-      {/* 2nd - reversed */}
+
       <Item
         title="Overlapping Planet Types"
         description="Many exoplanets blur categories—like super-Earths and mini-Neptunes—making strict classification difficult."
         reverse
+        content={<OverlappingPlanets />}
       />
-      {/* 3rd - normal */}
+
       <Item
         title="Limited Observational Data"
         description="We usually detect exoplanets indirectly through light dips or stellar wobbles, leaving gaps in our understanding."
+        content={
+          <LimitedObservationalData/>
+        }
       />
-      {/* 4th - reversed */}
+
       <Item
         title="Atmospheric Challenges"
         description="Studying atmospheres requires detecting tiny spectral signatures, which are easily distorted by noise and interference."
         reverse
+        content={<AtmosphericChallenges />}
       />
     </section>
   );

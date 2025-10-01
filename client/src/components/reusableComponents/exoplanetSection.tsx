@@ -8,6 +8,7 @@ import ExoplanetModel from "./exoplanetModel";
 import { BlurFade } from "../ui/blur-fade";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Particles } from "../ui/particles";
+import { Badge } from "../ui/badge";
 
 
 export default function ExoplanetSection() {
@@ -50,6 +51,7 @@ export default function ExoplanetSection() {
       <div className="max-w-6xl mx-auto flex items-center justify-between gap-12">
         <div className="md:w-1/2 space-y-4 text-center md:text-left">
           <BlurFade delay={0.25} inView>
+            <Badge variant={"secondary"}>Introduction</Badge>
             <h2 className="text-3xl md:text-4xl font-bold leading-snug">
               Exoplanets Come in All Shapes, Sizes, and Colors
             </h2>
@@ -70,7 +72,7 @@ export default function ExoplanetSection() {
             slidesPerView={1}
             loop
             autoplay={{
-              delay: 5000, // 2s
+              delay: 3000, 
               disableOnInteraction: false,
             }}
             modules={[Autoplay]}

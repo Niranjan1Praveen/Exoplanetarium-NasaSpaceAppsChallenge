@@ -7,6 +7,14 @@ import { ModeToggle } from "./modeToggle";
 import { NavigationMenuDemo } from "./navigationMenu";
 import { Earth } from "lucide-react";
 import Link from "next/link";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +25,7 @@ export default function Navbar() {
           <div className="rounded-md">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-2 items-center px-4 md:pr-2">
               <Link className="flex items-center gap-2" href={"/"}>
-                <Earth/>
+                <Earth />
                 <p className="text-2xl md:flex hidden">Exoplanetarium</p>
               </Link>
 
@@ -66,14 +74,21 @@ export default function Navbar() {
                     )}
                   ></line>
                 </svg>
+                <SignedOut>
+                  <Button
+                    className="cursor-pointer hidden md:inline-flex items-center"
+                    variant={"ghost"}
+                    asChild
+                  >
+                    <SignInButton />
+                  </Button>
+                </SignedOut>
+
                 <Button
                   className="cursor-pointer hidden md:inline-flex items-center"
-                  variant={"ghost"}
+                  asChild
                 >
-                  Log in
-                </Button>
-                <Button className="cursor-pointer hidden md:inline-flex items-center">
-                  <a href="#pricing">Sign Up</a>
+                  <SignUpButton />
                 </Button>
                 <ModeToggle className="cursor-pointer hidden md:inline-flex items-center" />
               </div>
@@ -92,10 +107,10 @@ export default function Navbar() {
                       className="cursor-pointer md:inline-flex items-center"
                       variant={"ghost"}
                     >
-                      Log in
+                      <SignInButton />
                     </Button>
                     <Button className="cursor-pointer md:inline-flex items-center">
-                      <a href="#signUpOptions">Sign Up</a>
+                      <SignUpButton />
                     </Button>
                     <ModeToggle className="cursor-pointer md:inline-flex items-center" />
                   </div>
