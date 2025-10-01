@@ -9,19 +9,21 @@ import ExoplanetModel from "./exoplanetModel";
 export default function ExoplanetSection() {
   const planetModels = [
     {
-      modelPath: "/models/ringed_gas_giant_planet.glb",
-      fov: 50,
-      position: [0, 0, 0], // default position
+      modelPath: "/models/blue_gas_giant.glb",
+      fov: 70,
+      scale: 3
     },
     {
       modelPath: "/models/rocky.glb",
       fov: 50,
-      position: [0, 0, 0],
     },
     {
       modelPath: "/models/lp_791-18d.glb",
-      fov: 55,
-      position: [0, 0, 0],
+      fov: 65,
+    },
+    {
+      modelPath: "/models/kepler-186f.glb",
+      fov: 65,
     },
   ];
 
@@ -57,6 +59,7 @@ export default function ExoplanetSection() {
                   <ExoplanetModel
                     modelPath={planet.modelPath}
                     fov={planet.fov}
+                    scale={planet.scale}
                   />
                 </div>
               </SwiperSlide>

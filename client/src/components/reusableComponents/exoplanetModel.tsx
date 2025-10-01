@@ -7,11 +7,12 @@ import * as THREE from "three";
 
 interface ExoplanetModelProps {
   modelPath: string;
-  fov?: number; // optional FOV
-  position?: [number, number, number]; // optional position
+  fov?: number; 
+  position?: [number, number, number];
+  scale?: number; // scale prop
 }
 
-function Model({ modelPath, position = [0, 0, 0] }: ExoplanetModelProps) {
+function Model({ modelPath, position = [0, 0, 0], scale = 2 }: ExoplanetModelProps) {
   const { scene } = useGLTF(modelPath);
   const modelRef = useRef<THREE.Group>(null);
 
@@ -22,18 +23,25 @@ function Model({ modelPath, position = [0, 0, 0] }: ExoplanetModelProps) {
     }
   });
 
-  return <primitive ref={modelRef} object={scene} position={new THREE.Vector3(...position)} scale={2} />;
+  return (
+    <primitive
+      ref={modelRef}
+      object={scene}
+      position={new THREE.Vector3(...position)}
+      scale={scale} // ✅ apply scale from props
+    />
+  );
 }
 
-export default function ExoplanetModel({ modelPath, fov = 45, position }: ExoplanetModelProps) {
+export default function ExoplanetModel({ modelPath, fov = 45, position, scale }: ExoplanetModelProps) {
   return (
     <Canvas camera={{ position: [0, 0, 5], fov }}>
       <ambientLight intensity={0.8} />
       <directionalLight position={[5, 5, 5]} intensity={1} />
       <Suspense fallback={null}>
-        <Model modelPath={modelPath} position={position} />
+        <Model modelPath={modelPath} position={position} scale={scale} />
       </Suspense>
-      <OrbitControls />
+      <OrbitControls enableZoom={false} />
     </Canvas>
   );
 }
