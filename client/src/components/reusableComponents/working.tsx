@@ -32,25 +32,6 @@ export default function Working() {
             >
               <h3 className="mb-2 font-semibold">{step.title}</h3>
 
-              {/* {i === 0 && (
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-sm md:flex hidden gap-1 items-center">
-                Step 1
-                <LucideArrowDownRightSquare/>
-              </div>
-            )}
-            {i === 1 && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm md:flex hidden gap-1 items-center">
-                Step 2
-                <LucideArrowUpRightSquare/>
-              </div>
-              
-            )}
-            {i === 2 && (
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-sm md:flex hidden gap-1 items-center">
-                <LucideArrowDownLeftSquare/>
-                Step 3
-              </div>
-            )} */}
               {i === 0 && (
                 <div className="relative rounded-md bg-muted p-6 shadow-md w-64 h-80 flex flex-col space-y-4">
                   <div className="h-3 w-3/5 rounded bg-muted-foreground/40" />
