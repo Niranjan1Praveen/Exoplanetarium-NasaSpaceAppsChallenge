@@ -41,7 +41,7 @@ export default function ExoplanetModel({ modelPath, fov = 45, position, scale }:
       <Suspense fallback={null}>
         <Model modelPath={modelPath} position={position} scale={scale} />
       </Suspense>
-      <OrbitControls enableZoom={false} />
+      <OrbitControls enableZoom={false}/>
     </Canvas>
   );
 }
