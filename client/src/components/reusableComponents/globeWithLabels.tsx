@@ -50,7 +50,7 @@ export default function GlobeWithLabels() {
     <motion.div
       animate={{ y: yShift }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="relative flex size-full items-center justify-center px-40 pt-8 pb-40 md:pb-40 overflow-hidden"
+      className="relative flex size-full items-center justify-center px-40 pt-8 pb-35 md:pb-35 overflow-hidden"
     >
       <Globe className="top-[10px]" />
 
