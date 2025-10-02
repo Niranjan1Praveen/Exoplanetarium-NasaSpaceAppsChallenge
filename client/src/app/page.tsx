@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="relative">
       <Navbar/>
-      <ScrollProgress className="lg:top-[68px] md:top-[68px] top-[56px] z-100" />
+      <ScrollProgress className="lg:top-[81px] md:top-[81px] top-[81px] z-100" />
       <div className="absolute overflow-hidden h-[1000px] w-full">
         <Meteors number={20} minDelay={3} />
       </div>
