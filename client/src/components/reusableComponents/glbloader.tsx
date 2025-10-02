@@ -27,7 +27,7 @@ const GLBLoader: React.FC<GLBLoaderProps> = ({
       <Suspense fallback={<Html center>Loading...</Html>}>
         <Model path={modelPath} scale={scale} />
       </Suspense>
-      <OrbitControls enablePan enableZoom enableRotate />
+      <OrbitControls enablePan enableZoom={false} enableRotate />
     </Canvas>
   );
 };
