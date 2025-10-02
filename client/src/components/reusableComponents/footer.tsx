@@ -11,7 +11,7 @@ export default function Footer() {
       >
         {/* Left Section */}
         <div>
-          <Logo/>
+          <Logo width={40}/>
           <p className="text-sm leading-relaxed mb-5">
             Experience the next generation of SEO analytics.
           </p>

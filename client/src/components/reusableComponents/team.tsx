@@ -11,14 +11,18 @@ const teamMembers = [
   {
     name: "Niranjan Praveen",
     role: "Frontend Engineer / Database Engineer",
-    image: "/team/alex.jpg",
+    image: "/team/niranjan.png",
   },
   {
     name: "Vaibhav Jain",
     role: "Frontend Engineer / API Engineer",
     image: "/team/vaibhav.jpeg",
   },
-  { name: "Abhishek Chaubey", role: "3D Visualization Specialist", image: "/team/ethan.jpg" },
+  {
+    name: "Abhishek Chaubey",
+    role: "3D Visualization Specialist",
+    image: "/team/ethan.jpg",
+  },
   {
     name: "Pratham Ranjhan",
     role: "3D Visualization Specialist",
@@ -51,7 +55,7 @@ export default function MeetOurTeam() {
             <CardContent className="p-0 h-full">
               {/* Background image */}
               <div
-                className="absolute inset-0 bg-cover bg-center hover:blur-xl transition-all duration-500"
+                className="absolute inset-0 bg-cover hover:blur-xl transition-all duration-500 bg-[center_20%]"
                 style={{ backgroundImage: `url(${member.image})` }}
               />
 

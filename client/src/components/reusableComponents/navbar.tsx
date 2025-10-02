@@ -25,7 +25,7 @@ export default function Navbar() {
           <div className="rounded-md">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-2 items-center px-4 md:pr-2">
               <Link className="flex items-center gap-2" href={"/"}>
-                <Logo/>
+                <Logo width={20} /> 
               </Link>
 
               <div className="flex justify-end gap-4">
