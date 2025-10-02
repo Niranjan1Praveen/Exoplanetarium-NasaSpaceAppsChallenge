@@ -1,93 +1,80 @@
-"use client";
-
 import {
-  ArrowUpRight,
-  ArrowUpZA,
-  File,
-  LucideArrowDownLeftFromSquare,
-  LucideArrowDownLeftSquare,
-  LucideArrowDownRightSquare,
-  LucideArrowUpRightFromSquare,
-  LucideArrowUpRightSquare,
-} from "lucide-react";
-import { workingSteps } from "../../../public/data/workingSteps";
+  BellIcon,
+  CalendarIcon,
+  FileTextIcon,
+  GlobeIcon,
+  InputIcon,
+} from "@radix-ui/react-icons";
+import { BentoCard, BentoGrid } from "../ui/bento-grid";
 import { Badge } from "../ui/badge";
-import { AnimatedBeamDemo } from "./animatedBeamDemo";
-import { motion } from "framer-motion";
 
-export default function Working() {
+const features = [
+  {
+    Icon: FileTextIcon,
+    name: "Automated Light Curve Pipeline",
+    description:
+      "Detrending, folding, and feature extraction from raw telescope data, fully automated.",
+    href: "/",
+    cta: "Learn more",
+    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    className: "lg:row-start-1 lg:row-end-2 lg:col-start-1 lg:col-end-2",
+  },
+  {
+    Icon: InputIcon,
+    name: "AI/ML Classification",
+    description:
+      "LightGBM + XGBoost ensemble models classify candidate exoplanets quickly and accurately.",
+    href: "/",
+    cta: "Learn more",
+    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    className: "lg:row-start-1 lg:row-end-2 lg:col-start-2 lg:col-end-4",
+  },
+  {
+    Icon: GlobeIcon,
+    name: "Habitability & Ranking Tools",
+    description:
+      "Predict atmospheric detectability, climate zones, and prioritize targets for telescope follow-up.",
+    href: "/",
+    cta: "Learn more",
+    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    className: "lg:row-start-2 lg:row-end-4 lg:col-start-1 lg:col-end-2",
+  },
+  {
+    Icon: CalendarIcon,
+    name: "Research Dashboard",
+    description:
+      "Interactive visualization of classification accuracy, injection-recovery tests, and downloadable vetting reports.",
+    href: "/",
+    cta: "Learn more",
+    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    className: "lg:row-start-2 lg:row-end-4 lg:col-start-2 lg:col-end-3",
+  },
+  {
+    Icon: BellIcon,
+    name: "Immersive 3D Learning",
+    description:
+      "Students explore exoplanets, detection techniques, and simulations in a fun, interactive environment.",
+    href: "/",
+    cta: "Learn more",
+    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    className: "lg:row-start-2 lg:row-end-4 lg:col-start-3 lg:col-end-4",
+  },
+];
+
+export function Working() {
   return (
-    <section className="flex items-center justify-center px-4 py-16 sm:px-6 lg:px-8">
-      <section className="container max-w-7xl text-center space-y-4">
-        <Badge variant={"secondary"}>How it Works?</Badge>
-        <h2 className="mb-12 text-center text-2xl font-bold sm:text-3xl">
-          AI-Powered Sales Intelligence in 3 Steps
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="text-center mb-12">
+        <Badge variant={"secondary"} className="mb-2">Working</Badge>
+        <h2 className="text-4xl md:text-5xl font-bold sm:text-4xl">
+          How We Solve It?
         </h2>
-
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-12">
-          {workingSteps.map((step, i) => (
-            <div
-              key={step.title}
-              className="relative flex flex-col items-center gap-2 rounded-xl border p-6 text-center justify-between"
-            >
-              <h3 className="mb-2 font-semibold">{step.title}</h3>
-
-              {i === 0 && (
-                <div className="relative rounded-md bg-muted p-6 shadow-md w-64 h-80 flex flex-col space-y-4">
-                  <div className="h-3 w-3/5 rounded bg-muted-foreground/40" />
-                  <div className="h-6 w-4/5 rounded bg-muted-foreground/30" />
-                  <div className="h-3 w-full rounded bg-muted-foreground/40" />
-                  <div className="h-3 w-1/3 rounded bg-muted-foreground/40" />
-                  <div className="h-3 w-full rounded bg-muted-foreground/40" />
-                  <div className="h-3 w-2/3 rounded bg-muted-foreground/40" />
-                  <div className="h-10 w-full rounded bg-muted-foreground/30" />
-                  <div className="h-3 w-3/5 rounded bg-muted-foreground/40" />
-                  <div className="h-3 w-full rounded bg-muted-foreground/40" />
-
-                  <motion.div
-                    initial={{ height: 20 }}
-                    animate={{ height: 300 }}
-                    transition={{
-                      duration: 6,
-                      ease: "easeInOut",
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                    }}
-                    className="mt-auto h-20 w-full rounded-md border border-dashed border-primary bg-transparent absolute bottom-0 left-0"
-                  />
-                </div>
-              )}
-              {i === 1 && (
-                <div className="w-full">
-                  <AnimatedBeamDemo />
-                </div>
-              )}
-              {i === 2 && (
-                <div className="relative flex w-full items-center justify-center space-x-2">
-                  <div className="absolute z-[-10] h-40 w-40 rounded-full bg-muted" />
-                  {[...Array(3)].map((_, i) =>
-                    i === 1 ? (
-                      <motion.div
-                        key={i}
-                        className="h-28 w-28 flex items-center justify-center"
-                        whileHover={{ scale: 0.9 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                      >
-                        <File className="h-40 w-40 fill-primary/20" />
-                      </motion.div>
-                    ) : (
-                      <File key={i} className="h-40 w-40 fill-primary/20" />
-                    )
-                  )}
-                </div>
-              )}
-              <p className="text-sm text-muted-foreground">
-                {step.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      </div>
+      <BentoGrid className="lg:grid-rows-3">
+        {features.map((feature) => (
+          <BentoCard key={feature.name} {...feature} />
+        ))}
+      </BentoGrid>
     </section>
   );
 }

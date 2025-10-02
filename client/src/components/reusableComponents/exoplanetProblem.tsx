@@ -9,6 +9,7 @@ import AtmosphericChallenges from "./atmopshericChallenges";
 import LimitedObservationalData from "./limitedObservationalData";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 function Item({
   title,
@@ -78,7 +79,8 @@ export default function ExoplanetProblem() {
         ease={80}
         refresh
       />
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto text-center">
+        <Badge variant={"secondary"}>Problem</Badge>
         <h2 className="text-4xl md:text-5xl font-bold leading-snug text-center mb-12">
           Why is it so hard to classify Exoplanets?
         </h2>

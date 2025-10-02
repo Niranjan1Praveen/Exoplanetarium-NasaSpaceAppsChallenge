@@ -5,14 +5,15 @@ import { Globe } from "../ui/globe";
 import { motion, AnimatePresence } from "framer-motion";
 
 const labels = [
-  "Stellar radius",
-  "Temperature",
+  "Stellar radius: 1.1 R☉",
+  "Temperature: 5800 K",
   "Potential habitability?",
-  "Distance from Earth",
-  "Orbital period",
-  "Surface gravity",
-  "Escape velocity",
+  "Distance from Earth: 620 light years",
+  "Orbital period: 385 days",
+  "Surface gravity: 1.1 g",
+  "Escape velocity: 11.2 km/s",
 ];
+
 
 export default function GlobeWithLabels() {
   const [index, setIndex] = useState(0);
@@ -38,12 +39,12 @@ export default function GlobeWithLabels() {
 
   const positions = [
     { top: "5%", left: "50%", transform: "translateX(-50%)" },
-    { top: "50%", left: "5%", transform: "translateY(-30%)" },
+    { top: "40%", left: "2%", transform: "translateY(-30%)" },
     { top: "10%", left: "50%", transform: "translateX(-30%)" },
     { top: "50%", right: "2%", transform: "translateY(-50%)" },
     { top: "5%", left: "50%", transform: "translateX(-50%)" },
     { top: "10%", left: "50%", transform: "translateX(-40%)" },
-    { top: "50%", right: "5%", transform: "translateY(-50%)" },
+    { top: "30%", right: "3%", transform: "translateY(-50%)" },
   ];
 
   return (
