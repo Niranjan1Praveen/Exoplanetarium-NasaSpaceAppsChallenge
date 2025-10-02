@@ -1,6 +1,6 @@
 import {
   Home,
-  FlaskConical, 
+  FlaskConical,
   User2,
   ChevronUp,
   Grid,
@@ -29,9 +29,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { currentUser } from "@clerk/nextjs/server";
 
 const AppSidebar = async () => {
-
+  const user = await currentUser();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="py-4 ">
@@ -45,7 +46,7 @@ const AppSidebar = async () => {
                 height={30}
                 className="rounded-full"
               /> */}
-              <span>Welcome Niranjan</span>
+              <span>Welcome {user?.firstName}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -57,22 +58,22 @@ const AppSidebar = async () => {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard">
-                      <Home />
-                      <span>Home</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard/gallery">
-                      <Grid />
-                      <span>Gallery</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/dashboard">
+                    <Home />
+                    <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/dashboard/gallery">
+                    <Grid />
+                    <span>Gallery</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -81,30 +82,30 @@ const AppSidebar = async () => {
           <SidebarGroupLabel>Image</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard/playground">
-                      <FlaskConical />
-                      <span>Attack Playground</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard/logs">
-                      <History />
-                      <span>Attack History</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard/customModel">
-                      <SwordsIcon />
-                      <span>Custom Models</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/dashboard/playground">
+                    <FlaskConical />
+                    <span>Attack Playground</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/dashboard/logs">
+                    <History />
+                    <span>Attack History</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/dashboard/customModel">
+                    <SwordsIcon />
+                    <span>Custom Models</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -113,14 +114,14 @@ const AppSidebar = async () => {
           <SidebarGroupLabel>Voice</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard/liveConversation">
-                      <Mic />
-                      <span>Live Conversation</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/dashboard/liveConversation">
+                    <Mic />
+                    <span>Live Conversation</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -131,7 +132,7 @@ const AppSidebar = async () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Niranjan <ChevronUp className="ml-auto" />
+                  <User2 /> {user?.firstName} <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

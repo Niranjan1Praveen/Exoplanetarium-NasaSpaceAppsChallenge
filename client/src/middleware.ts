@@ -1,14 +1,11 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-export default clerkMiddleware();
-import type { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
- 
-// export function middleware(request: NextRequest) {
-//   const url = request.nextUrl.clone()
-//   url.pathname = '/dest'
-//   return NextResponse.rewrite(url)
-// }
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', '/lab(.*)', '/play(.*)'])
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) await auth.protect()
+})
+
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
@@ -16,4 +13,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-};
+}
