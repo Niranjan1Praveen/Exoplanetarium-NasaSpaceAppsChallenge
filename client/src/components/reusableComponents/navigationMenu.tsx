@@ -108,7 +108,7 @@ export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Docs</Link>
+            <Link href="/team">Team</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
