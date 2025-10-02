@@ -14,18 +14,18 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import Logo from "./logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <section className="py-2 px-4 flex items-center justify-evenly fixed w-full top-0 z-100 border-b backdrop-blur-2xl">
+      <section className="px-4 flex items-center justify-evenly fixed w-full top-0 z-100 border-b backdrop-blur-2xl">
         <div className="container max-w-7xl">
           <div className="rounded-md">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-2 items-center px-4 md:pr-2">
               <Link className="flex items-center gap-2" href={"/"}>
-                <Earth />
-                <p className="text-2xl md:flex hidden">Exoplanetarium</p>
+                <Logo/>
               </Link>
 
               <div className="flex justify-end gap-4">

@@ -1,42 +1,42 @@
 export const faqs = [
   {
-    question: "What is the purpose of this platform?",
+    question: "What is Exoplanetarium?",
     answer:
-      "This platform helps users understand how adversarial attacks affect AI image classifiers. It allows you to visualize how small, often invisible changes to images can trick powerful AI models into making incorrect predictions.",
+      "Exoplanetarium is an AI/ML-powered platform that accelerates exoplanet discovery, providing automated classification, habitability models, and immersive 3D visualizations for researchers and students.",
   },
   {
-    question: "Who can use this platform?",
+    question: "Who can use Exoplanetarium?",
     answer:
-      "The platform is ideal for students, researchers, educators, and AI developers who want to explore, demonstrate, or study the vulnerabilities of deep learning models to adversarial attacks.",
+      "The platform is designed for researchers, educators, and K-12 students interested in exploring exoplanets. Researchers can analyze light curves and prioritize telescope observations, while students can learn through interactive simulations.",
   },
   {
-    question: "What are adversarial attacks?",
+    question: "How does the AI classification work?",
     answer:
-      "Adversarial attacks are slight, calculated modifications to input data (like images) that cause AI models to make incorrect predictions. These changes are often imperceptible to the human eye but can completely fool the model.",
+      "Automated models analyze light curves using ensemble methods like LightGBM and XGBoost to classify planets with high accuracy, extract key features, and predict properties like radius, temperature, and inclination.",
   },
   {
-    question: "What features does the dashboard offer?",
+    question: "What visualization tools are available?",
     answer:
-      "Users can upload images, select pre-trained models, apply different attack techniques (like FGSM or PGD), and see how predictions change. The platform also provides confidence scores, perturbation heatmaps, and comparison visualizations.",
+      "Users can explore 3D simulations of planetary systems, transit sandboxes, exoplanet categorization visuals, and detection technique showcases, making complex astrophysical data intuitive and engaging.",
   },
   {
-    question: "What models and datasets are supported?",
+    question: "Can I prioritize planets for follow-up?",
     answer:
-      "Common pre-trained models such as ResNet, VGG, and MobileNet are supported, along with datasets like CIFAR-10 and MNIST. More models and datasets will be added in future updates.",
+      "Yes! Exoplanetarium provides habitability scoring and ranking tools to guide telescope time and help researchers focus on the most promising candidates.",
   },
   {
-    question: "Can I customize attack parameters?",
+    question: "Is this platform suitable for education?",
     answer:
-      "Yes, users can adjust attack-specific parameters like epsilon (perturbation magnitude) to see how sensitivity affects prediction accuracy and robustness.",
+      "Absolutely. Interactive features like 'Draw Your Exoplanet', 3D discovery simulations, and adopt-a-planet cards make space science engaging for K-12 students.",
   },
   {
-    question: "Is this tool suitable for teaching and research?",
+    question: "Can I download reports for research?",
     answer:
-      "Absolutely. The platform is designed to be intuitive for classroom demonstrations and robust enough for use in research experiments on adversarial robustness.",
+      "Yes. Researchers can download vetting reports, accuracy metrics, and model cards to support analysis and telescope planning.",
   },
   {
-    question: "Will more features be added in the future?",
+    question: "Will new features be added in the future?",
     answer:
-      "Yes! Future features may include adversarial defense strategies, experiment saving/sharing, model comparison dashboards, and support for non-image classifiers.",
+      "Yes! Upcoming features may include enhanced AI models, more interactive simulations, expanded habitability metrics, and additional visualization tools for both research and education.",
   },
 ];

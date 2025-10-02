@@ -1,5 +1,6 @@
 import React from "react";
 import { Instagram, Youtube, Linkedin, Twitter, MapPin } from "lucide-react";
+import Logo from "./logo";
 
 export default function Footer() {
   return (
@@ -10,7 +11,7 @@ export default function Footer() {
       >
         {/* Left Section */}
         <div>
-          <h1 className="font-bold text-xl mb-3">LOGO</h1>
+          <Logo/>
           <p className="text-sm leading-relaxed mb-5">
             Experience the next generation of SEO analytics.
           </p>
