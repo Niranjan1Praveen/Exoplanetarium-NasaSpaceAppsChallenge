@@ -16,6 +16,7 @@ const labels = [
 
 export default function GlobeWithLabels() {
   const [index, setIndex] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -23,6 +24,17 @@ export default function GlobeWithLabels() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const maxShift = 300;
+  const yShift = Math.min(scrollY * 0.3, maxShift);
 
   const positions = [
     { top: "5%", left: "50%", transform: "translateX(-50%)" },
@@ -36,9 +48,8 @@ export default function GlobeWithLabels() {
 
   return (
     <motion.div
-      initial={{ y: 200, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1, ease: "easeOut" }}
+      animate={{ y: yShift }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className="relative flex size-full items-center justify-center px-40 pt-8 pb-40 md:pb-40 overflow-hidden"
     >
       <Globe className="top-[10px]" />

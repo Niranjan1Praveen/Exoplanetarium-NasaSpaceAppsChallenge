@@ -11,10 +11,12 @@ import { ScrollProgress } from "@/components/ui/scroll-progress";
 import Navbar from "@/components/reusableComponents/navbar";
 import Footer from "@/components/reusableComponents/footer";
 import { Workflow } from "@/components/reusableComponents/workflow";
+import RotatingGlobe from "@/components/reusableComponents/rotatingGlobe";
 
 export default function Home() {
   return (
     <div className="relative">
+      <RotatingGlobe/>
       <Navbar/>
       <ScrollProgress className="lg:top-[81px] md:top-[81px] top-[81px] z-100" />
       <div className="absolute overflow-hidden h-[1000px] w-full">
