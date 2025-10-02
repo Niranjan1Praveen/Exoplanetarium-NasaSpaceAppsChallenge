@@ -2,55 +2,55 @@
 
 import {
   Rocket,
-  Share2,
-  Lock,
-  Search,
-  Calendar,
-  BookOpen,
-  Smartphone,
-  Network,
+  Brain,
+  LineChart,
+  BarChart3,
+  FileText,
+  Globe,
+  Layers,
+  Zap,
 } from "lucide-react";
 
 const features = [
   {
-    title: "Built for speed",
-    description: "Instantly sync your notes across devices",
+    title: "AI/ML Classifier",
+    description: "Automated exoplanet detection using LightGBM + XGBoost ensemble models.",
+    icon: Brain,
+  },
+  {
+    title: "Light Curve Pipeline",
+    description: "Detrending, folding, and feature extraction for large-scale datasets.",
+    icon: LineChart,
+  },
+  {
+    title: "Research Dashboard",
+    description: "Visualize accuracy, error bars, and model interpretability in one place.",
+    icon: BarChart3,
+  },
+  {
+    title: "Downloadable Vetting Reports",
+    description: "Generate telescope-ready reports with validation metrics.",
+    icon: FileText,
+  },
+  {
+    title: "Habitability Tools",
+    description: "Rank planets by priority with climate zone classifiers and detectability scores.",
+    icon: Globe,
+  },
+  {
+    title: "Unsupervised Discovery",
+    description: "Clustering and anomaly detection to uncover novel or rare exoplanets.",
+    icon: Layers,
+  },
+  {
+    title: "Feature Correlation Explorer",
+    description: "Interactive heatmaps and scatterplots for scientific data insights.",
+    icon: Zap,
+  },
+  {
+    title: "Interactive Feature Tuning",
+    description: "Adjust model inputs and hyperparameters with live feedback.",
     icon: Rocket,
-  },
-  {
-    title: "Networked notes",
-    description: "Form a graph of ideas with backlinked notes",
-    icon: Network,
-  },
-  {
-    title: "iOS app",
-    description: "Capture ideas on the go, online or offline",
-    icon: Smartphone,
-  },
-  {
-    title: "End-to-end encryption",
-    description: "Only you can access your notes",
-    icon: Lock,
-  },
-  {
-    title: "Calendar integration",
-    description: "Keep track of meetings and agendas",
-    icon: Calendar,
-  },
-  {
-    title: "Publishing",
-    description: "Share anything you write with one click",
-    icon: Share2,
-  },
-  {
-    title: "Instant capture",
-    description: "Save snippets from your browser and Kindle",
-    icon: BookOpen,
-  },
-  {
-    title: "Frictionless search",
-    description: "Easily recall and index past notes and ideas",
-    icon: Search,
   },
 ];
 
@@ -64,7 +64,7 @@ export default function Features() {
             return (
               <div
                 key={feature.title}
-                className="flex flex-col items-start space-y-2" 
+                className="flex flex-col items-start space-y-2"
               >
                 <Icon className="h-6 w-6" aria-hidden="true" />
                 <h3 className="text-lg font-semibold">{feature.title}</h3>
