@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
 import { ModeToggle } from "./modeToggle";
 import { NavigationMenuDemo } from "./navigationMenu";
-import { Earth } from "lucide-react";
+import { ArrowRight, Earth } from "lucide-react";
 import Link from "next/link";
 import {
   ClerkProvider,
@@ -82,14 +82,21 @@ export default function Navbar() {
                   >
                     <SignInButton />
                   </Button>
+                  <Button
+                    className="cursor-pointer hidden md:inline-flex items-center"
+                    asChild
+                  >
+                    <SignUpButton />
+                  </Button>
                 </SignedOut>
 
-                <Button
-                  className="cursor-pointer hidden md:inline-flex items-center"
-                  asChild
-                >
-                  <SignUpButton />
-                </Button>
+                <SignedIn>
+                  <UserButton />
+                  <Button className="cursor-pointer hidden md:inline-flex items-center">
+                    <Link href={"/dashboard"}>Dashboard</Link>
+                    <ArrowRight />
+                  </Button>
+                </SignedIn>
                 <ModeToggle className="cursor-pointer hidden md:inline-flex items-center" />
               </div>
             </div>

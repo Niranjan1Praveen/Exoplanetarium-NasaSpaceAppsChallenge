@@ -24,13 +24,11 @@ export default function About() {
           <Badge variant="secondary">About</Badge>
 
           <h2 className="text-4xl font-bold sm:text-5xl">
-            We&apos;re an indie team dotted across the globe
+            Exploring Exoplanets Beyond Our Solar System
           </h2>
-          <p className="text-muted-foreground">
-            Our mission is to improve the way people think by making a jolly
-            good note-taking app.
-          </p>
-          <Button className="mt-4 px-4 py-2 text-sm">See our values</Button>
+          <Button className="mt-4 px-4 py-2 text-sm">
+            Learn More About Our Mission
+          </Button>
         </div>
 
         <div className="relative flex size-full max-w-lg items-center justify-center overflow-hidden px-40 pb-40 pt-8 md:pb-60">
