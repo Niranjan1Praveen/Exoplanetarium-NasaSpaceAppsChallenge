@@ -8,7 +8,6 @@ import { NavigationMenuDemo } from "./navigationMenu";
 import { ArrowRight, Earth } from "lucide-react";
 import Link from "next/link";
 import {
-  ClerkProvider,
   SignInButton,
   SignUpButton,
   SignedIn,

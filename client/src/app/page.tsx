@@ -10,6 +10,7 @@ import ExoplanetProblem from "@/components/reusableComponents/exoplanetProblem";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import Navbar from "@/components/reusableComponents/navbar";
 import Footer from "@/components/reusableComponents/footer";
+import { Workflow } from "@/components/reusableComponents/workflow";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <Features />
       <ExoplanetSection />
       <ExoplanetProblem />
+      <Workflow/>
       <Testimonial />
       <Faqs />
       <About />
