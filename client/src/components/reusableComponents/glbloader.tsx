@@ -22,12 +22,12 @@ const GLBLoader: React.FC<GLBLoaderProps> = ({
 }) => {
   return (
     <Canvas camera={{ position: cameraPosition, fov: 50 }}>
-      <ambientLight intensity={1} />
+      <ambientLight intensity={2.5} />
       <directionalLight position={[5, 5, 5]} intensity={1} />
       <Suspense fallback={<Html center>Loading...</Html>}>
         <Model path={modelPath} scale={scale} />
       </Suspense>
-      <OrbitControls enablePan enableZoom={false} enableRotate />
+      {/* <OrbitControls enablePan enableZoom={false} enableRotate /> */}
     </Canvas>
   );
 };

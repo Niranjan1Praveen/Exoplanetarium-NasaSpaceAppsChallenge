@@ -25,7 +25,7 @@ const ServiceOption: React.FC<ServiceOptionProps> = ({
           <GLBLoader
             modelPath={modelPath}
             scale={4.5}
-            cameraPosition={[12, 0, 0]}
+            cameraPosition={[-12, 0, 0]}
           />
         </div>
         <h2 className="text-4xl md:text-5xl font-semibold mb-3">{title}</h2>
