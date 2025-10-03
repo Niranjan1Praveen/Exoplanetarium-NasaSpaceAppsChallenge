@@ -59,7 +59,7 @@ const ScrollGlobe = () => {
               y: 0,
               scale: 1,
               opacity: 1,
-              zIndex: 0,
+              zIndex: 1000,
             }
           : {
               top: "80%",
