@@ -37,7 +37,7 @@ function Model({ modelPath, scale = 1 }: { modelPath: string; scale?: number }) 
 export default function GLBLoaderTimeline({
   modelPath,
   autoRotate = true,
-  scale = 1,
+  scale = 1.5,
 }: GLBLoaderTimelineProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -61,10 +61,10 @@ export default function GLBLoaderTimeline({
       <Canvas
         ref={canvasRef}
         shadows
-        camera={{ position: [0, 0, 4], fov: 45 }}
+        camera={{ position: [0, 0, 4], fov: 50}}
         gl={{ preserveDrawingBuffer: true, alpha: true }}
         onCreated={({ gl }) => {
-          gl.setClearColor(0x000000, 0) // Transparent background
+          gl.setClearColor(0x000000, 0) 
         }}
       >
         <Suspense fallback={null}>

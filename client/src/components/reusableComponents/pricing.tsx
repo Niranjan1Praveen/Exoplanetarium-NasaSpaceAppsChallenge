@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "../ui/badge";
 
 const features = [
-  "Networked note-taking",
-  "End to end encryption",
-  "Chrome and Safari web clipper",
-  "Kindle highlights sync",
-  "Kindle offline sync",
-  "iOS app",
+  "Interactive exoplanet drawing",
+  "3D exoplanet classification",
+  "Satellite timeline visualization",
+  "Data-driven habitability analysis",
+  "Orbital simulation tools",
+  "Cross-platform access (Web & iOS)",
 ];
 
 export default function Pricing() {

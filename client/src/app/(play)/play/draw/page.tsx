@@ -473,7 +473,7 @@ Only respond with the exact category name from above.
             style={{
               width: "400px",
               height: "400px",
-              background: "radial-gradient(circle at 30% 30%, #4F46E5, #7E22CE)"
+            //   background: "radial-gradient(circle at 30% 30%, #4F46E5, #7E22CE)"
             }}
           />
           <p className="text-xs text-muted-500 dark:text-muted-400 mt-2">
