@@ -1,117 +1,285 @@
-import { useMemo } from "react"
-import { formatDate } from "@/lib/utils"
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
+"use client";
+
+import { useMemo, useState } from "react";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import GLBLoaderTimeline from "@/components/reusableComponents/glbloadertimeline";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 interface ChangelogData {
-  title: string
-  date: string
-  version?: string
-  tags?: string[]
-  body: string 
+  title: string;
+  date: string;
+  tags?: string[];
+  body: string;
+  modelPath?: string;
 }
 
 interface ChangelogPage {
-  url: string
-  data: ChangelogData
+  url: string;
+  data: ChangelogData;
 }
 
-// Example static changelog data
 const changelogs: ChangelogPage[] = [
   {
-    url: "/v1.2.0",
+    url: "/ariel",
     data: {
-      title: "Added new exoplanet classifier feature",
-      date: "2025-10-03",
-      version: "v1.2.0",
-      tags: ["feature", "ml"],
-      body: "Implemented the AI/ML model for automatic exoplanet detection with 73% accuracy."
-    }
+      title: "Ariel",
+      date: "2029-01-01",
+      body: "Performing a chemical census of a large and diverse sample of exoplanets by analysing their atmospheres.",
+      modelPath: "/models/ariel.glb",
+    },
   },
   {
-    url: "/v1.1.0",
+    url: "/plato",
     data: {
-      title: "Initial release of the webapp",
-      date: "2025-09-20",
-      version: "v1.1.0",
-      tags: ["release"],
-      body: "First version of the exoplanet classifier webapp."
-    }
-  }
-]
+      title: "Plato",
+      date: "2026-01-01",
+      body: "Studying terrestrial planets in orbits up to the habitable zone of Sun-like stars, and characterising these stars.",
+      modelPath: "/models/plato.glb",
+    },
+  },
+  {
+    url: "/cheops",
+    data: {
+      title: "Cheops",
+      date: "2019-01-01",
+      body: "First step characterisation of known Earth-to-Neptune size exoplanets.",
+      modelPath: "/models/cheops.glb",
+    },
+  },
+  {
+    url: "/tess",
+    data: {
+      title: "Tess",
+      date: "2018-01-01",
+      body: "First all-sky transit survey satellite.",
+      modelPath: "/models/tess.glb",
+    },
+  },
+  {
+    url: "/kepler-k2",
+    data: {
+      title: "Kepler/K2",
+      date: "2013-01-01",
+      body: "A targeted search for terrestrial and larger planets in or near the habitable zone of a wide variety of stars.",
+      modelPath: "/models/kepler.glb",
+    },
+  },
+  {
+    url: "/corot",
+    data: {
+      title: "Corot",
+      date: "2006-01-01",
+      body: "Pioneering stellar seismology and exoplanet hunting mission.",
+      modelPath: "/models/corot.glb",
+    },
+  },
+  {
+    url: "/spitzer",
+    data: {
+      title: "Spitzer",
+      date: "2003-01-01",
+      body: "Studying exoplanet signatures in infrared light.",
+      modelPath: "/models/spitzer.glb",
+    },
+  },
+  {
+    url: "/hubble",
+    data: {
+      title: "Hubble",
+      date: "1990-01-01",
+      body: "Probing the composition of exoplanet atmospheres.",
+      modelPath: "/models/hubble.glb",
+    },
+  },
+];
 
 export default function HomePage() {
   const sortedChangelogs = useMemo(() => {
-    return changelogs.sort((a, b) => {
-      const dateA = new Date(a.data.date).getTime()
-      const dateB = new Date(b.data.date).getTime()
-      return dateB - dateA
-    })
-  }, [])
+    return changelogs.sort(
+      (a, b) =>
+        new Date(a.data.date).getTime() - new Date(b.data.date).getTime()
+    );
+  }, []);
+
+  const [open, setOpen] = useState(false);
+  const [selectedTelescope, setSelectedTelescope] =
+    useState<ChangelogData | null>(null);
+
+  const handleOpen = (telescope: ChangelogData) => {
+    setSelectedTelescope(telescope);
+    setOpen(true);
+  };
 
   return (
-    <div className="min-h-screen bg-background relative">
-      {/* Header */}
-      <div className="border-b border-border/50">
-        <div className="max-w-5xl mx-auto relative">
-          <div className="p-3 flex items-center justify-between">
-            <h1 className="text-3xl font-semibold tracking-tight">Changelog</h1>
-            <AnimatedThemeToggler />
-          </div>
-        </div>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
       </div>
 
-      {/* Timeline */}
-      <div className="max-w-5xl mx-auto px-6 lg:px-10 pt-10">
-        <div className="relative">
-          {sortedChangelogs.map((changelog) => {
-            const date = new Date(changelog.data.date)
-            const formattedDate = formatDate(date)
+      {/* Header */}
+        <div className="max-w-5xl mx-auto p-4 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+            Exoplanet Exploration Timeline
+          </h1>
+          <AnimatedThemeToggler />
+        </div>
+
+      {/* Vertical Timeline */}
+      <div className="max-w-5xl mx-auto px-4 py-16 relative">
+        {/* Center timeline line with gradient */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 w-[2px] h-full">
+          <div className="w-full h-full bg-gradient-to-b from-transparent via-border to-transparent" />
+        </div>
+
+        <div className="flex flex-col items-center space-y-20">
+          {sortedChangelogs.map((changelog, index) => {
+            const { title, date, modelPath } = changelog.data;
+            const year = new Date(date).getFullYear();
+            const isLeft = index % 2 === 0;
 
             return (
-              <div key={changelog.url} className="relative">
-                <div className="flex flex-col md:flex-row gap-y-6">
-                  <div className="md:w-48 flex-shrink-0">
-                    <div className="md:sticky md:top-8 pb-10">
-                      <time className="text-sm font-medium text-muted-foreground block mb-3">
-                        {formattedDate}
-                      </time>
-
-                      {changelog.data.version && (
-                        <div className="inline-flex relative z-10 items-center justify-center w-10 h-10 text-foreground border border-border rounded-lg text-sm font-bold">
-                          {changelog.data.version}
-                        </div>
-                      )}
+              <motion.div
+                key={changelog.url}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.1,
+                  ease: "easeOut",
+                }}
+                className={`relative flex w-full items-center ${
+                  isLeft ? "justify-start" : "justify-end"
+                }`}
+              >
+                {/* Side content */}
+                <div
+                  className={`w-1/2 flex flex-col items-center text-center ${
+                    isLeft ? "pr-10" : "pl-10"
+                  }`}
+                >
+                  {/* Telescope model with hover effect */}
+                  <div className="w-[220px] h-[220px] mx-auto relative group">
+                    <div className="absolute inset-0 bg-primary/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="relative z-10">
+                      <GLBLoaderTimeline
+                        modelPath={modelPath!}
+                        key={changelog.url}
+                      />
                     </div>
                   </div>
 
-                  {/* Right side - Content */}
-                  <div className="flex-1 md:pl-8 relative pb-10">
-                    {/* Vertical timeline line */}
-                    <div className="hidden md:block absolute top-2 left-0 w-px h-full bg-border">
-                      <div className="hidden md:block absolute -translate-x-1/2 size-3 bg-primary rounded-full z-10" />
-                    </div>
-
-                    <div className="space-y-6">
-                      <div className="relative z-10 flex flex-col gap-2">
-                        <h2 className="text-2xl font-semibold tracking-tight text-balance">
-                          {changelog.data.title}
-                        </h2>
-
-                        
-                      </div>
-
-                      {/* Body */}
-                      <div className="prose dark:prose-invert max-w-none prose-headings:scroll-mt-8 prose-headings:font-semibold prose-p:tracking-tight prose-p:text-balance">
-                        {changelog.data.body}
-                      </div>
-                    </div>
-                  </div>
+                  {/* Telescope name as a button */}
+                  <motion.div
+                    whileHover={{ y: -2 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Button
+                      variant="link"
+                      className="text-lg font-semibold mt-4 hover:text-primary transition-colors relative group"
+                      onClick={() => handleOpen(changelog.data)}
+                    >
+                      {title}
+                      <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary group-hover:w-full transition-all duration-300" />
+                    </Button>
+                  </motion.div>
                 </div>
-              </div>
-            )
+
+                {/* Year marker circle with connecting line */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.4,
+                    delay: 0.3,
+                    type: "spring",
+                    stiffness: 200,
+                  }}
+                  className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center"
+                >
+                  {/* Connecting line */}
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: isLeft ? "100px" : "100px" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className={`absolute top-1/2 h-[2px] bg-border/50 ${
+                      isLeft ? "right-full" : "left-full"
+                    }`}
+                  />
+
+                  {/* Year circle */}
+                  <div className="relative">
+                    <motion.div
+                      whileHover={{ scale: 1.2 }}
+                      className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-xs text-background font-semibold shadow-lg relative z-10 cursor-default"
+                    >
+                      {year}
+                    </motion.div>
+                    {/* Pulsing ring effect */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.5, 0, 0.5],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="absolute inset-0 bg-primary rounded-full"
+                    />
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
           })}
         </div>
       </div>
+
+      {/* Popup Dialog for telescope details */}
+      {selectedTelescope && (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-semibold text-center">
+                {selectedTelescope.title}
+              </DialogTitle>
+              <DialogDescription className="text-center">
+                Year: {new Date(selectedTelescope.date).getFullYear()}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="mt-4 flex flex-col items-center">
+              <div className="w-[400px] h-[400px]">
+                <GLBLoaderTimeline
+                  modelPath={selectedTelescope.modelPath!}
+                  key={selectedTelescope.title}
+                />
+              </div>
+
+              <p className="mt-6 text-center text-muted-foreground text-sm leading-relaxed">
+                {selectedTelescope.body}
+              </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
-  )
+  );
 }
