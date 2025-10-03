@@ -1,6 +1,7 @@
 import React from "react";
 import { Instagram, Youtube, Linkedin, Twitter, MapPin } from "lucide-react";
 import Logo from "./logo";
+import { Button } from "../ui/button";
 
 export default function Footer() {
   return (
@@ -11,56 +12,50 @@ export default function Footer() {
       >
         {/* Left Section */}
         <div>
-          <Logo width={40}/>
+          <Logo width={40} />
           <p className="text-sm leading-relaxed mb-5">
-            Experience the next generation of SEO analytics.
+            Discovering worlds beyond our solar system through
+            AI-powered analysis and immersive visualization.
           </p>
-          <button className="border px-6 py-2 rounded-full text-sm">
-            Unlimited trial for 14 days
-          </button>
+          <Button variant={"ghost"}>
+            Join Our Mission
+          </Button>
         </div>
 
-        {/* Platform, Legals & Wope for */}
+        {/* Explore, Resources & Community */}
         <div className="flex flex-wrap gap-12">
           <div>
-            <h3 className="font-semibold mb-4">Platform</h3>
+            <h3 className="font-semibold mb-4">Explore</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#">Pricing</a>
+                <a href="#">Exoplanet Database</a>
               </li>
               <li>
-                <a href="#">Partnership</a>
+                <a href="#">Visualization Lab</a>
               </li>
               <li>
-                <a href="#">Affiliate</a>
+                <a href="#">AI Predictions</a>
               </li>
               <li>
-                <a href="#">Download</a>
+                <a href="#">Publications</a>
               </li>
               <li>
-                <a href="#">Contact Us</a>
+                <a href="#">Contact</a>
               </li>
             </ul>
           </div>
+          
           <div>
-            <h3 className="font-semibold mb-4">Legals</h3>
+            <h3 className="font-semibold mb-4">Community</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#">Terms of Services</a>
+                <a href="#">For Students</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-4">Wope for</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#">Agencies</a>
+                <a href="#">For Researchers</a>
               </li>
               <li>
-                <a href="#">Startups</a>
+                <a href="#">For Educators</a>
               </li>
             </ul>
           </div>
@@ -72,11 +67,11 @@ export default function Footer() {
           <div className="flex items-start text-sm leading-relaxed">
             <MapPin className="w-4 h-4 mt-1 mr-2" />
             <p>
-              651 N Broad St
+              Exoplanetarium HQ
               <br />
-              Suite 201
+              Space Research Center
               <br />
-              Middletown, Delaware 19709
+              Cambridge, MA 02139
               <br />
               United States
             </p>
@@ -89,18 +84,18 @@ export default function Footer() {
         className="max-w-7xl mx-auto mt-12 pt-6 border-t flex flex-col md:flex-row
                       justify-between items-center gap-4 text-sm"
       >
-        <p>©2025 Wope. All rights reserved.</p>
+        <p>©2025 Exoplanetarium. Exploring new worlds together.</p>
         <div className="flex gap-5">
-          <a href="#" aria-label="Instagram">
+          <a href="#" aria-label="Instagram" className="pointer-events-none">
             <Instagram className="w-5 h-5" />
           </a>
-          <a href="#" aria-label="YouTube">
+          <a href="#" aria-label="YouTube" className="pointer-events-none">
             <Youtube className="w-5 h-5" />
           </a>
-          <a href="#" aria-label="LinkedIn">
+          <a href="#" aria-label="LinkedIn" className="pointer-events-none">
             <Linkedin className="w-5 h-5" />
           </a>
-          <a href="#" aria-label="Twitter">
+          <a href="#" aria-label="Twitter" className="pointer-events-none">
             <Twitter className="w-5 h-5" />
           </a>
         </div>
