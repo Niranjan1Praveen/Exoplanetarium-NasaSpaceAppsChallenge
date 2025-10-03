@@ -1,8 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react"
+import * as React from "react";
+import Link from "next/link";
 
 import {
   NavigationMenu,
@@ -12,48 +11,51 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
+import Logo from "./logo";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
+    title: "Exoplanet Lab",
+    href: "/lab",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Draw your own exoplanets and get them classified based on color patterns and features.",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
+    title: "Exoplanet Timeline",
+    href: "/timeline",
     description:
-      "For sighted users to preview content available behind a link.",
+      "Explore the history of exoplanet discovery with 3D satellite models and interactive visualization.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
+    title: "Stellar Data Viewer",
+    href: "/stellar-data",
     description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+      "View detailed data about stars and their planetary systems in an interactive, 3D interface.",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "Habitability Analyzer",
+    href: "/habitability",
+    description:
+      "Analyze exoplanets for potential habitability based on atmospheric and orbital data.",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
+    title: "Orbital Simulator",
+    href: "/simulator",
     description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "Simulate planetary orbits and observe the dynamics of different exoplanetary systems.",
   },
   {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
+    title: "Exoplanet Explorer",
+    href: "/explorer",
     description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      "A discovery tool that lets you browse, filter, and learn about thousands of known exoplanets.",
   },
-]
+];
+
 interface NavigationMenuDemoProps {
   /** Extra classes to apply to the trigger button */
-  className?: string
+  className?: string;
 }
 export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
   return (
@@ -70,22 +72,26 @@ export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
                     href="/"
                   >
                     <div className="mt-4 mb-2 text-lg font-medium">
-                      shadcn/ui
+                      <Logo/>
                     </div>
                     <p className="text-muted-foreground text-sm leading-tight">
-                      Beautifully designed components built with Tailwind CSS.
+                      Explore, draw, and visualize exoplanets with interactive
+                      3D tools.
                     </p>
                   </Link>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
+              <ListItem href="/lab" title="Exoplanet Lab">
+                Draw your own exoplanets and see them classified based on their
+                color patterns.
               </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
+              <ListItem href="/play" title="Exoplanet Timeline">
+                Explore the history of exoplanet discovery with 3D satellite
+                models and interactive visualization.
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
+              <ListItem href="/about" title="About Us">
+                Learn more about our mission to make exoplanet exploration
+                accessible and educational.
               </ListItem>
             </ul>
           </NavigationMenuContent>
@@ -123,7 +129,7 @@ export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }
 
 function ListItem({
@@ -143,5 +149,5 @@ function ListItem({
         </Link>
       </NavigationMenuLink>
     </li>
-  )
+  );
 }
