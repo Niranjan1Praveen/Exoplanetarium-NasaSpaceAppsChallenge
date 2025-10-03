@@ -7,6 +7,9 @@ import {
 } from "@radix-ui/react-icons";
 import { BentoCard, BentoGrid } from "../ui/bento-grid";
 import { Badge } from "../ui/badge";
+import { AnimatedBeamDemo } from "./animatedBeamDemo";
+import ResearchPaperSearch from "./researchPaperSearch";
+import PodiumStarAnimation from "./podiumStarAnimation";
 
 const features = [
   {
@@ -36,7 +39,7 @@ const features = [
       "Predict atmospheric detectability, climate zones, and prioritize targets for telescope follow-up.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    background: <PodiumStarAnimation/>,
     className: "lg:row-start-2 lg:row-end-4 lg:col-start-1 lg:col-end-2",
   },
   {
@@ -46,7 +49,7 @@ const features = [
       "Interactive visualization of classification accuracy, injection-recovery tests, and downloadable vetting reports.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    background: <ResearchPaperSearch/>,
     className: "lg:row-start-2 lg:row-end-4 lg:col-start-2 lg:col-end-3",
   },
   {
@@ -56,7 +59,7 @@ const features = [
       "Students explore exoplanets, detection techniques, and simulations in a fun, interactive environment.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    background: <AnimatedBeamDemo/>,
     className: "lg:row-start-2 lg:row-end-4 lg:col-start-3 lg:col-end-4",
   },
 ];

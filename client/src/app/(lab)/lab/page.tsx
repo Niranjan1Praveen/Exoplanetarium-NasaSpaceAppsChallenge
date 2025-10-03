@@ -143,6 +143,7 @@ const ExoplanetDashboard: React.FC = () => {
                     transition={{ duration: 0.6 }}
                   >
                     <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                        
                     </div>
                   </motion.div>
 
