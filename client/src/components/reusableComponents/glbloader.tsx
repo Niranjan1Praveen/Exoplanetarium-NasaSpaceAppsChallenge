@@ -11,7 +11,7 @@ interface GLBLoaderProps {
 }
 
 const Model: React.FC<{ path: string; scale?: number }> = ({ path, scale = 1 }) => {
-  const gltf = useGLTF(path) as any;
+  const gltf = useGLTF(path);
   return <primitive object={gltf.scene} scale={scale} />;
 };
 
@@ -22,8 +22,8 @@ const GLBLoader: React.FC<GLBLoaderProps> = ({
 }) => {
   return (
     <Canvas camera={{ position: cameraPosition, fov: 50 }}>
-      <ambientLight intensity={2.5} />
-      <directionalLight position={[5, 5, 5]} intensity={1} />
+      <ambientLight intensity={1} />
+      <directionalLight position={[5, 5, 5]} intensity={5} />
       <Suspense fallback={<Html center>Loading...</Html>}>
         <Model path={modelPath} scale={scale} />
       </Suspense>
