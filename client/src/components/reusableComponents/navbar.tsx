@@ -25,7 +25,7 @@ export default function Navbar() {
           <div className="rounded-md">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-2 items-center px-4 md:pr-2">
               <Link className="flex items-center gap-2" href={"/"}>
-                <Logo width={20} /> 
+                <Logo width={20} />
               </Link>
 
               <div className="flex justify-end gap-4">
@@ -90,7 +90,9 @@ export default function Navbar() {
                 </SignedOut>
 
                 <SignedIn>
-                  <UserButton />
+                  <div className="hidden md:inline-flex">
+                    <UserButton />
+                  </div>
                   <Button className="cursor-pointer hidden md:inline-flex items-center">
                     <Link href={"/dashboard"}>Dashboard</Link>
                     <ArrowRight />
@@ -109,15 +111,25 @@ export default function Navbar() {
                 >
                   <div className="flex flex-col items-center gap-4 py-4">
                     <NavigationMenuDemo className="flex flex-col space-y-2" />
-                    <Button
-                      className="cursor-pointer md:inline-flex items-center"
-                      variant={"ghost"}
-                    >
-                      <SignInButton />
-                    </Button>
-                    <Button className="cursor-pointer md:inline-flex items-center">
-                      <SignUpButton />
-                    </Button>
+                    <SignedOut>
+                      <Button
+                        className="cursor-pointer md:inline-flex items-center"
+                        variant={"ghost"}
+                      >
+                        <SignInButton />
+                      </Button>
+                      <Button className="cursor-pointer md:inline-flex items-center">
+                        <SignUpButton />
+                      </Button>
+                    </SignedOut>
+                    <SignedIn>
+                      <UserButton/>
+                      <Button className="cursor-pointer md:inline-flex items-center">
+                        <Link href={"/dashboard"}>Dashboard</Link>
+                        <ArrowRight />
+                      </Button>
+                    </SignedIn>
+
                     <ModeToggle className="cursor-pointer md:inline-flex items-center" />
                   </div>
                 </motion.div>
