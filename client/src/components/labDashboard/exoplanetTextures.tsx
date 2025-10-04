@@ -4,6 +4,41 @@ import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
+// Define proper interfaces
+interface PlanetData {
+  transit: {
+    time: number[];
+    brightness: number[];
+    model_brightness: number[];
+    labels: Array<{ x: number; y: number; text: string }>;
+  };
+  spectra: {
+    wavelength_morning: number[];
+    morning: number[];
+    wavelength_evening: number[];
+    evening: number[];
+    wavelength: number[];
+    labels: Array<{ name: string; symbol: string; x: number; y: number }>;
+  };
+  molecules: Array<{ symbol: string; name: string }>;
+  molecules_raw: string;
+  planet: string;
+  success: boolean;
+}
+
+interface ExoplanetTexturesProps {
+  planetData: PlanetData | null;
+  selectedPlanet: string;
+  selectedType: string;
+  availableTypes: string[];
+}
+
+interface SphereProps {
+  textureUrl: string;
+  planetName: string;
+}
+
+// Planet type textures mapping
 const planetTypeTextures: Record<string, string[]> = {
   "Hot Jupiter": [
     "/textures/hotJupiter/gg4.jpeg",
@@ -28,6 +63,7 @@ const planetTypeTextures: Record<string, string[]> = {
   "Warm": ["/textures/wmjp/gg5.jpeg", "/textures/wmjp/wmjp1.webp"],
 };
 
+// Helper function to get random texture
 function getRandomTexture(type: string): string {
   const textures = planetTypeTextures[type];
   if (!textures || textures.length === 0) return "/textures/ceres.jpg";
@@ -40,11 +76,7 @@ function cleanTypeString(type: string): string {
   return type.replace(/^"+|"+$/g, '').trim();
 }
 
-interface SphereProps {
-  textureUrl: string;
-  planetName: string;
-}
-
+// Sphere component with proper typing
 const Sphere: React.FC<SphereProps> = ({ textureUrl, planetName }) => {
   const texture = useLoader(THREE.TextureLoader, textureUrl);
   
@@ -55,13 +87,6 @@ const Sphere: React.FC<SphereProps> = ({ textureUrl, planetName }) => {
     </mesh>
   );
 };
-
-interface ExoplanetTexturesProps {
-  planetData: any;
-  selectedPlanet: string;
-  selectedType: string;
-  availableTypes: string[];
-}
 
 const ExoplanetTextures: React.FC<ExoplanetTexturesProps> = ({ 
   planetData, 
@@ -144,7 +169,6 @@ const ExoplanetTextures: React.FC<ExoplanetTexturesProps> = ({
         />
         <OrbitControls enableZoom={false} />
       </Canvas>
-      
     </div>
   );
 };

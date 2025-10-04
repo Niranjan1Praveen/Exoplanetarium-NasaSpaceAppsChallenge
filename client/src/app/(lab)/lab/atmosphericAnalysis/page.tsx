@@ -28,12 +28,10 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  ReferenceLine,
-  Text,
   Legend,
   ReferenceArea,
+  ReferenceLine,
+  TooltipProps,
 } from "recharts";
 import ExoplanetTextures from "@/components/labDashboard/exoplanetTextures";
 import { Particles } from "@/components/ui/particles";
@@ -67,8 +65,21 @@ interface TypePlanetMap {
   [key: string]: string[];
 }
 
+interface TooltipPayloadItem {
+  value: number;
+  dataKey: string;
+  color: string;
+  name: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string | number;
+}
+
 // Custom tooltip for transit chart
-const TransitTooltip = ({ active, payload, label }: any) => {
+const TransitTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
@@ -76,9 +87,11 @@ const TransitTooltip = ({ active, payload, label }: any) => {
         <p className="text-sm text-blue-400">
           Brightness: {payload[0].value.toFixed(4)}
         </p>
-        <p className="text-sm text-green-400">
-          Model: {payload[1].value.toFixed(4)}
-        </p>
+        {payload[1] && (
+          <p className="text-sm text-green-400">
+            Model: {payload[1].value.toFixed(4)}
+          </p>
+        )}
       </div>
     );
   }
@@ -136,12 +149,12 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   </Button>
 );
 // Custom tooltip for spectra chart
-const SpectraTooltip = ({ active, payload, label }: any) => {
+const SpectraTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
         <p className="font-medium">Wavelength: {label}μm</p>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry, index) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {entry.name}: {entry.value.toFixed(4)}
           </p>
@@ -153,8 +166,14 @@ const SpectraTooltip = ({ active, payload, label }: any) => {
 };
 
 // Custom label for molecule annotations
-const MoleculeLabel = (props: any) => {
-  const { x, y, name, symbol } = props;
+interface MoleculeLabelProps {
+  x?: number;
+  y?: number;
+  name: string;
+  symbol: string;
+}
+
+const MoleculeLabel: React.FC<MoleculeLabelProps> = ({ x, y, name, symbol }) => {
   if (!x || !y) return null;
 
   return (
@@ -179,9 +198,8 @@ const MoleculeLabel = (props: any) => {
   );
 };
 
-// Transit Chart Component
 // Custom Legend Component for Transit Chart
-const TransitLegend = () => {
+const TransitLegend: React.FC = () => {
   return (
     <div className="flex justify-center gap-6 mb-2 mt-4">
       <div className="flex items-center gap-2">
@@ -556,6 +574,7 @@ export default function Page() {
           </Select>
         </div>
       </div>
+
       {/* Scientific Context Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* Transit Methodology */}
@@ -611,6 +630,7 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
+
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Transit Light Curve */}
@@ -626,13 +646,15 @@ export default function Page() {
               <Skeleton className="h-64 w-full" />
             ) : planetData ? (
               <div className="space-y-4">
-                {/* GLB Model with fixed height */}
-                <div className="w-full overflow-hidden">
-                  {/* <GLBLoader
+                {/* GLB Model with Animation */}
+                <div className="w-full h-64 overflow-hidden rounded-lg border border-border bg-black">
+                  <GLBLoader
                     modelPath="/models/transitLightCurve.glb"
-                    cameraPosition={[0, 0, 1]}
-                    scale={0.1}
-                  /> */}
+                    cameraPosition={[0, 0, 2]}
+                    scale={0.8}
+                    autoPlay={true}
+                    loop={true}
+                  />
                 </div>
                 {/* Transit Chart */}
                 <div className="h-64">
@@ -647,7 +669,6 @@ export default function Page() {
           </CardContent>
         </Card>
 
-        {/* Blank Card - Reserved for future use */}
         {/* 3D Visualization */}
         <Card className="col-span-1 relative">
           <Particles
