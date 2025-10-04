@@ -300,9 +300,9 @@ const Controls: React.FC<{
         </div>
       </div>
       
-      <div className="mt-3 text-sm text-gray-300">
+      {/* <div className="mt-3 text-sm text-gray-300">
         <p><strong>Transit Timing Variations (TTV)</strong> occur when multiple planets gravitationally interact, causing their transit times to vary from perfect periodicity.</p>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -347,7 +347,7 @@ const TTVAnimation: React.FC = () => {
         setAnimationSpeed={setAnimationSpeed}
       />
       
-      <div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-70 p-3 rounded-lg">
+      <div className="absolute bottom-0 left-4 text-white bg-black bg-opacity-70 p-3 rounded-lg">
         <h4 className="font-bold">How TTV Works:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>Planets periodically transit (pass in front of) their host star</li>

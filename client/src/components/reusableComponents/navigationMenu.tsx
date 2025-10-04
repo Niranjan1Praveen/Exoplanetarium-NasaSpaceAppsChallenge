@@ -81,13 +81,12 @@ export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
                   </Link>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/lab" title="Exoplanet Lab">
+              <ListItem href="/lab" title="Exoplanet Play">
                 Draw your own exoplanets and see them classified based on their
                 color patterns.
               </ListItem>
-              <ListItem href="/play" title="Exoplanet Timeline">
-                Explore the history of exoplanet discovery with 3D satellite
-                models and interactive visualization.
+              <ListItem href="/play" title="Exoplanet Lab">
+                Classify and analyze exoplanets.
               </ListItem>
               <ListItem href="/about" title="About Us">
                 Learn more about our mission to make exoplanet exploration

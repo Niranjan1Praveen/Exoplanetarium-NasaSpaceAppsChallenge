@@ -5,6 +5,7 @@ import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import * as THREE from "three";
+import Link from "next/link";
 
 interface ColorStats {
   [color: string]: number;
@@ -64,11 +65,13 @@ const Page = () => {
 
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
-        y: e.clientY - previousMousePosition.y
+        y: e.clientY - previousMousePosition.y,
       };
 
       if (scene) {
-        const sphere = scene.children.find(child => child instanceof THREE.Mesh);
+        const sphere = scene.children.find(
+          (child) => child instanceof THREE.Mesh
+        );
         if (sphere) {
           sphere.rotation.y += deltaMove.x * 0.01;
           sphere.rotation.x += deltaMove.y * 0.01;
@@ -77,7 +80,7 @@ const Page = () => {
 
       previousMousePosition = {
         x: e.clientX,
-        y: e.clientY
+        y: e.clientY,
       };
     };
 
@@ -92,19 +95,19 @@ const Page = () => {
       }
     };
 
-    renderer.domElement.addEventListener('mousedown', onMouseDown);
-    renderer.domElement.addEventListener('mousemove', onMouseMove);
-    renderer.domElement.addEventListener('mouseup', onMouseUp);
-    renderer.domElement.addEventListener('wheel', onWheel);
+    renderer.domElement.addEventListener("mousedown", onMouseDown);
+    renderer.domElement.addEventListener("mousemove", onMouseMove);
+    renderer.domElement.addEventListener("mouseup", onMouseUp);
+    renderer.domElement.addEventListener("wheel", onWheel);
 
     // Create initial canvas for texture
-    const tempCanvas = document.createElement('canvas');
+    const tempCanvas = document.createElement("canvas");
     tempCanvas.width = 512;
     tempCanvas.height = 512;
-    const ctx = tempCanvas.getContext('2d');
+    const ctx = tempCanvas.getContext("2d");
     if (ctx) {
       // Create a default blue planet texture
-      ctx.fillStyle = '#4F46E5';
+      ctx.fillStyle = "#4F46E5";
       ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
     }
 
@@ -114,7 +117,7 @@ const Page = () => {
 
     // Sphere geometry
     const geometry = new THREE.SphereGeometry(2, 64, 64);
-    
+
     // Material with canvas texture
     const material = new THREE.MeshPhongMaterial({
       map: initialTexture,
@@ -147,22 +150,22 @@ const Page = () => {
     const handleResize = () => {
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
-      
+
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
-      renderer.domElement.removeEventListener('mousedown', onMouseDown);
-      renderer.domElement.removeEventListener('mousemove', onMouseMove);
-      renderer.domElement.removeEventListener('mouseup', onMouseUp);
-      renderer.domElement.removeEventListener('wheel', onWheel);
-      
+      window.removeEventListener("resize", handleResize);
+      renderer.domElement.removeEventListener("mousedown", onMouseDown);
+      renderer.domElement.removeEventListener("mousemove", onMouseMove);
+      renderer.domElement.removeEventListener("mouseup", onMouseUp);
+      renderer.domElement.removeEventListener("wheel", onWheel);
+
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -184,23 +187,23 @@ const Page = () => {
 
       img.onload = () => {
         // Create a square canvas for the texture
-        const textureCanvas = document.createElement('canvas');
+        const textureCanvas = document.createElement("canvas");
         const size = 512;
         textureCanvas.width = size;
         textureCanvas.height = size;
-        const ctx = textureCanvas.getContext('2d');
-        
+        const ctx = textureCanvas.getContext("2d");
+
         if (ctx) {
-          ctx.fillStyle = '#ffffff'; 
+          ctx.fillStyle = "#ffffff";
           ctx.fillRect(0, 0, size, size);
-          
+
           // Draw the sketch canvas content in a circle
           ctx.save();
           ctx.beginPath();
           ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
           ctx.closePath();
           ctx.clip();
-          
+
           ctx.drawImage(img, 0, 0, size, size);
           ctx.restore();
         }
@@ -213,7 +216,9 @@ const Page = () => {
         setTexture(newTexture);
 
         // Update sphere material
-        const sphere = scene.children.find(child => child instanceof THREE.Mesh);
+        const sphere = scene.children.find(
+          (child) => child instanceof THREE.Mesh
+        );
         if (sphere && sphere instanceof THREE.Mesh) {
           (sphere.material as THREE.MeshPhongMaterial).map = newTexture;
           (sphere.material as THREE.MeshPhongMaterial).needsUpdate = true;
@@ -227,36 +232,45 @@ const Page = () => {
   // Kid-friendly messages for each classification
   const getClassificationMessage = (classification: string) => {
     const messages: { [key: string]: { title: string; message: string } } = {
-      "Terrestrial": {
+      Terrestrial: {
         title: "🌍 Rocky Planet Explorer!",
-        message: "Wow! You've created a rocky planet just like Earth! This could be home to alien mountains, valleys, and maybe even space creatures! Perfect for future space explorers to visit!"
+        message:
+          "Wow! You've created a rocky planet just like Earth! This could be home to alien mountains, valleys, and maybe even space creatures! Perfect for future space explorers to visit!",
       },
       "Super Earth": {
         title: "🪐 Super Earth Discovered!",
-        message: "Amazing! You've discovered a Super Earth - a giant rocky planet with super cool landscapes! It might have enormous canyons and mega volcanoes. What an incredible find!"
+        message:
+          "Amazing! You've discovered a Super Earth - a giant rocky planet with super cool landscapes! It might have enormous canyons and mega volcanoes. What an incredible find!",
       },
       "Neptune-like": {
         title: "🔮 Ice Giant Wizard!",
-        message: "Brilliant! You've painted a beautiful ice giant with swirling blue magic! This planet has super winds and mysterious deep oceans. You're a cosmic artist!"
+        message:
+          "Brilliant! You've painted a beautiful ice giant with swirling blue magic! This planet has super winds and mysterious deep oceans. You're a cosmic artist!",
       },
       "Gas Giants": {
         title: "🎨 Gas Giant Masterpiece!",
-        message: "Spectacular! You've created a majestic gas giant with colorful swirling storms! This giant planet has no solid ground - it's like a giant space cloud painting!"
+        message:
+          "Spectacular! You've created a majestic gas giant with colorful swirling storms! This giant planet has no solid ground - it's like a giant space cloud painting!",
       },
-      "Unknown": {
+      Unknown: {
         title: "🚀 Mysterious Space Object!",
-        message: "Whoa! You've discovered something completely new and mysterious! Even our smartest space scientists haven't seen anything like this before. You're a true space pioneer! Want to try creating a different kind of planet?"
+        message:
+          "Whoa! You've discovered something completely new and mysterious! Even our smartest space scientists haven't seen anything like this before. You're a true space pioneer! Want to try creating a different kind of planet?",
       },
       "Error classifying planet.": {
         title: "🛰️ Signal Lost!",
-        message: "Oops! Our space scanners are having trouble reading your amazing creation. The cosmic dust might be interfering! Please try again, space artist!"
-      }
+        message:
+          "Oops! Our space scanners are having trouble reading your amazing creation. The cosmic dust might be interfering! Please try again, space artist!",
+      },
     };
 
-    return messages[classification] || {
-      title: "🌌 Cosmic Creation!",
-      message: "You've made something truly special in space! Keep exploring and creating amazing planets!"
-    };
+    return (
+      messages[classification] || {
+        title: "🌌 Cosmic Creation!",
+        message:
+          "You've made something truly special in space! Keep exploring and creating amazing planets!",
+      }
+    );
   };
 
   // Save & Analyze
@@ -381,7 +395,9 @@ Only respond with the exact category name from above.
     setTimeout(updatePlanetTexture, 100);
   };
 
-  const classificationInfo = classification ? getClassificationMessage(classification) : null;
+  const classificationInfo = classification
+    ? getClassificationMessage(classification)
+    : null;
 
   return (
     <div className="h-screen flex flex-col items-center px-4 overflow-x-hidden bg-gradient-to-b from-blue-50 to-purple-50 dark:from-gray-900 dark:to-blue-900">
@@ -390,10 +406,16 @@ Only respond with the exact category name from above.
         🪐 Color Your 3D Exoplanet
       </h1>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
-        Draw on the 2D canvas and watch your creation come to life on the 3D planet!
+        Draw on the 2D canvas and watch your creation come to life on the 3D
+        planet!
       </p>
-      
-      <AnimatedThemeToggler className="mb-2"/>
+
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <AnimatedThemeToggler />
+        <Link href={"/play"} className="hover:underline">
+          Go Back
+        </Link>
+      </div>
 
       {/* Toolbar */}
       <div className="p-3 flex flex-wrap gap-4 items-center shadow-lg rounded-2xl mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
@@ -402,12 +424,12 @@ Only respond with the exact category name from above.
           <input
             type="color"
             value={color}
-            disabled={isEraser} 
+            disabled={isEraser}
             onChange={(e) => setColor(e.target.value)}
             className="w-10 h-10 border-2 rounded-lg cursor-pointer"
           />
         </div>
-        
+
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">Size:</span>
           <input
@@ -426,19 +448,19 @@ Only respond with the exact category name from above.
         >
           🚀 Analyze Planet
         </button>
-        
+
         <button
           onClick={handleClear}
           className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg"
         >
           🗑️ Clear
         </button>
-        
+
         <button
           onClick={toggleEraser}
           className={`px-4 py-2 rounded-lg font-medium transition-all shadow-md hover:shadow-lg ${
-            isEraser 
-              ? "bg-blue-600 hover:bg-blue-700 text-white" 
+            isEraser
+              ? "bg-blue-600 hover:bg-blue-700 text-white"
               : "bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
           }`}
         >
@@ -456,10 +478,10 @@ Only respond with the exact category name from above.
               strokeColor={color}
               strokeWidth={strokeWidth}
               onStroke={handleStroke}
-              style={{ 
-                width: "400px", 
+              style={{
+                width: "400px",
                 height: "400px",
-                cursor: 'crosshair'
+                cursor: "crosshair",
               }}
             />
           </div>
@@ -473,7 +495,7 @@ Only respond with the exact category name from above.
             style={{
               width: "400px",
               height: "400px",
-            //   background: "radial-gradient(circle at 30% 30%, #4F46E5, #7E22CE)"
+              //   background: "radial-gradient(circle at 30% 30%, #4F46E5, #7E22CE)"
             }}
           />
           <p className="text-xs text-muted-500 dark:text-muted-400 mt-2">
@@ -492,8 +514,9 @@ Only respond with the exact category name from above.
           <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
             {classificationInfo.message}
           </p>
-          
-          {(classification === "Unknown" || classification === "Error classifying planet.") && (
+
+          {(classification === "Unknown" ||
+            classification === "Error classifying planet.") && (
             <button
               onClick={handleClear}
               className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
@@ -501,7 +524,7 @@ Only respond with the exact category name from above.
               🌟 Try Creating Another Planet!
             </button>
           )}
-          
+
           <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
             🎨 Keep drawing to update your 3D planet in real-time!
           </div>

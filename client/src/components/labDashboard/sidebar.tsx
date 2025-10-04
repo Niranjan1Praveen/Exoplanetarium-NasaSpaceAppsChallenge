@@ -79,7 +79,7 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/lab/tool2">
+                  <Link href="/lab/atmosphericAnalysis">
                     <Cloud />
                     <span>Atmospheric Analysis</span>
                   </Link>
