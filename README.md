@@ -1,4 +1,4 @@
-# Exoplanetarium – An Exoplanet Classifier Tool for Researchers
+# Exoplanetarium: An AI Platform for Exoplanet Discovery & Education
 
 #### 🪐 Event - NASA Space Apps Challenge 2025 [Noida]
 #### 👨‍🚀 Team Name - CODE4CHANGE
@@ -22,7 +22,8 @@ By leveraging *NASA's open-source datasets* and *AI models*, the project enables
 ## 🌍 Modules Overview
 
 ### 🧠 1. Exoplanet Classification Tool (Flask App)
-![Classifier](designs/LabClassifier.png)  
+![Classifier Inputs](designs/LabClassifierInputs.png)  
+![Classifier Results](designs/LabClassifier.png)  
 A **web-based ML classifier** that predicts whether an object is a **Confirmed Planet, Candidate, or False Positive**.  
 - Accepts astrophysical parameters like *orbital period*, *transit depth*, *planet radius*, and *stellar radius*.  
 - Utilizes **LightGBM** and **XGBoost** ensemble models for robust predictions.  
@@ -177,7 +178,3 @@ By merging machine learning with cosmic data, it transforms how researchers and 
 > "Exploring worlds beyond our own begins with understanding the data that reveals them."
 
 ---
-
-### 🛰️ Repository
-
-🔗 [GitHub Repository (Link coming soon)]()
