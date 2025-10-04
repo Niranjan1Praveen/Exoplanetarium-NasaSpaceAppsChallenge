@@ -4,6 +4,64 @@
     <meta charset="UTF-8">
     <title>Prediction Result</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+            min-height: 100vh;
+        }
+
+        h2 {
+            color: #ffffff; /* Cyan accent */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h4 strong {
+            color: #ffffff;
+        }
+
+        .container {
+            background-color: #111; /* Dark gray container */
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
+        }
+
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+        }
+
+        .card-body {
+            background-color: #111;
+        }
+
+        .progress {
+            background-color: #333;
+            height: 20px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+
+        label {
+            color: #ccc;
+        }
+
+        .btn-secondary {
+            background-color: #00bcd4;
+            border: none;
+            color: #000;
+        }
+
+        .btn-secondary:hover {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
@@ -31,7 +89,7 @@
     </div>
     {% endfor %}
 
-    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Predict Again</a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3 w-100">Predict Again</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
