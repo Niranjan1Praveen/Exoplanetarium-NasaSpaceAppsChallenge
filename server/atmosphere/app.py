@@ -89,7 +89,6 @@ def load_data():
         "molecules_col": "molecules" if "molecules" in df.columns else None,
     }
 
-    # Optional: show a preview of molecules column on startup like your snippet
     if "molecules" in raw.columns:
         print("\nMolecules column preview:")
         try:

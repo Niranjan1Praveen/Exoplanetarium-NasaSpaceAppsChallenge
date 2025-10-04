@@ -31,7 +31,10 @@ import {
   ReferenceLine,
   Text,
   Legend,
+  ReferenceArea,
 } from "recharts";
+import ExoplanetTextures from "@/components/labDashboard/exoplanetTextures";
+import { Particles } from "@/components/ui/particles";
 
 // Types
 interface PlanetData {
@@ -122,6 +125,30 @@ const MoleculeLabel = (props: any) => {
 };
 
 // Transit Chart Component
+// Custom Legend Component for Transit Chart
+const TransitLegend = () => {
+  return (
+    <div className="flex justify-center gap-6 mb-2 mt-4">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-3 bg-blue-500 rounded-sm" />
+        <span className="text-xs text-muted-foreground">Observed</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-0.5 bg-green-500 border border-green-500 border-dashed" />
+        <span className="text-xs text-muted-foreground">Model</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-3 bg-red-400/20 border border-red-400/30 border-dashed" />
+        <span className="text-xs text-muted-foreground">Blocked Starlight</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-3 bg-green-400/20 border border-green-400/30 border-dashed" />
+        <span className="text-xs text-muted-foreground">Normal Starlight</span>
+      </div>
+    </div>
+  );
+};
+
 const TransitChart = ({ data }: { data: PlanetData["transit"] }) => {
   const chartData = data.time.map((time, index) => ({
     time,
@@ -130,10 +157,10 @@ const TransitChart = ({ data }: { data: PlanetData["transit"] }) => {
   }));
 
   return (
-    <ResponsiveContainer width="100%" height={286}>
+    <ResponsiveContainer width="100%" height={300}>
       <LineChart
         data={chartData}
-        margin={{ top: 20, right: 30, left: 10, bottom: 20 }}
+        margin={{ top: 40, right: 30, left: 20, bottom: 20 }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
         <XAxis
@@ -142,13 +169,13 @@ const TransitChart = ({ data }: { data: PlanetData["transit"] }) => {
           label={{
             value: "Time (hours)",
             position: "insideBottom",
-            offset: -15,
+            offset: -10,
             fill: "#9CA3AF",
           }}
         />
         <YAxis
           stroke="#9CA3AF"
-          domain={["dataMin - 0.001", "dataMax + 0.001"]}
+          domain={[0.97, 1.01]}
           tickFormatter={(value) => value.toFixed(2)}
           label={{
             value: "Brightness",
@@ -162,6 +189,11 @@ const TransitChart = ({ data }: { data: PlanetData["transit"] }) => {
           content={<TransitTooltip />}
           formatter={(value: number) => value.toFixed(4)}
         />
+
+        {/* Custom Legend */}
+        <Legend content={<TransitLegend />} />
+
+        {/* Data Lines */}
         <Line
           type="monotone"
           dataKey="brightness"
@@ -180,19 +212,31 @@ const TransitChart = ({ data }: { data: PlanetData["transit"] }) => {
           name="Model"
         />
 
-        {/* Annotations - Fixed version */}
-        {data.labels.map((label, index) => (
-          <g key={index}>
-            <text
-              x={label.x}
-              y={label.y}
-              textAnchor="middle"
-              className="fill-muted-foreground text-xs"
-            >
-              {label.text}
-            </text>
-          </g>
-        ))}
+        {/* Area highlighting for blocked starlight */}
+        <ReferenceArea
+          x1={Math.min(...data.time)}
+          x2={Math.max(...data.time)}
+          y1={0.97}
+          y2={Math.min(...data.brightness) - 0.002}
+          fill="#EF4444"
+          fillOpacity={0.1}
+          stroke="#EF4444"
+          strokeOpacity={0.3}
+          strokeDasharray="3 3"
+        />
+
+        {/* Area highlighting for normal starlight */}
+        <ReferenceArea
+          x1={Math.min(...data.time)}
+          x2={Math.max(...data.time)}
+          y1={Math.max(...data.brightness) + 0.002}
+          y2={1.01}
+          fill="#10B981"
+          fillOpacity={0.1}
+          stroke="#10B981"
+          strokeOpacity={0.3}
+          strokeDasharray="3 3"
+        />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -493,21 +537,34 @@ export default function Page() {
         </Card>
 
         {/* Blank Card - Reserved for future use */}
-        <Card className="col-span-1">
+        {/* 3D Visualization */}
+        <Card className="col-span-1 relative">
+          <Particles
+            className="absolute inset-0"
+            quantity={100}
+            size={0.1}
+            ease={80}
+            refresh
+          />
           <CardHeader>
-            <CardTitle>Additional Information</CardTitle>
-            <CardDescription>Reserved for future widgets</CardDescription>
+            <CardTitle>3D Visualization</CardTitle>
+            <CardDescription>
+              Atmospheric rendering based on spectral data and molecular
+              composition
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-64 flex flex-col items-center justify-center text-muted-foreground space-y-2">
-              <span>Future content area</span>
-              {planetData && (
-                <div className="text-center text-sm">
-                  <p>Selected: {planetData.planet}</p>
-                  <p>Type: {selectedType}</p>
-                </div>
-              )}
-            </div>
+          <CardContent className="bg-transparent">
+            {loading ? (
+              <Skeleton className="h-64 w-full" />
+            ) : (
+              <ExoplanetTextures
+                planetData={planetData}
+                selectedPlanet={selectedPlanet}
+                selectedType={selectedType}
+                availableTypes={types}
+                key={`exoplanet-3d-${selectedPlanet}-${selectedType}`}
+              />
+            )}
           </CardContent>
         </Card>
 
@@ -526,13 +583,13 @@ export default function Page() {
                 <Skeleton className="h-6 w-3/4" />
               </div>
             ) : planetData ? (
-              <div className="flex flex-wrap gap-2 min-h-20">
+              <div className="flex flex-wrap gap-2">
                 {planetData.molecules.length > 0 ? (
                   planetData.molecules.map((molecule) => (
                     <Badge
                       key={molecule.symbol}
                       variant="secondary"
-                      className="text-sm"
+                      className="text-sm p-3"
                     >
                       {molecule.name} ({molecule.symbol})
                     </Badge>
