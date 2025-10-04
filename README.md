@@ -1,4 +1,4 @@
-# 🌌 Exoplanetarium – An Exoplanet Classifier Tool for Researchers
+# Exoplanetarium – An Exoplanet Classifier Tool for Researchers
 
 #### 🪐 Event - NASA Space Apps Challenge 2025 [Noida]
 #### 👨‍🚀 Team Name - CODE4CHANGE
@@ -22,6 +22,7 @@ By leveraging *NASA's open-source datasets* and *AI models*, the project enables
 ## 🌍 Modules Overview
 
 ### 🧠 1. Exoplanet Classification Tool (Flask App)
+![Classifier](designs/LabClassifier.png)  
 A **web-based ML classifier** that predicts whether an object is a **Confirmed Planet, Candidate, or False Positive**.  
 - Accepts astrophysical parameters like *orbital period*, *transit depth*, *planet radius*, and *stellar radius*.  
 - Utilizes **LightGBM** and **XGBoost** ensemble models for robust predictions.  
@@ -32,6 +33,7 @@ A **web-based ML classifier** that predicts whether an object is a **Confirmed P
 ---
 
 ### ☁️ 2. Exoplanet Atmosphere Visualization API
+![Atmospheric Analysis](designs/LabAtmosphere.png)  
 A **Flask-based API** for retrieving and visualizing exoplanet atmosphere data.  
 - Loads and normalizes CSV datasets from NASA archives.  
 - Generates **synthetic transit and spectral curves** when data is incomplete.  
@@ -49,6 +51,7 @@ A **Flask-based API** for retrieving and visualizing exoplanet atmosphere data.
 ---
 
 ### 🔭 3. Exoplanet Discovery Methods (Educational Web App)
+![Exoplanet Discovery Methods](designs/PlayDiscovery.png)  
 An **interactive educational module** built with **Next.js + Tailwind CSS**, showcasing five exoplanet detection techniques:  
 - Transit Timing Variation (TTV)  
 - Radial Velocity  
@@ -66,6 +69,7 @@ An **interactive educational module** built with **Next.js + Tailwind CSS**, sho
 ---
 
 ### 🎨 4. Interactive 3D Planet Creator
+![Interactive 3D Planet Creator](designs/PlayDraw.png)  
 A **creative AI-powered experience** allowing users to **draw and generate planets**.  
 - Users sketch planetary textures on a circular canvas.  
 - Real-time 3D sphere preview powered by **Three.js**.  
@@ -82,6 +86,8 @@ A **creative AI-powered experience** allowing users to **draw and generate plane
 ---
 
 ### 🛰️ 5. Exoplanet Telescope Timeline
+![Exoplanet Telescope Timeline](designs/PlayTimeline.png)  
+
 An **interactive 3D timeline** showcasing major telescope missions from *Hubble (1990)* to *Ariel (2029)*.  
 - Chronological animation with glowing markers  
 - Clickable 3D telescope models (.glb)  
