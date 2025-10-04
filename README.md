@@ -1,4 +1,3 @@
-```markdown
 # 🌌 Exoplanetarium – An Exoplanet Classifier Tool for Researchers
 
 #### 🪐 Event - NASA Space Apps Challenge 2025 [Noida]
@@ -9,8 +8,6 @@
 ---
 
 ## 🌠 A Brief of the Prototype
-
-Interact and test the live models here → [**(Link coming soon)**]()
 
 **Exoplanetarium** is a next-generation **AI-powered web platform** designed to explore, classify, and visualize exoplanets discovered through NASA's missions.  
 
@@ -97,23 +94,29 @@ An **interactive 3D timeline** showcasing major telescope missions from *Hubble 
 
 ## 🧰 Tech Stack
 
-**Frontend:**  
-🧩 Next.js · TypeScript · Tailwind CSS · ShadCN UI · Three.js · Plotly.js · Framer Motion  
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | Next.js · TypeScript · Tailwind CSS · ShadCN UI · Three.js · Plotly.js · Framer Motion |
+| **Backend** | Flask · Flask-CORS |
+| **Authentication** | Clerk Auth |
+| **AI & ML** | CNN · XGBoost · LightGBM · PCA / t-SNE · K-Means · DBSCAN · Isolation Forest · Autoencoders |
+| **APIs & Add-Ons** | NASA Exoplanet Archive API · WebGL (3D Rendering) |
+| **Deployment** | Vercel (Frontend) · Render (Backend) |
 
-**Backend:**  
-⚙️ Flask · Flask-CORS  
+---
 
-**Authentication:**  
-🔐 Clerk Auth  
+## 👨‍👩‍👧‍👦 Meet the Team – CODE4CHANGE
 
-**AI & ML:**  
-🧠 CNN · XGBoost · LightGBM · PCA / t-SNE · K-Means · DBSCAN · Isolation Forest · Autoencoders  
+| Member | Role |
+|--------|------|
+| **Debshata Choudhury** | Team Lead / Data Analyst |
+| **Niranjan Praveen** | Frontend Engineer / Version Control Specialist |
+| **Vaibhav Jain** | Frontend Engineer / API Engineer |
+| **Abhishek Chaubey** | 3D Visualization Specialist |
+| **Pratham Ranjhan** | AI/ML Engineer |
+| **Shreyansh Jaiswal** | AI/ML Engineer / Solutions Architect |
 
-**APIs & Add-Ons:**  
-🪐 NASA Exoplanet Archive API · WebGL (3D Rendering)  
-
-**Deployment:**  
-🌐 Vercel (Frontend) · Render (Backend)
+> ✨ Together, Team CODE4CHANGE envisions making **space science more interactive, data-driven, and accessible** through cutting-edge web technologies and AI.
 
 ---
 
@@ -149,28 +152,13 @@ python app.py
 
 ---
 
-## 👨‍👩‍👧‍👦 Meet the Team – CODE4CHANGE
-
-| Member                 | Role                                           |
-| ---------------------- | ---------------------------------------------- |
-| **Debshata Choudhury** | Team Lead / Data Analyst                       |
-| **Niranjan Praveen**   | Frontend Engineer / Version Control Specialist |
-| **Vaibhav Jain**       | Frontend Engineer / API Engineer               |
-| **Abhishek Chaubey**   | 3D Visualization Specialist                    |
-| **Pratham Ranjhan**    | AI/ML Engineer                                 |
-| **Shreyansh Jaiswal**  | AI/ML Engineer / Solutions Architect           |
-
-> ✨ Together, Team CODE4CHANGE envisions making **space science more interactive, data-driven, and accessible** through cutting-edge web technologies and AI.
-
----
-
 ## 🚀 Future Plans
 
-* Integration of **real-time NASA mission feeds**
-* Enhanced **mobile accessibility and VR mode**
-* Addition of **hyperparameter tuning** through the interface
-* Community module for **uploading and benchmarking custom models**
-* Continuous learning pipeline for improving classification accuracy
+- Integration of **real-time NASA mission feeds**
+- Enhanced **mobile accessibility and VR mode**
+- Addition of **hyperparameter tuning** through the interface
+- Community module for **uploading and benchmarking custom models**
+- Continuous learning pipeline for improving classification accuracy
 
 ---
 
@@ -187,4 +175,3 @@ By merging machine learning with cosmic data, it transforms how researchers and 
 ### 🛰️ Repository
 
 🔗 [GitHub Repository (Link coming soon)]()
-```
