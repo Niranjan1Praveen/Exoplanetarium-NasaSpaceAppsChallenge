@@ -7,6 +7,10 @@ import {
   Mic,
   SwordsIcon,
   History,
+  Cloud,
+  Brain,
+  Earth,
+  Leaf,
 } from "lucide-react";
 
 import {
@@ -68,16 +72,16 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/lab/tool1">
-                    <Grid />
-                    <span>Tool1</span>
+                  <Link href="http://127.0.0.1:5003">
+                    <Earth />
+                    <span>Exoplanet Classifier</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href="/lab/tool2">
-                    <Grid />
+                    <Cloud />
                     <span>Atmospheric Analysis</span>
                   </Link>
                 </SidebarMenuButton>
@@ -85,8 +89,8 @@ const AppSidebar = async () => {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href="/lab/tool3">
-                    <Grid />
-                    <span>Tool3</span>
+                    <Leaf />
+                    <span>Habitibility Estimator</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

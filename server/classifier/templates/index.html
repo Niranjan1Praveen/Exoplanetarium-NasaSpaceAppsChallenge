@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exoplanet Predictor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Exoplanet Classification</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('predict') }}">
+        <div class="row">
+            {% for key, info in sliders.items() %}
+            <div class="col-md-6 mb-3">
+                <label for="{{ key }}" class="form-label">
+                    {{ key.replace('_',' ').title() }} ({{ info.unit }}): 
+                    <span id="{{ key }}_val">{{ info.default }}</span>
+                </label>
+                <input type="range" class="form-range" min="{{ info.min }}" max="{{ info.max }}" step="{{ info.step }}"
+                       value="{{ info.default }}" name="{{ key }}" id="{{ key }}"
+                       oninput="{{ key }}_val.innerText = this.value; document.getElementById('{{ key }}_input').value = this.value;">
+                <input type="number" class="form-control mt-2" id="{{ key }}_input" value="{{ info.default }}" 
+                       min="{{ info.min }}" max="{{ info.max }}" step="{{ info.step }}"
+                       oninput="document.getElementById('{{ key }}').value = this.value; document.getElementById('{{ key }}_val').innerText = this.value;">
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Predict</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

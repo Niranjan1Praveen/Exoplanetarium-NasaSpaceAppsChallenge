@@ -18,7 +18,7 @@ const ExoplanetDashboard: React.FC = () => {
   const models: Model[] = [
     {
       id: 1,
-      name: "Transit Photometry",
+      name: "Exoplanet Classifier",
       icon: Target,
       description: "Detects exoplanets by measuring the dimming of a star's light as a planet passes in front of it. This method has discovered thousands of exoplanets and provides crucial data about planetary size and orbital period.",
       accuracy: "95%",
@@ -26,7 +26,7 @@ const ExoplanetDashboard: React.FC = () => {
     },
     {
       id: 2,
-      name: "Radial Velocity",
+      name: "Atmospheric Analysis",
       icon: Orbit,
       description: "Identifies exoplanets by detecting the wobble in a star's motion caused by gravitational pull. This technique reveals planetary mass and orbital characteristics with remarkable precision.",
       accuracy: "92%",
@@ -34,7 +34,7 @@ const ExoplanetDashboard: React.FC = () => {
     },
     {
       id: 3,
-      name: "Direct Imaging",
+      name: "Habitibility Estimator",
       icon: Sparkles,
       description: "Captures actual images of exoplanets by blocking out the star's light. While challenging, this method provides direct visual confirmation and spectroscopic data about distant worlds.",
       accuracy: "88%",
@@ -55,36 +55,6 @@ const ExoplanetDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-8 relative overflow-hidden">
-      {/* Animated background orbits */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            variants={orbitVariants}
-            animate="animate"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              width: `${300 + i * 200}px`,
-              height: `${300 + i * 200}px`,
-            }}
-          >
-            <div className="w-full h-full border border-white/5 rounded-full" />
-            <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 15 - i * 3,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              className="absolute top-0 left-1/2 w-2 h-2 bg-white/20 rounded-full"
-              style={{ originX: 0.5, originY: `${150 + i * 100}px` }}
-            />
-          </motion.div>
-        ))}
-      </div>
-
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
