@@ -33,6 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { currentUser } from "@clerk/nextjs/server";
+import Image from "next/image";
 
 const AppSidebar = async () => {
   const user = await currentUser();
@@ -42,13 +43,13 @@ const AppSidebar = async () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton>
-              {/* <Image
-                src=""
-                alt="logo"
+              <img
+                src={user?.imageUrl || "/default-avatar.png"} 
+                alt="User Avatar"
                 width={30}
                 height={30}
                 className="rounded-full"
-              /> */}
+              />
               <span>Welcome {user?.firstName}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -79,7 +80,7 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/lab/tool2">
+                  <Link href="/lab/atmosphericAnalysis">
                     <Cloud />
                     <span>Atmospheric Analysis</span>
                   </Link>
@@ -88,7 +89,6 @@ const AppSidebar = async () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>

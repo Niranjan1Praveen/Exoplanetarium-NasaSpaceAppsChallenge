@@ -619,9 +619,9 @@ const DirectImagingControls: React.FC<{
         </div>
       </div>
       
-      <div className="mt-3 text-sm text-gray-300">
+      {/* <div className="mt-3 text-sm text-gray-300">
         <p><strong>Direct Imaging</strong> captures actual pictures of exoplanets by blocking the host star's light and using advanced optics to reveal faint planetary companions.</p>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -669,7 +669,7 @@ const DirectImagingAnimation: React.FC = () => {
         setAnimationSpeed={setAnimationSpeed}
       />
       
-      <div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-md">
+      <div className="absolute bottom-0 left-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-md">
         <h4 className="font-bold">How Direct Imaging Works:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>Coronagraph blocks bright starlight</li>
@@ -680,7 +680,7 @@ const DirectImagingAnimation: React.FC = () => {
         </ul>
       </div>
 
-      <div className="absolute top-4 right-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-sm">
+      {/* <div className="absolute top-4 right-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-sm">
         <h4 className="font-bold">Challenges & Solutions:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>Extreme contrast ratios (1:1,000,000+)</li>
@@ -689,9 +689,9 @@ const DirectImagingAnimation: React.FC = () => {
           <li>Coronagraphs block starlight</li>
           <li>Works in infrared wavelengths</li>
         </ul>
-      </div>
+      </div> */}
 
-      <div className="absolute bottom-4 right-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-xs">
+      {/* <div className="absolute bottom-4 right-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-xs">
         <h4 className="font-bold text-green-400">Real Examples:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>HR 8799 system (4 planets)</li>
@@ -699,7 +699,7 @@ const DirectImagingAnimation: React.FC = () => {
           <li>Fomalhaut b</li>
           <li>James Webb discoveries</li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
