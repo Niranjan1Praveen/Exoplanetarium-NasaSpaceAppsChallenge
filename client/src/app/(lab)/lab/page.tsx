@@ -83,7 +83,7 @@ const ExoplanetDashboard: React.FC = () => {
           className="text-center mb-16"
         >
           <motion.h1
-            className="text-6xl font-bold mb-4 bg-clip-text"
+            className="text-5xl font-bold mb-4 bg-clip-text"
             animate={{
               backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
             }}
@@ -112,7 +112,6 @@ const ExoplanetDashboard: React.FC = () => {
               >
                 <motion.div
                   className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 h-full border border-white/10 relative overflow-hidden"
-                  whileHover={{ scale: 1.02, borderColor: 'rgba(255,255,255,0.3)' }}
                   transition={{ duration: 0.3 }}
                 >
                   
@@ -178,17 +177,17 @@ const ExoplanetDashboard: React.FC = () => {
           <div className="inline-flex items-center gap-8 bg-white/5 backdrop-blur-sm rounded-full px-8 py-4 border border-white/10">
             <div>
               <p className="text-3xl font-bold">5,500+</p>
-              <p className="text-sm text-gray-400">Total Exoplanets</p>
+              <p className="text-sm text-muted-foreground">Total Exoplanets</p>
             </div>
             <div className="w-px h-12 bg-white/20" />
             <div>
               <p className="text-3xl font-bold">3</p>
-              <p className="text-sm text-gray-400">Detection Methods</p>
+              <p className="text-sm text-muted-foreground">Detection Methods</p>
             </div>
             <div className="w-px h-12 bg-white/20" />
             <div>
               <p className="text-3xl font-bold">92%</p>
-              <p className="text-sm text-gray-400">Avg. Accuracy</p>
+              <p className="text-sm text-muted-foreground">Avg. Accuracy</p>
             </div>
           </div>
         </motion.div>
