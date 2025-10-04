@@ -1,23 +1,12 @@
-# app.py
-# Exoplanet Atmospheres — Dark Demo (Flask)
-# ------------------------------------------------------------
-# - CSV LOADING: EXACTLY like the user's snippet (sep=';', engine='python',
-#   quoting=csv.QUOTE_NONE, on_bad_lines='skip', encoding='utf-8')
-# - Auto-detects planet/type columns; synthesizes curves if missing
-# - Spectra labels and dashboard chips come ONLY from detected molecules
-# - Endpoints:
-#     GET /          -> index.html
-#     GET /planets   -> planets by type
-#     GET /data      -> JSON for selected planet
-# ------------------------------------------------------------
-
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 import os, re, glob, csv, json
 
 APP_TITLE = "Exoplanet Atmospheres — Dark Demo"
 app = Flask(__name__)
+CORS(app)  # Enable CORS for Next.js frontend
 
 # ---------- CSV PATH ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -266,17 +255,29 @@ def get_type_planet_map():
 # ---------- ROUTES ----------
 @app.route("/")
 def index():
-    type_planet = get_type_planet_map()
-    return render_template("index.html", app_title=APP_TITLE, type_planet=type_planet, meta=META)
+    return jsonify({"message": "Exoplanet Atmospheres API"})
 
-@app.get("/planets")
+@app.get("/api/types")
+def get_types():
+    """Get all available exoplanet types"""
+    mapping = get_type_planet_map()
+    return jsonify({
+        "types": list(mapping.keys()),
+        "type_planet_map": mapping
+    })
+
+@app.get("/api/planets")
 def planets_for_type():
+    """Get planets for a specific type"""
     t = request.args.get("type", "")
     mapping = get_type_planet_map()
-    return jsonify(mapping.get(t, []))
+    return jsonify({
+        "planets": mapping.get(t, [])
+    })
 
-@app.get("/data")
+@app.get("/api/data")
 def data_for_planet():
+    """Get all data for a specific planet"""
     planet = request.args.get("planet", "")
     pcol = META["planet_col"]
     sub = DF[DF[pcol].astype(str) == str(planet)].copy()
@@ -357,7 +358,9 @@ def data_for_planet():
         "transit": transit,
         "spectra": spectra,
         "molecules": molecules_list,
-        "molecules_raw": molecules_raw
+        "molecules_raw": molecules_raw,
+        "planet": planet,
+        "success": True
     })
 
 # ---------- MAIN ----------
