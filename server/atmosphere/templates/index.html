@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Exoplanet Atmos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Exoplanet Atmos</h1>
+      <p class="subtitle">Interactive Transit Light Curve & Transmission Spectra</p>
+    </header>
+
+    <main class="container">
+      <!-- controls directly under the heading -->
+      <section class="controls">
+        <div class="control">
+          <label for="typeSelect">Type of Exoplanet</label>
+          <select id="typeSelect"></select>
+        </div>
+        <div class="control">
+          <label for="planetSelect">Exoplanet</label>
+          <select id="planetSelect"></select>
+        </div>
+      </section>
+
+      <!-- 2 × 2 dashboard grid -->
+      <section class="dashboard">
+        <!-- top-left -->
+        <div class="card cell-transit">
+          <h2>Transit Light Curve</h2>
+          <div id="transitChart" class="chart"></div>
+        </div>
+
+        <!-- top-right (intentionally blank) -->
+        <div class="card cell-blank">
+          <!-- reserved for future widget -->
+        </div>
+
+        <!-- bottom-left -->
+        <div class="card cell-molecules">
+          <h2>Detected Molecules</h2>
+          <div id="moleculeList" class="molecule-list"></div>
+        </div>
+
+        <!-- bottom-right -->
+        <div class="card cell-spectra">
+          <h2>Transmission Spectra: Morning vs Evening</h2>
+          <div id="spectraChart" class="chart"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Dark theme • all text & strokes in white</span>
+    </footer>
+
+    <script id="bootstrap-data" type="application/json">
+      {{ type_planet | tojson }}
+    </script>
+  </body>
+</html>

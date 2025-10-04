@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 const teamMembers = [
   {
     name: "Debshata Choudhury",
-    role: "Team Lead / Data Engineer",
+    role: "Team Lead / Data Analyst",
     image: "/team/debshata.jpeg",
   },
   {
@@ -30,8 +30,8 @@ const teamMembers = [
   },
   {
     name: "Shreyansh Jaiswal",
-    role: "Exoplanet Analyst",
-    image: "/team/liam.jpg",
+    role: "AI/ML Engineer / Solutions Architect",
+    image: "/team/shreyansh.jpg",
   },
 ];
 
