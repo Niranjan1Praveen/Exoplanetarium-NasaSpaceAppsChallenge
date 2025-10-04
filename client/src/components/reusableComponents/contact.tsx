@@ -11,34 +11,34 @@ export default function Contact() {
       {/* Header */}
       <section className="text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
-          How can we help?
+          Need Assistance or Have Questions?
         </h1>
         <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-          Get in touch with our sales and support teams for demos, onboarding support, or product questions.
+          Get in touch with the Exoplanetarium team for guidance on research, classroom use, or technical support.
         </p>
       </section>
 
-      {/* Top Cards: Sales & Support */}
+      {/* Top Cards: Research & Support */}
       <section className="grid gap-6 md:grid-cols-2 mb-16">
         <Card className="flex flex-col justify-between">
           <CardHeader>
-            <CardTitle>Sales</CardTitle>
+            <CardTitle>Research Assistance</CardTitle>
             <CardDescription>
-              Speak to our sales team about plans, pricing, enterprise contracts, or request a demo.
+              Speak to our experts for help with exoplanet simulations, data analysis, or project guidance.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <Link href="#">Talk to sales</Link>
+              <Link href="#">Talk to research team</Link>
             </Button>
           </CardContent>
         </Card>
 
         <Card className="flex flex-col justify-between">
           <CardHeader>
-            <CardTitle>Help &amp; support</CardTitle>
+            <CardTitle>Help & Support</CardTitle>
             <CardDescription>
-              Ask product questions, report problems, or leave feedback.
+              Ask questions about Exoplanetarium features, report issues, or share feedback.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -52,45 +52,45 @@ export default function Contact() {
       {/* Lower Links */}
       <section className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
         <div>
-          <h3 className="font-semibold mb-1">Join the community</h3>
+          <h3 className="font-semibold mb-1">Join the Community</h3>
           <p className="text-sm text-muted-foreground mb-2">
-            More than 15,000 Linear users share questions and best practices in our Slack community.
+            Collaborate with other students and researchers, share findings, and discuss exoplanet discoveries.
           </p>
           <Link href="#" className="text-sm underline">
-            Join Slack
+            Join the forum
           </Link>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-1">General communication</h3>
+          <h3 className="font-semibold mb-1">General Communication</h3>
           <p className="text-sm text-muted-foreground mb-2">
-            For other queries, please get in touch with us via email.
+            For any general inquiries, get in touch via email.
           </p>
           <a
-            href="mailto:hello@linear.app"
+            href="mailto:hello@exoplanetarium.com"
             className="text-sm underline break-all"
           >
-            hello@linear.app
+            hello@exoplanetarium.com
           </a>
         </div>
 
         <div>
           <h3 className="font-semibold mb-1">Documentation</h3>
           <p className="text-sm text-muted-foreground mb-2">
-            Get an overview of Linear&apos;s features, integrations, and how to use them.
+            Explore tutorials, guides, and technical documentation for Exoplanetarium tools.
           </p>
           <Link href="#" className="text-sm underline">
-            Linear Docs
+            Exoplanetarium Docs
           </Link>
         </div>
 
         <div>
           <h3 className="font-semibold mb-1">Developers</h3>
           <p className="text-sm text-muted-foreground mb-2">
-            Learn how to use the GraphQL API and TypeScript SDK to extend Linear.
+            Learn how to integrate Exoplanetarium data and tools into your own applications.
           </p>
           <Link href="#" className="text-sm underline">
-            Linear API
+            API & SDK
           </Link>
         </div>
       </section>
