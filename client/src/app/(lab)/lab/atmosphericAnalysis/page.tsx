@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import domtoimage from 'dom-to-image';
+
 import {
   Card,
   CardContent,
@@ -26,16 +28,16 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  ReferenceLine,
-  Text,
   Legend,
   ReferenceArea,
+  ReferenceLine,
+  TooltipProps,
 } from "recharts";
 import ExoplanetTextures from "@/components/labDashboard/exoplanetTextures";
 import { Particles } from "@/components/ui/particles";
 import GLBLoader from "@/components/reusableComponents/glbloader";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 
 // Types
 interface PlanetData {
@@ -63,8 +65,21 @@ interface TypePlanetMap {
   [key: string]: string[];
 }
 
+interface TooltipPayloadItem {
+  value: number;
+  dataKey: string;
+  color: string;
+  name: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string | number;
+}
+
 // Custom tooltip for transit chart
-const TransitTooltip = ({ active, payload, label }: any) => {
+const TransitTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
@@ -72,22 +87,74 @@ const TransitTooltip = ({ active, payload, label }: any) => {
         <p className="text-sm text-blue-400">
           Brightness: {payload[0].value.toFixed(4)}
         </p>
-        <p className="text-sm text-green-400">
-          Model: {payload[1].value.toFixed(4)}
-        </p>
+        {payload[1] && (
+          <p className="text-sm text-green-400">
+            Model: {payload[1].value.toFixed(4)}
+          </p>
+        )}
       </div>
     );
   }
   return null;
 };
 
+const useDownloadChart = () => {
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  const downloadChart = async (filename: string) => {
+    if (!chartRef.current) return;
+
+    try {
+      const dataUrl = await domtoimage.toPng(chartRef.current, {
+        bgcolor: '#000000',
+        style: {
+          transform: 'scale(2)',
+          transformOrigin: 'center'
+        },
+        quality: 1.0
+      });
+      
+      const link = document.createElement('a');
+      link.download = `${filename}-${new Date().getTime()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error('Error downloading chart:', error);
+      alert('Failed to download chart. Please try again.');
+    }
+  };
+
+  return { chartRef, downloadChart };
+};
+interface DownloadButtonProps {
+  onDownload: () => void;
+  title: string;
+  disabled?: boolean;
+}
+
+const DownloadButton: React.FC<DownloadButtonProps> = ({
+  onDownload,
+  title,
+  disabled = false,
+}) => (
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={onDownload}
+    disabled={disabled}
+    className="absolute top-3 right-4 z-10 bg-background/80 backdrop-blur-sm"
+  >
+    <Download className="w-4 h-4 mr-2" />
+    Download {title}
+  </Button>
+);
 // Custom tooltip for spectra chart
-const SpectraTooltip = ({ active, payload, label }: any) => {
+const SpectraTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-3 rounded-lg shadow-lg">
         <p className="font-medium">Wavelength: {label}μm</p>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry, index) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {entry.name}: {entry.value.toFixed(4)}
           </p>
@@ -99,8 +166,14 @@ const SpectraTooltip = ({ active, payload, label }: any) => {
 };
 
 // Custom label for molecule annotations
-const MoleculeLabel = (props: any) => {
-  const { x, y, name, symbol } = props;
+interface MoleculeLabelProps {
+  x?: number;
+  y?: number;
+  name: string;
+  symbol: string;
+}
+
+const MoleculeLabel: React.FC<MoleculeLabelProps> = ({ x, y, name, symbol }) => {
   if (!x || !y) return null;
 
   return (
@@ -125,9 +198,8 @@ const MoleculeLabel = (props: any) => {
   );
 };
 
-// Transit Chart Component
 // Custom Legend Component for Transit Chart
-const TransitLegend = () => {
+const TransitLegend: React.FC = () => {
   return (
     <div className="flex justify-center gap-6 mb-2 mt-4">
       <div className="flex items-center gap-2">
@@ -151,100 +223,109 @@ const TransitLegend = () => {
 };
 
 const TransitChart = ({ data }: { data: PlanetData["transit"] }) => {
+  const { chartRef, downloadChart } = useDownloadChart();
+
+  const handleDownload = () => {
+    downloadChart(`transit-chart`);
+  };
   const chartData = data.time.map((time, index) => ({
     time,
     brightness: data.brightness[index],
     model: data.model_brightness[index],
   }));
-
+  
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart
-        data={chartData}
-        margin={{ top: 40, right: 30, left: 20, bottom: 20 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-        <XAxis
-          dataKey="time"
-          stroke="#9CA3AF"
-          label={{
-            value: "Time (hours)",
-            position: "insideBottom",
-            offset: -10,
-            fill: "#9CA3AF",
-          }}
-        />
-        <YAxis
-          stroke="#9CA3AF"
-          domain={[0.97, 1.01]}
-          tickFormatter={(value) => value.toFixed(2)}
-          label={{
-            value: "Brightness",
-            angle: -90,
-            position: "insideLeft",
-            offset: 10,
-            fill: "#9CA3AF",
-          }}
-        />
-        <Tooltip
-          content={<TransitTooltip />}
-          formatter={(value: number) => value.toFixed(4)}
-        />
+    <div className="relative" ref={chartRef}>
+      <DownloadButton onDownload={handleDownload} title="Transit Chart" />
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart
+          data={chartData}
+          margin={{ top: 40, right: 30, left: 20, bottom: 20 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+          <XAxis
+            dataKey="time"
+            stroke="#9CA3AF"
+            label={{
+              value: "Time (hours)",
+              position: "insideBottom",
+              offset: -10,
+              fill: "#9CA3AF",
+            }}
+          />
+          <YAxis
+            stroke="#9CA3AF"
+            domain={[0.97, 1.01]}
+            tickFormatter={(value) => value.toFixed(2)}
+            label={{
+              value: "Brightness",
+              angle: -90,
+              position: "insideLeft",
+              offset: 10,
+              fill: "#9CA3AF",
+            }}
+          />
+          <Tooltip
+            content={<TransitTooltip />}
+            formatter={(value: number) => value.toFixed(4)}
+          />
 
-        {/* Custom Legend */}
-        <Legend content={<TransitLegend />} />
+          {/* Custom Legend */}
+          <Legend content={<TransitLegend />} />
 
-        {/* Data Lines */}
-        <Line
-          type="monotone"
-          dataKey="brightness"
-          stroke="#60A5FA"
-          strokeWidth={2}
-          dot={false}
-          name="Observed"
-        />
-        <Line
-          type="monotone"
-          dataKey="model"
-          stroke="#34D399"
-          strokeWidth={2}
-          strokeDasharray="5 5"
-          dot={false}
-          name="Model"
-        />
+          {/* Data Lines */}
+          <Line
+            type="monotone"
+            dataKey="brightness"
+            stroke="#60A5FA"
+            strokeWidth={2}
+            dot={false}
+            name="Observed"
+          />
+          <Line
+            type="monotone"
+            dataKey="model"
+            stroke="#34D399"
+            strokeWidth={2}
+            strokeDasharray="5 5"
+            dot={false}
+            name="Model"
+          />
 
-        {/* Area highlighting for blocked starlight */}
-        <ReferenceArea
-          x1={Math.min(...data.time)}
-          x2={Math.max(...data.time)}
-          y1={0.97}
-          y2={Math.min(...data.brightness) - 0.002}
-          fill="#EF4444"
-          fillOpacity={0.1}
-          stroke="#EF4444"
-          strokeOpacity={0.3}
-          strokeDasharray="3 3"
-        />
+          {/* Area highlighting for blocked starlight */}
+          <ReferenceArea
+            x1={Math.min(...data.time)}
+            x2={Math.max(...data.time)}
+            y1={0.97}
+            y2={Math.min(...data.brightness) - 0.002}
+            fill="#EF4444"
+            fillOpacity={0.1}
+            stroke="#EF4444"
+            strokeOpacity={0.3}
+            strokeDasharray="3 3"
+          />
 
-        {/* Area highlighting for normal starlight */}
-        <ReferenceArea
-          x1={Math.min(...data.time)}
-          x2={Math.max(...data.time)}
-          y1={Math.max(...data.brightness) + 0.002}
-          y2={1.01}
-          fill="#10B981"
-          fillOpacity={0.1}
-          stroke="#10B981"
-          strokeOpacity={0.3}
-          strokeDasharray="3 3"
-        />
-      </LineChart>
-    </ResponsiveContainer>
+          {/* Area highlighting for normal starlight */}
+          <ReferenceArea
+            x1={Math.min(...data.time)}
+            x2={Math.max(...data.time)}
+            y1={Math.max(...data.brightness) + 0.002}
+            y2={1.01}
+            fill="#10B981"
+            fillOpacity={0.1}
+            stroke="#10B981"
+            strokeOpacity={0.3}
+            strokeDasharray="3 3"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 
 // Spectra Chart Component - Fixed version
 const SpectraChart = ({ data }: { data: PlanetData["spectra"] }) => {
+  const { chartRef, downloadChart } = useDownloadChart();
   // Create properly aligned data for both series
   const chartData = data.wavelength.map((wavelength, index) => ({
     wavelength,
@@ -256,94 +337,128 @@ const SpectraChart = ({ data }: { data: PlanetData["spectra"] }) => {
   const filteredData = chartData.filter(
     (point) => point.morning !== null && point.evening !== null
   );
-
+  const handleDownload = () => {
+    downloadChart(`spectra-chart-${data.labels[0]?.name || "exoplanet"}`);
+  };
   return (
-    <ResponsiveContainer width="100%" height={256}>
-      <LineChart
-        data={filteredData}
-        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-        <XAxis
-          dataKey="wavelength"
-          stroke="#9CA3AF"
-          label={{
-            value: "Wavelength (μm)",
-            position: "insideBottom",
-            offset: -10,
-            fill: "#9CA3AF",
-          }}
-        />
-        <YAxis
-          stroke="#9CA3AF"
-          label={{
-            value: "Transmission",
-            angle: -90,
-            position: "insideLeft",
-            offset: 10,
-            fill: "#9CA3AF",
-          }}
-        />
-        <Tooltip content={<SpectraTooltip />} />
-        <Legend
-          verticalAlign="top"
-          height={36}
-          wrapperStyle={{
-            fontSize: "12px",
-            color: "#9CA3AF",
-          }}
-          iconType="plainline"
-          iconSize={8}
-        />
+    <div className="relative" ref={chartRef}>
+      <DownloadButton onDownload={handleDownload} title="Spectra Chart" />
 
-        {/* Morning data */}
-        <Line
-          type="monotone"
-          dataKey="morning"
-          stroke="#F59E0B"
-          strokeWidth={2}
-          dot={false}
-          name="Morning"
-          legendType="plainline"
-        />
-
-        {/* Evening data */}
-        <Line
-          type="monotone"
-          dataKey="evening"
-          stroke="#8B5CF6"
-          strokeWidth={2}
-          dot={false}
-          name="Evening"
-          legendType="plainline"
-        />
-
-        {/* Molecule reference lines */}
-        {data.labels.map((molecule, index) => (
-          <ReferenceLine
-            key={index}
-            x={molecule.x}
-            stroke="#EF4444"
-            strokeDasharray="3 3"
-            strokeWidth={1}
+      <ResponsiveContainer width="100%" height={256}>
+        <LineChart
+          data={filteredData}
+          margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+          <XAxis
+            dataKey="wavelength"
+            stroke="#9CA3AF"
+            label={{
+              value: "Wavelength (μm)",
+              position: "insideBottom",
+              offset: -10,
+              fill: "#9CA3AF",
+            }}
           />
-        ))}
-
-        {/* Molecule annotations */}
-        {data.labels.map((molecule, index) => (
-          <MoleculeLabel
-            key={index}
-            x={molecule.x}
-            y={molecule.y}
-            name={molecule.name}
-            symbol={molecule.symbol}
+          <YAxis
+            stroke="#9CA3AF"
+            label={{
+              value: "Transmission",
+              angle: -90,
+              position: "insideLeft",
+              offset: 10,
+              fill: "#9CA3AF",
+            }}
           />
-        ))}
-      </LineChart>
-    </ResponsiveContainer>
+          <Tooltip content={<SpectraTooltip />} />
+          <Legend
+            verticalAlign="top"
+            height={36}
+            wrapperStyle={{
+              fontSize: "12px",
+              color: "#9CA3AF",
+            }}
+            iconType="plainline"
+            iconSize={8}
+          />
+
+          {/* Morning data */}
+          <Line
+            type="monotone"
+            dataKey="morning"
+            stroke="#F59E0B"
+            strokeWidth={2}
+            dot={false}
+            name="Morning"
+            legendType="plainline"
+          />
+
+          {/* Evening data */}
+          <Line
+            type="monotone"
+            dataKey="evening"
+            stroke="#8B5CF6"
+            strokeWidth={2}
+            dot={false}
+            name="Evening"
+            legendType="plainline"
+          />
+
+          {/* Molecule reference lines */}
+          {data.labels.map((molecule, index) => (
+            <ReferenceLine
+              key={index}
+              x={molecule.x}
+              stroke="#EF4444"
+              strokeDasharray="3 3"
+              strokeWidth={1}
+            />
+          ))}
+
+          {/* Molecule annotations */}
+          {data.labels.map((molecule, index) => (
+            <MoleculeLabel
+              key={index}
+              x={molecule.x}
+              y={molecule.y}
+              name={molecule.name}
+              symbol={molecule.symbol}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
+// Add this component after your other custom components
+const MoleculesDownload = ({
+  molecules,
+  planetName,
+}: {
+  molecules: Array<{ symbol: string; name: string }>;
+  planetName: string;
+}) => {
+  const handleDownloadMolecules = () => {
+    const content = `Detected Molecules for ${planetName}\n\n${molecules
+      .map((mol) => `${mol.name} (${mol.symbol})`)
+      .join("\n")}\n\nGenerated on: ${new Date().toLocaleString()}`;
 
+    const blob = new Blob([content], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.download = `molecules-${planetName}-${new Date().getTime()}.txt`;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  return (
+    <DownloadButton
+      onDownload={handleDownloadMolecules}
+      title="Molecules List"
+      disabled={molecules.length === 0}
+    />
+  );
+};
 export default function Page() {
   const [types, setTypes] = useState<string[]>([]);
   const [planets, setPlanets] = useState<string[]>([]);
@@ -459,6 +574,7 @@ export default function Page() {
           </Select>
         </div>
       </div>
+
       {/* Scientific Context Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* Transit Methodology */}
@@ -514,6 +630,7 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
+
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Transit Light Curve */}
@@ -529,13 +646,15 @@ export default function Page() {
               <Skeleton className="h-64 w-full" />
             ) : planetData ? (
               <div className="space-y-4">
-                {/* GLB Model with fixed height */}
-                <div className="w-full overflow-hidden">
-                  {/* <GLBLoader
+                {/* GLB Model with Animation */}
+                <div className="w-full h-64 overflow-hidden rounded-lg border border-border bg-black">
+                  <GLBLoader
                     modelPath="/models/transitLightCurve.glb"
-                    cameraPosition={[0, 0, 1]}
-                    scale={0.1}
-                  /> */}
+                    cameraPosition={[0, 0, 2]}
+                    scale={0.8}
+                    autoPlay={true}
+                    loop={true}
+                  />
                 </div>
                 {/* Transit Chart */}
                 <div className="h-64">
@@ -550,7 +669,6 @@ export default function Page() {
           </CardContent>
         </Card>
 
-        {/* Blank Card - Reserved for future use */}
         {/* 3D Visualization */}
         <Card className="col-span-1 relative">
           <Particles
@@ -583,7 +701,7 @@ export default function Page() {
         </Card>
 
         {/* Detected Molecules */}
-        <Card className="col-span-1">
+        <Card className="relative col-span-1">
           <CardHeader>
             <CardTitle>Detected Molecules</CardTitle>
             <CardDescription>
@@ -591,6 +709,12 @@ export default function Page() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {planetData && (
+              <MoleculesDownload
+                molecules={planetData.molecules}
+                planetName={planetData.planet}
+              />
+            )}
             {loading ? (
               <div className="space-y-2">
                 <Skeleton className="h-6 w-full" />

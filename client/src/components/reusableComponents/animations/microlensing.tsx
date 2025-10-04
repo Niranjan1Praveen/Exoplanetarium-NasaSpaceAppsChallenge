@@ -464,9 +464,9 @@ const MicrolensingControls: React.FC<{
         </div>
       </div>
       
-      <div className="mt-3 text-sm text-gray-300">
+      {/* <div className="mt-3 text-sm text-gray-300">
         <p><strong>Gravitational Microlensing</strong> occurs when a foreground star (lens) magnifies the light of a background star (source) due to gravitational bending of light.</p>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -510,7 +510,7 @@ const MicrolensingAnimation: React.FC = () => {
         setAnimationSpeed={setAnimationSpeed}
       />
       
-      <div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-md">
+      <div className="absolute bottom-0 left-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-md">
         <h4 className="font-bold">How Microlensing Works:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>Foreground star acts as gravitational lens</li>
@@ -521,7 +521,7 @@ const MicrolensingAnimation: React.FC = () => {
         </ul>
       </div>
 
-      <div className="absolute top-4 right-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-sm">
+      {/* <div className="absolute top-4 right-4 text-white bg-black bg-opacity-70 p-3 rounded-lg max-w-sm">
         <h4 className="font-bold">Key Features:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>Detects planets at large distances</li>
@@ -529,7 +529,7 @@ const MicrolensingAnimation: React.FC = () => {
           <li>One-time events (non-repeatable)</li>
           <li>Can detect free-floating planets</li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
