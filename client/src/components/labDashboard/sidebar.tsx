@@ -72,6 +72,7 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
+                  
                   <Link href="http://127.0.0.1:5003">
                     <Earth />
                     <span>Exoplanet Classifier</span>
