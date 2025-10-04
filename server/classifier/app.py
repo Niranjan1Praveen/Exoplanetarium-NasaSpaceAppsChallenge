@@ -51,15 +51,15 @@ def create_features(user_input):
     df = pd.DataFrame([user_input])
 
     # Placeholder features (unknown inputs)
-    df["transit_duration"] = 1.0       # unknown
-    df["eccentricity"] = 0.0           # unknown
-    df["impact_parameter"] = 0.5       # unknown
-    df["eq_temperature"] = 1.0         # unknown
-    df["semi_major_axis"] = 1.0        # unknown
-    df["stellar_mass"] = 1.0           # unknown
-    df["stellar_temp"] = 5800.0        # Sun-like default
-    df["stellar_logg"] = 4.44          # Sun-like default
-    df["stellar_metallicity"] = 0.0    # unknown
+    df["transit_duration"] = 1.0
+    df["eccentricity"] = 0.0
+    df["impact_parameter"] = 0.5
+    df["eq_temperature"] = 1.0
+    df["semi_major_axis"] = 1.0
+    df["stellar_mass"] = 1.0
+    df["stellar_temp"] = 5800.0
+    df["stellar_logg"] = 4.44
+    df["stellar_metallicity"] = 0.0
 
     # Derived features
     df["transit_snr"] = df["transit_depth"] / (df["transit_duration"] + EPSILON)
@@ -114,7 +114,15 @@ def predict():
         prob_display = {class_map[i]: round(float(p)*100, 2) for i, p in enumerate(ensemble_probs[0])}
         inference = "Exoplanet classification result based on ensemble of LightGBM and XGBoost models."
 
-        return render_template("result.html", pred_class=pred_class, prob_display=prob_display, inference=inference)
+        # Pass ensemble_probs and user_input for chart visualization
+        return render_template(
+            "result.html",
+            pred_class=pred_class,
+            prob_display=prob_display,
+            inference=inference,
+            user_input=user_input,
+            ensemble_probs=ensemble_probs[0].tolist()
+        )
 
     except Exception as e:
         flash(str(e), "danger")
