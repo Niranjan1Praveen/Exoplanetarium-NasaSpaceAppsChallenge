@@ -35,6 +35,7 @@ import {
 } from "recharts";
 import ExoplanetTextures from "@/components/labDashboard/exoplanetTextures";
 import { Particles } from "@/components/ui/particles";
+import GLBLoader from "@/components/reusableComponents/glbloader";
 
 // Types
 interface PlanetData {
@@ -527,7 +528,20 @@ export default function Page() {
             {loading ? (
               <Skeleton className="h-64 w-full" />
             ) : planetData ? (
-              <TransitChart data={planetData.transit} />
+              <div className="space-y-4">
+                {/* GLB Model with fixed height */}
+                <div className="w-full overflow-hidden">
+                  {/* <GLBLoader
+                    modelPath="/models/transitLightCurve.glb"
+                    cameraPosition={[0, 0, 1]}
+                    scale={0.1}
+                  /> */}
+                </div>
+                {/* Transit Chart */}
+                <div className="h-64">
+                  <TransitChart data={planetData.transit} />
+                </div>
+              </div>
             ) : (
               <div className="h-64 flex items-center justify-center text-muted-foreground">
                 Select a planet to view transit data

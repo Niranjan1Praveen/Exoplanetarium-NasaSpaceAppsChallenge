@@ -26,7 +26,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,7 +71,6 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  
                   <Link href="http://127.0.0.1:5003">
                     <Earth />
                     <span>Exoplanet Classifier</span>
@@ -84,14 +82,6 @@ const AppSidebar = async () => {
                   <Link href="/lab/tool2">
                     <Cloud />
                     <span>Atmospheric Analysis</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/lab/tool3">
-                    <Leaf />
-                    <span>Habitibility Estimator</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

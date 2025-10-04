@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Orbit, Target, Sparkles } from 'lucide-react';
 
@@ -12,8 +12,27 @@ interface Model {
   planets: string;
 }
 
+interface Particle {
+  id: number;
+  top: string;
+  left: string;
+}
+
 const ExoplanetDashboard: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Initialize particles only on client side
+  useEffect(() => {
+    setIsMounted(true);
+    const initialParticles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+    }));
+    setParticles(initialParticles);
+  }, []);
 
   const models: Model[] = [
     {
@@ -54,7 +73,7 @@ const ExoplanetDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8 relative overflow-hidden">
+    <div className="min-h-screen p-8 relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
@@ -64,16 +83,16 @@ const ExoplanetDashboard: React.FC = () => {
           className="text-center mb-16"
         >
           <motion.h1
-            className="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-white"
+            className="text-6xl font-bold mb-4 bg-clip-text"
             animate={{
               backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
             }}
             transition={{ duration: 5, repeat: Infinity }}
           >
-            Exoplanet Detection Models
+            Exoplanet Models
           </motion.h1>
-          <p className="text-xl text-gray-400">
-            Exploring distant worlds through advanced astronomical techniques
+          <p className="text-xl text-muted-foreground">
+            Classify and analyze exoplanets with cutting-edge AI models
           </p>
         </motion.div>
 
@@ -96,13 +115,7 @@ const ExoplanetDashboard: React.FC = () => {
                   whileHover={{ scale: 1.02, borderColor: 'rgba(255,255,255,0.3)' }}
                   transition={{ duration: 0.3 }}
                 >
-                  {/* Glowing effect on hover */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: hoveredCard === model.id ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
+                  
 
                   {/* Icon */}
                   <motion.div
@@ -113,6 +126,7 @@ const ExoplanetDashboard: React.FC = () => {
                     transition={{ duration: 0.6 }}
                   >
                     <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                      {/* <Icon className="w-8 h-8" /> */}
                     </div>
                   </motion.div>
 
@@ -125,13 +139,13 @@ const ExoplanetDashboard: React.FC = () => {
                   {/* Stats */}
                   <div className="flex justify-between items-center pt-4 border-t border-white/10">
                     <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
                         Accuracy
                       </p>
                       <p className="text-lg font-semibold">{model.accuracy}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
                         Discovered
                       </p>
                       <p className="text-lg font-semibold">{model.planets}</p>
@@ -180,26 +194,6 @@ const ExoplanetDashboard: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-white rounded-full"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 2,
-            repeat: Infinity,
-            delay: Math.random() * 2,
-          }}
-        />
-      ))}
     </div>
   );
 };
