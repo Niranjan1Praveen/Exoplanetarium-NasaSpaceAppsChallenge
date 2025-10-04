@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Particles } from "@/components/ui/particles";
+import Link from "next/link";
 
 interface ChangelogData {
   title: string;
@@ -139,11 +140,14 @@ export default function HomePage() {
       </div>
 
       {/* Header */}
-      <div className="max-w-5xl mx-auto p-4 flex items-center justify-center gap-4">
+      <div className="max-w-5xl mx-auto p-4 flex flex-col items-center justify-center gap-4">
         <h1 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
           Exoplanet Exploration Timeline
         </h1>
-        <AnimatedThemeToggler />
+         <div className="flex items-center justify-center gap-4 mb-4">
+            <AnimatedThemeToggler />
+            <Link href={"/play"} className="hover:underline">Go Back</Link>
+          </div>
       </div>
 
       {/* Vertical Timeline */}
@@ -285,8 +289,8 @@ export default function HomePage() {
           </DialogContent>
         </Dialog>
       )}
-      <div className="max-w-64 right-10 bottom-10 fixed rounded-md bg-muted-foreground/20 p-4 text-muted-foreground z-100">
-        Move the cursor around the satellites to interact with them!
+      <div className="max-w-64 text-sm right-10 bottom-10 fixed rounded-md bg-muted-foreground/20 p-4 text-muted-foreground z-100">
+        Click on the telescope names to learn more!
       </div>
     </div>
   );
