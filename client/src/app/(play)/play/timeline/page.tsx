@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Particles } from "@/components/ui/particles";
 
 interface ChangelogData {
   title: string;
@@ -121,6 +122,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      <Particles
+        className="absolute inset-0"
+        quantity={300}
+        size={0.1}
+        ease={80}
+        refresh
+      />
       {/* Ambient background effects */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
@@ -162,15 +170,13 @@ export default function HomePage() {
                   delay: 0.1,
                   ease: "easeOut",
                 }}
-                className={`relative flex w-full items-center ${
-                  isLeft ? "justify-start" : "justify-end"
-                }`}
+                className={`relative flex w-full items-center ${isLeft ? "justify-start" : "justify-end"
+                  }`}
               >
                 {/* Side content */}
                 <div
-                  className={`w-1/2 flex flex-col items-center text-center ${
-                    isLeft ? "pr-10" : "pl-10"
-                  }`}
+                  className={`w-1/2 flex flex-col items-center text-center ${isLeft ? "pr-10" : "pl-10"
+                    }`}
                 >
                   {/* Telescope model with hover effect */}
                   <div className="mx-auto relative group">
@@ -218,9 +224,8 @@ export default function HomePage() {
                     whileInView={{ width: isLeft ? "100px" : "100px" }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    className={`absolute top-1/2 h-[2px] bg-border/50 ${
-                      isLeft ? "right-full" : "left-full"
-                    }`}
+                    className={`absolute top-1/2 h-[2px] bg-border/50 ${isLeft ? "right-full" : "left-full"
+                      }`}
                   />
 
                   {/* Year circle */}
