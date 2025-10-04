@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Prediction Result</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background-color: #000; /* Black background */
@@ -61,6 +62,20 @@
         .btn-secondary:hover {
             color: #fff;
         }
+
+        /* Chart container */
+        #chart-container {
+            margin-top: 50px;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 188, 212, 0.15);
+        }
+
+        #inputChart {
+            max-width: 500px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -89,9 +104,8 @@
     </div>
     {% endfor %}
 
-    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3 w-100">Predict Again</a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4 w-100">Predict Again</a>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
