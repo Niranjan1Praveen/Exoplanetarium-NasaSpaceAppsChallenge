@@ -132,8 +132,8 @@ An **interactive 3D timeline** showcasing major telescope missions from *Hubble 
 ### ▶️ How to Run the Frontend (Next.js)
 ```bash
 # 1. Clone the Repository
-git clone https://github.com/YourUsername/exoplanetarium.git
-cd exoplanetarium
+git clone https://github.com/Niranjan1Praveen/Exoplanetarium-NasaSpaceAppsChallenge.git
+cd client
 
 # 2. Install Dependencies
 npm install
@@ -148,12 +148,18 @@ Visit http://localhost:3000 in your browser
 ### 🧠 How to Run the Backend (Flask API)
 ```bash
 # 1. Navigate to the Backend Folder
-cd server/tools
+cd server
 
 # 2. Install Required Packages
 pip install -r requirements.txt
 
 # 3. Start the Flask Server
+cd atmosphere
+
+python app.py
+
+cd classifier
+
 python app.py
 ```
 
