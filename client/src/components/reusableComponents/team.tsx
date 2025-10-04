@@ -10,7 +10,7 @@ const teamMembers = [
   },
   {
     name: "Niranjan Praveen",
-    role: "Frontend Engineer / Database Engineer",
+    role: "Frontend Engineer / Version Control Specialist",
     image: "/team/niranjan.png",
   },
   {
@@ -21,11 +21,11 @@ const teamMembers = [
   {
     name: "Abhishek Chaubey",
     role: "3D Visualization Specialist",
-    image: "/team/ethan.jpg",
+    image: "/team/abhishek.png",
   },
   {
     name: "Pratham Ranjhan",
-    role: "3D Visualization Specialist",
+    role: "AI/ML Engineer",
     image: "/team/pratham.png",
   },
   {
@@ -60,7 +60,7 @@ export default function MeetOurTeam() {
               />
 
               {/* Overlay for text */}
-              <div className="absolute bottom-0 left-0 p-4 bg-gradient-to-t from-black/60 to-transparent w-full">
+              <div className="absolute bottom-0 left-0 p-4 bg-gradient-to-t from-black/70 to-transparent w-full">
                 <h3 className="text-lg font-semibold text-white">
                   {member.name}
                 </h3>

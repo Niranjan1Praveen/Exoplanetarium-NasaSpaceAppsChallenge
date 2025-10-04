@@ -21,15 +21,17 @@ const ServiceOption: React.FC<ServiceOptionProps> = ({
   return (
     <Link href={href}>
       <div className="flex flex-col items-center justify-center rounded-2xl shadow-lg p-6 w-100 hover:scale-105 transition-transform duration-300">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-3">{title}</h2>
+
         <div className="h-50 w-full mb-4">
+          
           <GLBLoader
             modelPath={modelPath}
             scale={4.5}
             cameraPosition={[-12, 0, 0]}
           />
         </div>
-        <h2 className="text-4xl md:text-5xl font-semibold mb-3">{title}</h2>
-        <p className="text-xl text-center text-muted-foreground">
+        <p className="text-md text-center text-muted-foreground">
           {description}
         </p>
       </div>
@@ -49,13 +51,13 @@ const ExoplanetOptions: React.FC = () => {
       />
       <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
         <ServiceOption
-          title="Exoplanet Lab"
+          title="Lab"
           description="Dive deep into research and analysis. Explore light curves, stellar wobbles, and data-driven models that reveal hidden exoplanets."
           modelPath="/models/lab.glb"
           href="/lab"
         />
         <ServiceOption
-          title="Exoplanet Play"
+          title="Play"
           description="A fun, interactive way to discover new worlds. Simulate planetary systems, play with orbital dynamics, and learn through exploration."
           modelPath="/models/exoplanet_play.glb"
           href="/play"
