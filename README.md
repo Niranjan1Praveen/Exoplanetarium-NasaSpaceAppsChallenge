@@ -8,7 +8,7 @@
 ---
 
 ## 🌠 A Brief of the Prototype
-
+![Landing Page](designs/LandingPage.png)  
 **Exoplanetarium** is a next-generation **AI-powered web platform** designed to explore, classify, and visualize exoplanets discovered through NASA's missions.  
 
 It brings together *machine learning, astrophysics, and interactive visualization* to make the study of exoplanets engaging for **students, researchers, and astronomy enthusiasts** alike.  
