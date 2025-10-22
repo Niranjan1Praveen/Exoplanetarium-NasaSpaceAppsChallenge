@@ -120,7 +120,7 @@ An **interactive 3D timeline** showcasing major telescope missions from *Hubble 
 | **Niranjan Praveen** | Frontend Engineer / Version Control Specialist |
 | **Vaibhav Jain** | Frontend Engineer / API Engineer |
 | **Abhishek Chaubey** | 3D Visualization Specialist |
-| **Pratham Ranjhan** | AI/ML Engineer |
+| **Pratham Ranjan** | AI/ML Engineer |
 | **Shreyansh Jaiswal** | AI/ML Engineer / Solutions Architect |
 
 > ✨ Together, Team CODE4CHANGE envisions making **space science more interactive, data-driven, and accessible** through cutting-edge web technologies and AI.
