@@ -29,12 +29,12 @@ N_SPLITS = 5
 # Data Loading
 # -----------------------------
 def load_and_preprocess_data():
-    print("🔄 Loading data and computing class weights...")
+    print("Loading data and computing class weights...")
     try:
         train_df = pd.read_csv(os.path.join(FEATURE_DIR, "train_features.csv"))
         test_df = pd.read_csv(os.path.join(FEATURE_DIR, "test_features.csv"))
     except FileNotFoundError as e:
-        print(f"❌ Error: {e}. Run feature_engineering.py first.")
+        print(f"Error: {e}. Run feature_engineering.py first.")
         raise
 
     X_train = train_df.drop("label", axis=1)
@@ -45,7 +45,7 @@ def load_and_preprocess_data():
     classes = np.unique(y_train)
     class_weights = compute_class_weight(class_weight="balanced", classes=classes, y=y_train)
     class_weight_dict = {cls: weight for cls, weight in zip(classes, class_weights)}
-    print("⚖️ Class Weights:", class_weight_dict)
+    print("Class Weights:", class_weight_dict)
 
     return X_train, y_train, X_test, y_test, class_weight_dict
 
@@ -53,7 +53,7 @@ def load_and_preprocess_data():
 # LightGBM Training
 # -----------------------------
 def train_lightgbm(X_train, y_train, X_test, y_test, class_weight_dict):
-    print("\n--- 🧠 Training LightGBM Model (CV + Early Stopping) ---")
+    print("\n--- Training LightGBM Model (CV + Early Stopping) ---")
     params = {
         'n_estimators': 1000,
         'learning_rate': 0.05,
@@ -99,14 +99,14 @@ def train_lightgbm(X_train, y_train, X_test, y_test, class_weight_dict):
     print(f"Accuracy: {accuracy_score(y_test, lgb_preds):.4f}")
 
     joblib.dump(lgb_final, os.path.join(MODEL_DIR, "lightgbm_model.pkl"))
-    print("✅ LightGBM model saved.")
+    print("LightGBM model saved.")
     return lgb_probs
 
 # -----------------------------
 # XGBoost Training
 # -----------------------------
 def train_xgboost(X_train, y_train, X_test, y_test, class_weight_dict):
-    print("\n--- 🧠 Training XGBoost Model ---")
+    print("\n--- Training XGBoost Model ---")
     sample_weights = y_train.map(class_weight_dict).values
 
     xgb_model = xgb.XGBClassifier(
@@ -147,26 +147,26 @@ def train_xgboost(X_train, y_train, X_test, y_test, class_weight_dict):
 
     xgb_preds = xgb_model.predict(X_test)
     xgb_probs = xgb_model.predict_proba(X_test)
-    print("\n🔹 XGBoost Test Report:")
+    print("\n XGBoost Test Report:")
     print(classification_report(y_test, xgb_preds))
     print(f"Accuracy: {accuracy_score(y_test, xgb_preds):.4f}")
 
     joblib.dump(xgb_model, os.path.join(MODEL_DIR, "xgboost_model.pkl"))
-    print("✅ XGBoost model saved.")
+    print("XGBoost model saved.")
     return xgb_probs
 
 # -----------------------------
 # Ensemble
 # -----------------------------
 def run_ensemble(lgb_probs, xgb_probs, y_test):
-    print("\n--- 🤝 Running Ensemble ---")
+    print("\n--- Running Ensemble ---")
     ensemble_probs = (lgb_probs + xgb_probs) / 2
     ensemble_preds = np.argmax(ensemble_probs, axis=1)
     print("\n🔹 Ensemble Test Report:")
     print(classification_report(y_test, ensemble_preds))
     print(f"Accuracy: {accuracy_score(y_test, ensemble_preds):.4f}")
     np.save(os.path.join(MODEL_DIR, "ensemble_probs.npy"), ensemble_probs)
-    print("✅ Ensemble probabilities saved.")
+    print("Ensemble probabilities saved.")
 
 # -----------------------------
 # Main
@@ -177,6 +177,7 @@ if __name__ == "__main__":
         lgb_probs = train_lightgbm(X_train, y_train, X_test, y_test, class_weight_dict)
         xgb_probs = train_xgboost(X_train, y_train, X_test, y_test, class_weight_dict)
         run_ensemble(lgb_probs, xgb_probs, y_test)
-        print(f"\n✨ DONE. All models and assets saved in {MODEL_DIR}")
+        print(f"\n DONE. All models and assets saved in {MODEL_DIR}")
     except Exception as e:
-        print(f"\n🚨 Training error: {e}")
+        print(f"\n Training error: {e}")
+
