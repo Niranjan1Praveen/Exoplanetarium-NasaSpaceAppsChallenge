@@ -65,7 +65,7 @@ def engineer_features(df):
 # Imputation
 # -----------------------------
 def impute_data(train_df, test_df):
-    print("🔄 Imputing missing values with training median...")
+    print("Imputing missing values with training median...")
     median_values = train_df.median()
     train_df.fillna(median_values, inplace=True)
     test_df.fillna(median_values, inplace=True)
@@ -75,13 +75,13 @@ def impute_data(train_df, test_df):
 # Main Pipeline
 # -----------------------------
 def main():
-    print("🚀 Starting Feature Engineering pipeline...")
+    print("Starting Feature Engineering pipeline...")
 
     # Delete old scaler if exists
     scaler_path = os.path.join(MODEL_DIR, "scaler.pkl")
     if os.path.exists(scaler_path):
         os.remove(scaler_path)
-        print("🧹 Old scaler.pkl deleted.")
+        print("Old scaler.pkl deleted.")
 
     # Load train/test data
     train = pd.read_csv(os.path.join(PROCESSED_DIR, "train.csv"))
@@ -108,7 +108,7 @@ def main():
         y_test = pd.Series(dtype='object')
 
     # 4. Partial scaling — only non-physical features
-    print("⚙️ Applying StandardScaler to non-physical (derived) features...")
+    print("Applying StandardScaler to non-physical (derived) features...")
     cols_to_scale = [c for c in X_train.columns if c not in PHYSICAL_FEATURES]
 
     scaler = StandardScaler()
@@ -120,13 +120,13 @@ def main():
 
     # 5. Save new scaler
     joblib.dump(scaler, scaler_path)
-    print(f"✅ New scaler saved at: {scaler_path}")
+    print(f"New scaler saved at: {scaler_path}")
 
     # 6. Save feature column order for prediction
     feature_cols_path = os.path.join(MODEL_DIR, "feature_cols.pkl")
     feature_cols = X_train_scaled.columns.tolist()
     joblib.dump(feature_cols, feature_cols_path)
-    print(f"✅ Feature column order saved at: {feature_cols_path}")
+    print(f"Feature column order saved at: {feature_cols_path}")
 
     # 7. Re-attach labels
     train_final = pd.concat([X_train_scaled, y_train.reset_index(drop=True)], axis=1)
@@ -135,7 +135,8 @@ def main():
     # 8. Save processed feature datasets
     train_final.to_csv(os.path.join(FEATURE_DIR, "train_features.csv"), index=False)
     test_final.to_csv(os.path.join(FEATURE_DIR, "test_features.csv"), index=False)
-    print(f"✅ Feature-engineered datasets saved at: {FEATURE_DIR}")
+    print(f"Feature-engineered datasets saved at: {FEATURE_DIR}")
 
 if __name__ == "__main__":
     main()
+
