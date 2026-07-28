@@ -118,11 +118,6 @@ export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/pricing">Pricing</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href="/contact">Contact</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>

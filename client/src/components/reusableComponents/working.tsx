@@ -19,7 +19,7 @@ const features = [
       "Detrending, folding, and feature extraction from raw telescope data, fully automated.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    background: <div className="absolute -top-20 -right-20 opacity-20" />,
     className: "lg:row-start-1 lg:row-end-2 lg:col-start-1 lg:col-end-2",
   },
   {
@@ -29,7 +29,7 @@ const features = [
       "LightGBM + XGBoost ensemble models classify candidate exoplanets quickly and accurately.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-20" />,
+    background: <div className="absolute -top-20 -right-20 opacity-20" />,
     className: "lg:row-start-1 lg:row-end-2 lg:col-start-2 lg:col-end-4",
   },
   {

@@ -147,6 +147,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Dark-only site: tell the UA so scrollbars, form controls and the
+     pre-paint canvas render dark instead of flashing white. */
+  html {
+    color-scheme: dark;
+  }
   body {
     @apply bg-background text-foreground;
   }

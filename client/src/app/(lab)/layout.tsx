@@ -1,7 +1,6 @@
 import AppNavbar from "@/components/labDashboard/navbar";
 import AppSidebar from "@/components/labDashboard/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { ThemeProvider } from "@/providers/theme-provider";
 import { cookies } from "next/headers";
 
 export default async function DashboardLayout({
@@ -14,15 +13,13 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen">
-      <ThemeProvider>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <main className="w-full">
-            <AppNavbar />
-            <div className="px-4">{children}</div>
-          </main>
-        </SidebarProvider>
-      </ThemeProvider>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
+        <main className="w-full">
+          <AppNavbar />
+          <div className="px-4">{children}</div>
+        </main>
+      </SidebarProvider>
     </div>
   );
 }

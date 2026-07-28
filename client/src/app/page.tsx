@@ -5,14 +5,12 @@ import Features from "@/components/reusableComponents/features";
 import { Hero } from "@/components/reusableComponents/hero";
 import { HeroVideo } from "@/components/reusableComponents/heroVideo";
 import { Testimonial } from "@/components/reusableComponents/testimonial";
-import { Meteors } from "@/components/ui/meteors";
 import ExoplanetProblem from "@/components/reusableComponents/exoplanetProblem";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import Navbar from "@/components/reusableComponents/navbar";
 import Footer from "@/components/reusableComponents/footer";
-import { Workflow } from "@/components/reusableComponents/workflow";
-import ScrollGlobe from "@/components/reusableComponents/scrollGlobe";
 import { Working } from "@/components/reusableComponents/working";
+import { ScrollGlobe, Meteors } from "@/components/reusableComponents/homeVisuals";
 
 export default function Home() {
   return (

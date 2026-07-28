@@ -1,5 +1,4 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { ThemeProvider } from "@/providers/theme-provider";
 import { cookies } from "next/headers";
 
 export default async function DashboardLayout({
@@ -12,13 +11,11 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen">
-      <ThemeProvider>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <main className="w-full">
-            <div className="px-4">{children}</div>
-          </main>
-        </SidebarProvider>
-      </ThemeProvider>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <main className="w-full">
+          <div className="px-4">{children}</div>
+        </main>
+      </SidebarProvider>
     </div>
   );
 }

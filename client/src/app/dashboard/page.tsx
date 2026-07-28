@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import React from "react";
-import GLBLoader from "@/components/reusableComponents/glbloader";
-import { Particles } from "@/components/ui/particles";
+import dynamic from "next/dynamic";
+import LazyVisible from "@/components/reusableComponents/lazyVisible";
+
+const GLBLoader = dynamic(
+  () => import("@/components/reusableComponents/glbloader"),
+  { ssr: false }
+);
+const Particles = dynamic(
+  () => import("@/components/ui/particles").then((m) => m.Particles),
+  { ssr: false }
+);
 
 interface ServiceOptionProps {
   title: string;
@@ -24,12 +33,13 @@ const ServiceOption: React.FC<ServiceOptionProps> = ({
         <h2 className="text-3xl md:text-4xl font-semibold mb-3">{title}</h2>
 
         <div className="h-50 w-full mb-4">
-          
-          <GLBLoader
-            modelPath={modelPath}
-            scale={4.5}
-            cameraPosition={[-12, 0, 0]}
-          />
+          <LazyVisible rootMargin="300px" className="h-full w-full">
+            <GLBLoader
+              modelPath={modelPath}
+              scale={4.5}
+              cameraPosition={[-12, 0, 0]}
+            />
+          </LazyVisible>
         </div>
         <p className="text-md text-center text-muted-foreground">
           {description}

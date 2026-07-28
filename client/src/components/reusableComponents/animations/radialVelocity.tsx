@@ -525,7 +525,7 @@ const RadialVelocityAnimation: React.FC = () => {
         <h4 className="font-bold">How Radial Velocity Works:</h4>
         <ul className="text-sm list-disc list-inside space-y-1">
           <li>Planets gravitationally pull on their host star</li>
-          <li>Star wobbles around the system's center of mass</li>
+          <li>Star wobbles around the system&apos;s center of mass</li>
           <li>Wobble causes Doppler shifts in spectral lines</li>
           <li>Red curve: Hot Jupiter, Blue curve: Super-Earth</li>
           <li>Amplitude reveals planet mass, period reveals orbit size</li>
