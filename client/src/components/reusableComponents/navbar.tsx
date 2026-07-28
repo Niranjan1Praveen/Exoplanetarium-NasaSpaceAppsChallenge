@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
-import { ModeToggle } from "./modeToggle";
 import { NavigationMenuDemo } from "./navigationMenu";
 import { ArrowRight, Earth } from "lucide-react";
 import Link from "next/link";
@@ -98,7 +97,6 @@ export default function Navbar() {
                     <ArrowRight />
                   </Button>
                 </SignedIn>
-                <ModeToggle className="cursor-pointer hidden md:inline-flex items-center" />
               </div>
             </div>
             <AnimatePresence>
@@ -129,8 +127,6 @@ export default function Navbar() {
                         <ArrowRight />
                       </Button>
                     </SignedIn>
-
-                    <ModeToggle className="cursor-pointer md:inline-flex items-center" />
                   </div>
                 </motion.div>
               )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import domtoimage from 'dom-to-image';
+import dynamic from "next/dynamic";
 
 import {
   Card,
@@ -33,9 +33,18 @@ import {
   ReferenceLine,
   TooltipProps,
 } from "recharts";
-import ExoplanetTextures from "@/components/labDashboard/exoplanetTextures";
-import { Particles } from "@/components/ui/particles";
-import GLBLoader from "@/components/reusableComponents/glbloader";
+const ExoplanetTextures = dynamic(
+  () => import("@/components/labDashboard/exoplanetTextures"),
+  { ssr: false }
+);
+const Particles = dynamic(
+  () => import("@/components/ui/particles").then((m) => m.Particles),
+  { ssr: false }
+);
+const GLBLoader = dynamic(
+  () => import("@/components/reusableComponents/glbloader"),
+  { ssr: false }
+);
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 
@@ -105,6 +114,9 @@ const useDownloadChart = () => {
     if (!chartRef.current) return;
 
     try {
+      // Only needed when the user actually exports a chart, so it is pulled
+      // in on demand rather than shipped in the page bundle.
+      const { default: domtoimage } = await import("dom-to-image");
       const dataUrl = await domtoimage.toPng(chartRef.current, {
         bgcolor: '#000000',
         style: {

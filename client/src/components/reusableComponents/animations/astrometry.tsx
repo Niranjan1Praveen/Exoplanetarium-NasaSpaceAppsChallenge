@@ -339,7 +339,7 @@ const ParallaxEffect: React.FC<{
       </mesh>
 
       <Text position={[1, 0.5, 1]} fontSize={0.3} color="#4a86e8">
-        Earth's Orbit
+        Earth&apos;s Orbit
       </Text>
 
       {/* Parallax lines */}

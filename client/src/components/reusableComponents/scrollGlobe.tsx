@@ -1,8 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { Globe } from "../ui/globe";
+
+// cobe draws to a canvas and has no server-rendered output.
+const Globe = dynamic(() => import("../ui/globe").then((m) => m.Globe), {
+  ssr: false,
+});
 
 const ScrollGlobe = () => {
   const [stage, setStage] = useState<"center" | "bottomRight" | "finalCenter">(

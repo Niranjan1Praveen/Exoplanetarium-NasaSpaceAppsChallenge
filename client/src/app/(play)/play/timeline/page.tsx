@@ -1,8 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
-import GLBLoaderTimeline from "@/components/reusableComponents/glbloadertimeline";
+import dynamic from "next/dynamic";
+import LazyVisible from "@/components/reusableComponents/lazyVisible";
+
+// One WebGL canvas per timeline entry: load each only as it scrolls into view.
+const GLBLoaderTimeline = dynamic(
+  () => import("@/components/reusableComponents/glbloadertimeline"),
+  { ssr: false }
+);
 import {
   Dialog,
   DialogContent,
@@ -13,7 +19,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Particles } from "@/components/ui/particles";
+const Particles = dynamic(
+  () => import("@/components/ui/particles").then((m) => m.Particles),
+  { ssr: false }
+);
 import Link from "next/link";
 
 interface ChangelogData {
@@ -145,7 +154,6 @@ export default function HomePage() {
           Exoplanet Exploration Timeline
         </h1>
          <div className="flex items-center justify-center gap-4 mb-4">
-            <AnimatedThemeToggler />
             <Link href={"/play"} className="hover:underline">Go Back</Link>
           </div>
       </div>
@@ -186,10 +194,15 @@ export default function HomePage() {
                   <div className="mx-auto relative group">
                     <div className="h-full absolute inset-0 bg-primary/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="relative z-10">
-                      <GLBLoaderTimeline
-                        modelPath={modelPath!}
-                        key={changelog.url}
-                      />
+                      <LazyVisible
+                        rootMargin="400px"
+                        fallback={<div className="h-[300px] w-[300px]" />}
+                      >
+                        <GLBLoaderTimeline
+                          modelPath={modelPath!}
+                          key={changelog.url}
+                        />
+                      </LazyVisible>
                     </div>
                   </div>
 

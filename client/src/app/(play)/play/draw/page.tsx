@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import * as THREE from "three";
 import Link from "next/link";
 
@@ -24,7 +23,6 @@ const Page = () => {
   const [texture, setTexture] = useState<THREE.CanvasTexture | null>(null);
   const [renderer, setRenderer] = useState<THREE.WebGLRenderer | null>(null);
   const [camera, setCamera] = useState<THREE.PerspectiveCamera | null>(null);
-  const [controls, setControls] = useState<any>(null);
 
   const genAI = new GoogleGenerativeAI(
     process.env.NEXT_PUBLIC_GEMINI_API_KEY as string
@@ -411,7 +409,6 @@ Only respond with the exact category name from above.
       </p>
 
       <div className="flex items-center justify-center gap-4 mb-4">
-        <AnimatedThemeToggler />
         <Link href={"/play"} className="hover:underline">
           Go Back
         </Link>

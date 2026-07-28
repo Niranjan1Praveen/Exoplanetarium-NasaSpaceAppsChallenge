@@ -6,12 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import TTVAnimation from "@/components/reusableComponents/animations/ttvAnimation";
-import MicrolensingAnimation from "@/components/reusableComponents/animations/microlensing";
-import DirectImagingAnimation from "@/components/reusableComponents/animations/directImaging";
-import AstrometryAnimation from "@/components/reusableComponents/animations/astrometry";
-import RadialVelocityAnimation from "@/components/reusableComponents/animations/radialVelocity";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import {
+  TTVAnimation,
+  MicrolensingAnimation,
+  DirectImagingAnimation,
+  AstrometryAnimation,
+  RadialVelocityAnimation,
+} from "@/components/reusableComponents/animations/lazyAnimations";
 import Link from "next/link";
 
 const discoveryMethods = [
@@ -62,7 +63,6 @@ export default function Home() {
             Exoplanet Discovery Methods
           </h1>
           <div className="flex items-center justify-center gap-4 mb-4">
-            <AnimatedThemeToggler />
             <Link href={"/play"} className="hover:underline">Go Back</Link>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
