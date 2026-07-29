@@ -79,7 +79,9 @@ const ScrollGlobe = () => {
             }
       }
       transition={{ type: "spring", stiffness: 80, damping: 20 }}
-      className="fixed w-24 h-24 pointer-events-none"
+      // Hidden below sm: on a phone this drifting globe lands on top of the
+      // page content, and it costs a canvas + scroll listener for decoration.
+      className="pointer-events-none fixed hidden size-24 sm:block"
     >
       <Globe/>
     </motion.div>

@@ -1,41 +1,34 @@
-"use client";
-
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
+/**
+ * Previously an email capture whose submit handler only console.logged the
+ * address — visitors would have been handing over an email that went nowhere.
+ * It now points at the part of the site that actually exists.
+ */
 export function FooterCta() {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = () => {
-    console.log("Email submitted:", email);
-  };
-
   return (
-    <section className="w-full flex flex-col items-center text-center px-4 py-16 space-y-4 bg-gradient-to-b from-background/90 to-background">
-      <h2 className="text-3xl md:text-4xl font-bold">
+    <section className="flex w-full flex-col items-center space-y-4 bg-gradient-to-b from-background/90 to-background px-4 py-16 text-center">
+      <h2 className="text-2xl font-bold sm:text-3xl md:text-4xl">
         Explore Distant Worlds with Exoplanetarium
       </h2>
-      <p className="mt-2 text-md text-muted-foreground max-w-md">
-        Join our AI-powered platform to discover, classify, and visualize exoplanets. Perfect for researchers and curious minds alike.
+      <p className="mt-2 max-w-md text-muted-foreground">
+        Draw and classify your own planet, play with the methods astronomers use
+        to find real ones, and walk the timeline of every mission that looked.
       </p>
 
-      <div className="mt-6 flex w-full max-w-md flex-col sm:flex-row items-center sm:space-x-2 space-y-2 sm:space-y-0">
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="flex-1"
-        />
-        <Button onClick={handleSubmit} className="w-full sm:w-auto">
-          Get Early Access
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <Button asChild>
+          <Link href="/explore">
+            Start Exploring
+            <ArrowRight className="ml-1 size-4" />
+          </Link>
+        </Button>
+        <Button variant="ghost" asChild>
+          <Link href="/play">Try the interactives</Link>
         </Button>
       </div>
-
-      <p className="mt-4 text-xs text-muted-foreground max-w-sm">
-        No credit card required &nbsp; • &nbsp; Stay updated with our latest discoveries
-      </p>
     </section>
   );
 }

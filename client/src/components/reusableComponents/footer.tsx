@@ -1,104 +1,110 @@
 import React from "react";
-import { Instagram, Youtube, Linkedin, Twitter, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Github } from "lucide-react";
 import Logo from "./logo";
-import { Button } from "../ui/button";
+
+/**
+ * Every link here resolves to a real route. The previous version had eight
+ * dead `href="#"` entries, disabled social icons and a fabricated postal
+ * address, none of which described anything that exists.
+ */
+const play = [
+  { label: "Play Home", href: "/play" },
+  { label: "Draw & Classify", href: "/play/draw" },
+  { label: "Discovery Methods", href: "/play/discoveryMethods" },
+  { label: "Discovery Timeline", href: "/play/timeline" },
+];
+
+const lab = [
+  { label: "Lab Home", href: "/lab" },
+  { label: "Exoplanet Classifier", href: "/lab/exoplanet" },
+  { label: "Atmospheric Analysis", href: "/lab/atmosphericAnalysis" },
+];
+
+const site = [
+  { label: "Home", href: "/" },
+  { label: "Explore", href: "/explore" },
+  { label: "Team", href: "/team" },
+];
+
+const REPO_URL =
+  "https://github.com/Niranjan1Praveen/Exoplanetarium-NasaSpaceAppsChallenge";
 
 export default function Footer() {
   return (
-    <footer className="px-6 md:px-16 py-12">
-      <div
-        className="max-w-7xl mx-auto grid gap-10 lg:gap-16
-                      grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-      >
-        {/* Left Section */}
-        <div>
+    <footer className="px-6 py-12 md:px-16">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-16">
+        <div className="col-span-2 sm:col-span-2 lg:col-span-1">
           <Logo width={40} />
-          <p className="text-sm leading-relaxed mb-5">
-            Discovering worlds beyond our solar system through
-            AI-powered analysis and immersive visualization.
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            Discovering worlds beyond our solar system through AI-powered
+            analysis and immersive visualization.
           </p>
-          <Button variant={"ghost"}>
-            Join Our Mission
-          </Button>
         </div>
 
-        {/* Explore, Resources & Community */}
-        <div className="flex flex-wrap gap-12">
-          <div>
-            <h3 className="font-semibold mb-4">Explore</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#">Exoplanet Database</a>
+        <div>
+          <h3 className="mb-4 font-semibold">Play</h3>
+          <ul className="space-y-2 text-sm">
+            {play.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  {item.label}
+                </Link>
               </li>
-              <li>
-                <a href="#">Visualization Lab</a>
-              </li>
-              <li>
-                <a href="#">AI Predictions</a>
-              </li>
-              <li>
-                <a href="#">Publications</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
-              </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold mb-4">Community</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#">For Students</a>
-              </li>
-              <li>
-                <a href="#">For Researchers</a>
-              </li>
-              <li>
-                <a href="#">For Educators</a>
-              </li>
-            </ul>
-          </div>
+            ))}
+          </ul>
         </div>
 
-        {/* Get in touch */}
-        <div className="border rounded-xl p-5">
-          <h3 className="font-semibold mb-3">Get in touch</h3>
-          <div className="flex items-start text-sm leading-relaxed">
-            <MapPin className="w-4 h-4 mt-1 mr-2" />
-            <p>
-              Exoplanetarium HQ
-              <br />
-              Space Research Center
-              <br />
-              Cambridge, MA 02139
-              <br />
-              United States
-            </p>
-          </div>
+        <div>
+          <h3 className="mb-4 font-semibold">Lab</h3>
+          <ul className="space-y-2 text-sm">
+            {lab.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="mb-4 font-semibold">Site</h3>
+          <ul className="space-y-2 text-sm">
+            {site.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div
-        className="max-w-7xl mx-auto mt-12 pt-6 border-t flex flex-col md:flex-row
-                      justify-between items-center gap-4 text-sm"
-      >
-        <p>©2025 Exoplanetarium. Exploring new worlds together.</p>
-        <div className="flex gap-5">
-          <a href="#" aria-label="Instagram" className="pointer-events-none">
-            <Instagram className="w-5 h-5" />
-          </a>
-          <a href="#" aria-label="YouTube" className="pointer-events-none">
-            <Youtube className="w-5 h-5" />
-          </a>
-          <a href="#" aria-label="LinkedIn" className="pointer-events-none">
-            <Linkedin className="w-5 h-5" />
-          </a>
-          <a href="#" aria-label="Twitter" className="pointer-events-none">
-            <Twitter className="w-5 h-5" />
-          </a>
-        </div>
+      <div className="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-4 border-t pt-6 text-sm md:flex-row">
+        <p className="text-muted-foreground">
+          © 2025 Exoplanetarium. Built for the NASA Space Apps Challenge.
+        </p>
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Source on GitHub"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
+        >
+          <Github className="size-5" />
+          <span>Source</span>
+        </a>
       </div>
     </footer>
   );

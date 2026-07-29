@@ -47,11 +47,14 @@ export default function GlobeWithLabels() {
     { top: "30%", right: "3%", transform: "translateY(-50%)" },
   ];
 
+  // px-40 at every breakpoint left roughly 55px of usable width on a 375px
+  // phone. The globe is decorative, so below sm it is dropped rather than
+  // squeezed, which also skips the cobe canvas entirely on small devices.
   return (
     <motion.div
       animate={{ y: yShift }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="relative flex size-full items-center justify-center px-40 pt-8 pb-35 md:pb-35 overflow-hidden"
+      className="relative hidden size-full items-center justify-center overflow-hidden px-8 pt-8 pb-35 sm:flex sm:px-20 md:pb-35 lg:px-40"
     >
       <Globe className="top-[10px]" />
 

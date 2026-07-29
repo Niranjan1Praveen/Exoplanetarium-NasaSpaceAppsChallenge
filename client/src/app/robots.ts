@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         // These all redirect to /sign-in for anonymous visitors, so there is
         // nothing indexable behind them.
-        disallow: ["/dashboard", "/sign-in", "/sign-up", "/lab", "/play"],
+        disallow: ["/explore", "/sign-in", "/sign-up", "/lab", "/play"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

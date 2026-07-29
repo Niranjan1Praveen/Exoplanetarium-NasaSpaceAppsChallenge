@@ -5,6 +5,14 @@ import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as THREE from "three";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { ArrowLeft } from "lucide-react";
+import LazyVisible from "@/components/reusableComponents/lazyVisible";
+
+const Particles = dynamic(
+  () => import("@/components/ui/particles").then((m) => m.Particles),
+  { ssr: false }
+);
 
 interface ColorStats {
   [color: string]: number;
@@ -36,9 +44,10 @@ const Page = () => {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // Scene
+    // Scene. Left transparent (the renderer has alpha) so the page's dark
+    // background shows through instead of a light grey square.
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
+    scene.background = null;
 
     // Camera
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
@@ -93,10 +102,43 @@ const Page = () => {
       }
     };
 
+    // Touch equivalents, so the planet can be rotated on a phone.
+    const rotateBy = (dx: number, dy: number) => {
+      const sphere = scene.children.find((child) => child instanceof THREE.Mesh);
+      if (sphere) {
+        sphere.rotation.y += dx * 0.01;
+        sphere.rotation.x += dy * 0.01;
+      }
+    };
+
+    let lastTouch: { x: number; y: number } | null = null;
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) lastTouch = { x: t.clientX, y: t.clientY };
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t || !lastTouch) return;
+      // Dragging the planet should rotate it, not scroll the page.
+      e.preventDefault();
+      rotateBy(t.clientX - lastTouch.x, t.clientY - lastTouch.y);
+      lastTouch = { x: t.clientX, y: t.clientY };
+    };
+
+    const onTouchEnd = () => {
+      lastTouch = null;
+    };
+
     renderer.domElement.addEventListener("mousedown", onMouseDown);
     renderer.domElement.addEventListener("mousemove", onMouseMove);
     renderer.domElement.addEventListener("mouseup", onMouseUp);
+    renderer.domElement.addEventListener("mouseleave", onMouseUp);
     renderer.domElement.addEventListener("wheel", onWheel);
+    renderer.domElement.addEventListener("touchstart", onTouchStart, { passive: true });
+    renderer.domElement.addEventListener("touchmove", onTouchMove, { passive: false });
+    renderer.domElement.addEventListener("touchend", onTouchEnd);
 
     // Create initial canvas for texture
     const tempCanvas = document.createElement("canvas");
@@ -133,9 +175,11 @@ const Page = () => {
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
 
-    // Animation loop
+    // Animation loop. The frame id is tracked so the loop actually stops on
+    // unmount instead of rendering into a disposed context forever.
+    let frameId = 0;
     const animate = () => {
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
     animate();
@@ -158,11 +202,16 @@ const Page = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
       renderer.domElement.removeEventListener("mousedown", onMouseDown);
       renderer.domElement.removeEventListener("mousemove", onMouseMove);
       renderer.domElement.removeEventListener("mouseup", onMouseUp);
+      renderer.domElement.removeEventListener("mouseleave", onMouseUp);
       renderer.domElement.removeEventListener("wheel", onWheel);
+      renderer.domElement.removeEventListener("touchstart", onTouchStart);
+      renderer.domElement.removeEventListener("touchmove", onTouchMove);
+      renderer.domElement.removeEventListener("touchend", onTouchEnd);
 
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
@@ -398,24 +447,40 @@ Only respond with the exact category name from above.
     : null;
 
   return (
-    <div className="h-screen flex flex-col items-center px-4 overflow-x-hidden bg-gradient-to-b from-blue-50 to-purple-50 dark:from-gray-900 dark:to-blue-900">
+    // Matches the background used across the rest of the site rather than the
+    // light-mode gradient this page previously carried.
+    <div className="relative flex min-h-screen flex-col items-center overflow-x-clip bg-background px-4 pb-16">
+      <LazyVisible className="absolute inset-0" rootMargin="0px">
+        <Particles
+          className="absolute inset-0"
+          quantity={150}
+          size={0.1}
+          ease={80}
+          refresh
+        />
+      </LazyVisible>
+
       {/* Title */}
-      <h1 className="text-3xl font-bold mt-6 mb-4 text-center bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-        🪐 Color Your 3D Exoplanet
+      <h1 className="relative mt-6 mb-3 text-center text-2xl font-bold sm:text-3xl">
+        Color Your 3D Exoplanet
       </h1>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
+      <p className="relative mb-4 max-w-md text-center text-sm text-muted-foreground">
         Draw on the 2D canvas and watch your creation come to life on the 3D
-        planet!
+        planet.
       </p>
 
-      <div className="flex items-center justify-center gap-4 mb-4">
-        <Link href={"/play"} className="hover:underline">
-          Go Back
+      <div className="relative mb-4 flex items-center justify-center gap-4">
+        <Link
+          href={"/play"}
+          className="inline-flex items-center gap-1 text-sm hover:underline"
+        >
+          <ArrowLeft className="size-4" />
+          Back to Play
         </Link>
       </div>
 
       {/* Toolbar */}
-      <div className="p-3 flex flex-wrap gap-4 items-center shadow-lg rounded-2xl mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+      <div className="relative mb-6 flex flex-wrap items-center justify-center gap-3 rounded-2xl border bg-card/80 p-3 shadow-lg backdrop-blur sm:gap-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">Color:</span>
           <input
@@ -448,55 +513,49 @@ Only respond with the exact category name from above.
 
         <button
           onClick={handleClear}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg"
+          className="rounded-lg bg-destructive px-4 py-2 font-medium text-white shadow-md transition-all hover:opacity-90"
         >
-          🗑️ Clear
+          Clear
         </button>
 
         <button
           onClick={toggleEraser}
-          className={`px-4 py-2 rounded-lg font-medium transition-all shadow-md hover:shadow-lg ${
+          className={`rounded-lg px-4 py-2 font-medium shadow-md transition-all ${
             isEraser
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : "bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+              ? "bg-primary text-primary-foreground hover:opacity-90"
+              : "bg-secondary text-secondary-foreground hover:opacity-90"
           }`}
         >
-          {isEraser ? "🎨 Switch to Draw" : "🧼 Use Eraser"}
+          {isEraser ? "Switch to Draw" : "Use Eraser"}
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 w-full max-w-6xl items-center justify-center">
-        {/* 2D Drawing Canvas */}
-        <div className="flex flex-col items-center">
-          <h3 className="text-lg font-semibold mb-2">🎨 Draw Here</h3>
-          <div className="border-4 rounded-full overflow-hidden shadow-2xl">
+      <div className="relative flex w-full max-w-6xl flex-col items-center justify-center gap-8 lg:flex-row">
+        {/* 2D Drawing Canvas. Sized in vw on small screens so it never
+            overflows, capped at the original 400px on larger ones. */}
+        <div className="flex w-full flex-col items-center">
+          <h3 className="mb-2 text-lg font-semibold">Draw Here</h3>
+          <div className="aspect-square w-full max-w-[min(400px,80vw)] overflow-hidden rounded-full border-4 shadow-2xl">
             <ReactSketchCanvas
               ref={canvasRef}
               strokeColor={color}
               strokeWidth={strokeWidth}
               onStroke={handleStroke}
-              style={{
-                width: "400px",
-                height: "400px",
-                cursor: "crosshair",
-              }}
+              width="100%"
+              height="100%"
+              style={{ cursor: "crosshair" }}
             />
           </div>
         </div>
 
-        <div className="flex flex-col items-center">
-          <h3 className="text-lg font-semibold mb-2">🪐 Your 3D Planet</h3>
+        <div className="flex w-full flex-col items-center">
+          <h3 className="mb-2 text-lg font-semibold">Your 3D Planet</h3>
           <div
             ref={threeContainerRef}
-            className="border-4 rounded-lg overflow-hidden shadow-2xl"
-            style={{
-              width: "400px",
-              height: "400px",
-              //   background: "radial-gradient(circle at 30% 30%, #4F46E5, #7E22CE)"
-            }}
+            className="aspect-square w-full max-w-[min(400px,80vw)] overflow-hidden rounded-lg border-4 shadow-2xl"
           />
-          <p className="text-xs text-muted-500 dark:text-muted-400 mt-2">
-            💡 Click and drag to rotate • Scroll to zoom
+          <p className="mt-2 text-center text-xs text-muted-foreground">
+            Drag to rotate · Scroll or pinch to zoom
           </p>
         </div>
       </div>
@@ -504,11 +563,11 @@ Only respond with the exact category name from above.
       <canvas ref={hiddenCanvasRef} style={{ display: "none" }} />
 
       {classificationInfo && (
-        <div className="mt-6 p-6 rounded-2xl shadow-lg max-w-2xl text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold mb-3 text-purple-600 dark:text-purple-400">
+        <div className="relative mt-6 w-full max-w-2xl rounded-2xl border bg-card/80 p-5 text-center shadow-lg backdrop-blur sm:p-6">
+          <h2 className="mb-3 text-xl font-bold text-primary sm:text-2xl">
             {classificationInfo.title}
           </h2>
-          <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
+          <p className="mb-4 text-muted-foreground sm:text-lg">
             {classificationInfo.message}
           </p>
 
@@ -516,14 +575,14 @@ Only respond with the exact category name from above.
             classification === "Error classifying planet.") && (
             <button
               onClick={handleClear}
-              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="rounded-xl bg-primary px-6 py-3 font-bold text-primary-foreground shadow-lg transition-all hover:opacity-90"
             >
-              🌟 Try Creating Another Planet!
+              Try Creating Another Planet
             </button>
           )}
 
-          <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-            🎨 Keep drawing to update your 3D planet in real-time!
+          <div className="mt-4 text-sm text-muted-foreground">
+            Keep drawing to update your 3D planet in real time.
           </div>
         </div>
       )}

@@ -10,7 +10,7 @@ function Page() {
 
   useEffect(() => {
     if (isSignedIn) {
-      router.replace("/dashboard");
+      router.replace("/explore");
     }
   }, [isSignedIn, router]);
 

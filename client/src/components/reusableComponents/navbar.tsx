@@ -1,10 +1,11 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { NavigationMenuDemo } from "./navigationMenu";
-import { ArrowRight, Earth } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import {
   SignInButton,
@@ -17,124 +18,106 @@ import Logo from "./logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Navigating from inside the mobile sheet must close it, otherwise the
+  // panel stays over the new page.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Prevent the page behind the open mobile sheet from scrolling.
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
     <>
-      <section className="px-4 flex items-center justify-evenly fixed w-full top-0 z-100 border-b backdrop-blur-2xl">
-        <div className="container max-w-7xl">
-          <div className="rounded-md">
-            <div className="grid grid-cols-2 lg:grid-cols-2 p-2 items-center px-4 md:pr-2">
-              <Link className="flex items-center gap-2" href={"/"}>
-                <Logo width={20} />
-              </Link>
+      <header className="fixed top-0 z-50 w-full border-b bg-background/80 backdrop-blur-2xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex shrink-0 items-center gap-2">
+            <Logo width={20} />
+          </Link>
 
-              <div className="flex justify-end gap-4">
-                <div className="lg:flex justify-center items-center hidden">
-                  <NavigationMenuDemo />
-                </div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-menu md:hidden"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  <line
-                    x1="3"
-                    y1="6"
-                    x2="21"
-                    y2="6"
-                    className={twMerge(
-                      "origin-left transition",
-                      isOpen && "rotate-45 -translate-y-1"
-                    )}
-                  ></line>
-                  <line
-                    x1="3"
-                    y1="12"
-                    x2="21"
-                    y2="12"
-                    className={twMerge("transition", isOpen && "opacity-0")}
-                  ></line>
-                  <line
-                    x1="3"
-                    y1="18"
-                    x2="21"
-                    y2="18"
-                    className={twMerge(
-                      "origin-left transition",
-                      isOpen && "-rotate-45 translate-y-1"
-                    )}
-                  ></line>
-                </svg>
-                <SignedOut>
-                  <Button
-                    className="cursor-pointer hidden md:inline-flex items-center"
-                    variant={"ghost"}
-                    asChild
-                  >
-                    <SignInButton />
-                  </Button>
-                  <Button
-                    className="cursor-pointer hidden md:inline-flex items-center"
-                    asChild
-                  >
-                    <SignUpButton />
-                  </Button>
-                </SignedOut>
+          <div className="hidden lg:flex lg:items-center lg:gap-3">
+            <NavigationMenuDemo />
+            <SignedOut>
+              <Button variant="ghost" size="sm" asChild>
+                <SignInButton />
+              </Button>
+              <Button size="sm" asChild>
+                <SignUpButton />
+              </Button>
+            </SignedOut>
+            <SignedIn>
+              <Button size="sm" asChild>
+                <Link href="/explore">
+                  Explore
+                  <ArrowRight className="ml-1 size-4" />
+                </Link>
+              </Button>
+              <UserButton />
+            </SignedIn>
+          </div>
 
-                <SignedIn>
-                  <div className="hidden md:inline-flex">
-                    <UserButton />
-                  </div>
-                  <Button className="cursor-pointer hidden md:inline-flex items-center">
-                    <Link href={"/dashboard"}>Dashboard</Link>
-                    <ArrowRight />
-                  </Button>
-                </SignedIn>
-              </div>
-            </div>
-            <AnimatePresence>
-              {isOpen && (
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: "auto" }}
-                  exit={{ height: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="flex flex-col items-center gap-4 py-4">
-                    <NavigationMenuDemo className="flex flex-col space-y-2" />
-                    <SignedOut>
-                      <Button
-                        className="cursor-pointer md:inline-flex items-center"
-                        variant={"ghost"}
-                      >
-                        <SignInButton />
-                      </Button>
-                      <Button className="cursor-pointer md:inline-flex items-center">
-                        <SignUpButton />
-                      </Button>
-                    </SignedOut>
-                    <SignedIn>
-                      <UserButton/>
-                      <Button className="cursor-pointer md:inline-flex items-center">
-                        <Link href={"/dashboard"}>Dashboard</Link>
-                        <ArrowRight />
-                      </Button>
-                    </SignedIn>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="flex items-center gap-2 lg:hidden">
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            <button
+              type="button"
+              onClick={() => setIsOpen((v) => !v)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-nav"
+              className="inline-flex size-10 items-center justify-center rounded-md hover:bg-accent"
+            >
+              {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
           </div>
         </div>
-      </section>
-      <div className="pb-[86px] md:pb-[98px] lg:pb-[130px]"></div>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              id="mobile-nav"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden border-t bg-background lg:hidden"
+            >
+              <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-4 py-4 sm:px-6">
+                <NavigationMenuDemo stacked />
+                <div className="mt-6 flex flex-col gap-2 border-t pt-4">
+                  <SignedOut>
+                    <Button variant="ghost" className="w-full" asChild>
+                      <SignInButton />
+                    </Button>
+                    <Button className="w-full" asChild>
+                      <SignUpButton />
+                    </Button>
+                  </SignedOut>
+                  <SignedIn>
+                    <Button className="w-full" asChild>
+                      <Link href="/explore">
+                        Explore
+                        <ArrowRight className="ml-1 size-4" />
+                      </Link>
+                    </Button>
+                  </SignedIn>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {/* Spacer matching the fixed header height. */}
+      <div className="h-16" aria-hidden />
     </>
   );
 }

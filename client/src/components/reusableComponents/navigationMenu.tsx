@@ -12,113 +12,162 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import Logo from "./logo";
 
-const components: { title: string; href: string; description: string }[] = [
+/** Every entry here points at a route that actually exists. */
+const play: { title: string; href: string; description: string }[] = [
   {
-    title: "Exoplanet Lab",
+    title: "Play Home",
+    href: "/play",
+    description: "Pick an interactive way to explore how exoplanets are found.",
+  },
+  {
+    title: "Draw & Classify",
+    href: "/play/draw",
+    description:
+      "Paint a planet surface and watch it get classified from its colour and pattern.",
+  },
+  {
+    title: "Discovery Methods",
+    href: "/play/discoveryMethods",
+    description:
+      "Play with transit, radial velocity, microlensing, imaging and astrometry.",
+  },
+  {
+    title: "Discovery Timeline",
+    href: "/play/timeline",
+    description:
+      "Walk the missions that found these worlds, in interactive 3D.",
+  },
+];
+
+const lab: { title: string; href: string; description: string }[] = [
+  {
+    title: "Lab Home",
     href: "/lab",
-    description:
-      "Draw your own exoplanets and get them classified based on color patterns and features.",
+    description: "Research tools for classifying and analysing exoplanets.",
   },
   {
-    title: "Exoplanet Timeline",
-    href: "/timeline",
+    title: "Exoplanet Classifier",
+    href: "/lab/exoplanet",
     description:
-      "Explore the history of exoplanet discovery with 3D satellite models and interactive visualization.",
+      "Explore planet types and how model features map to a classification.",
   },
   {
-    title: "Stellar Data Viewer",
-    href: "/stellar-data",
+    title: "Atmospheric Analysis",
+    href: "/lab/atmosphericAnalysis",
     description:
-      "View detailed data about stars and their planetary systems in an interactive, 3D interface.",
-  },
-  {
-    title: "Habitability Analyzer",
-    href: "/habitability",
-    description:
-      "Analyze exoplanets for potential habitability based on atmospheric and orbital data.",
-  },
-  {
-    title: "Orbital Simulator",
-    href: "/simulator",
-    description:
-      "Simulate planetary orbits and observe the dynamics of different exoplanetary systems.",
-  },
-  {
-    title: "Exoplanet Explorer",
-    href: "/explorer",
-    description:
-      "A discovery tool that lets you browse, filter, and learn about thousands of known exoplanets.",
+      "Inspect transit light curves and atmospheric signals in detail.",
   },
 ];
 
 interface NavigationMenuDemoProps {
-  /** Extra classes to apply to the trigger button */
+  /** Extra classes to apply to the menu list */
   className?: string;
+  /** Collapse to a plain stacked link list, used inside the mobile sheet. */
+  stacked?: boolean;
 }
-export function NavigationMenuDemo({ className }: NavigationMenuDemoProps) {
+
+export function NavigationMenuDemo({
+  className,
+  stacked = false,
+}: NavigationMenuDemoProps) {
+  // The hover-triggered dropdowns are unusable on touch, so small screens get
+  // a flat list of the same links instead.
+  if (stacked) {
+    return (
+      <nav className={className} aria-label="Main">
+        <div className="space-y-6">
+          <div>
+            <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Play
+            </p>
+            <ul className="space-y-1">
+              {play.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Lab
+            </p>
+            <ul className="space-y-1">
+              {lab.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <ul className="space-y-1 border-t pt-4">
+              <li>
+                <Link
+                  href="/explore"
+                  className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                >
+                  Explore
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/team"
+                  className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                >
+                  Team
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList className={className}>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Home</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Play</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <Link
-                    className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
-                    href="/"
-                  >
-                    <div className="mt-4 mb-2 text-lg font-medium">
-                      <Logo/>
-                    </div>
-                    <p className="text-muted-foreground text-sm leading-tight">
-                      Explore, draw, and visualize exoplanets with interactive
-                      3D tools.
-                    </p>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/lab" title="Exoplanet Play">
-                Draw your own exoplanets and see them classified based on their
-                color patterns.
-              </ListItem>
-              <ListItem href="/play" title="Exoplanet Lab">
-                Classify and analyze exoplanets.
-              </ListItem>
-              <ListItem href="/about" title="About Us">
-                Learn more about our mission to make exoplanet exploration
-                accessible and educational.
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
+            <ul className="grid w-[360px] gap-2 md:w-[440px] md:grid-cols-2">
+              {play.map((item) => (
+                <ListItem key={item.href} title={item.title} href={item.href}>
+                  {item.description}
                 </ListItem>
               ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Lab</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[360px] gap-2 md:w-[440px] md:grid-cols-2">
+              {lab.map((item) => (
+                <ListItem key={item.href} title={item.title} href={item.href}>
+                  {item.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href="/team">Team</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/contact">Contact</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>

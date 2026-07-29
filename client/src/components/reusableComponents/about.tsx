@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { Particles } from "../ui/particles";
 import { Globe } from "../ui/globe";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 
 export default function About() {
   return (
@@ -23,15 +22,13 @@ export default function About() {
         <div className="z-10 max-w-2xl space-y-4 px-4">
           <Badge variant="secondary">About</Badge>
 
-          <h2 className="text-4xl font-bold sm:text-5xl">
+          <h2 className="text-3xl font-bold sm:text-5xl">
             Exploring Exoplanets Beyond Our Solar System
           </h2>
-          <Button className="mt-4 px-4 py-2 text-sm">
-            Learn More About Our Mission
-          </Button>
         </div>
 
-        <div className="relative flex size-full max-w-lg items-center justify-center overflow-hidden px-40 pb-40 pt-8 md:pb-60">
+        {/* The globe is decorative and expensive; small screens skip it. */}
+        <div className="relative hidden size-full max-w-lg items-center justify-center overflow-hidden px-8 pb-40 pt-8 sm:flex sm:px-20 md:pb-60 lg:px-40">
           <Globe className="opacity-70" />
           <div className="pointer-events-none absolute bottom-0 h-40 w-full bg-gradient-to-b from-transparent to-background" />
         </div>
