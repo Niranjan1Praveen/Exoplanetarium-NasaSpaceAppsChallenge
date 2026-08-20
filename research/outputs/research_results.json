@@ -1,0 +1,76 @@
+{
+  "notebook": "01_exoplanet_ml_research.ipynb",
+  "random_state": 42,
+  "dataset": "server/classifier/data/raw/koi.csv",
+  "n_objects": 9564,
+  "n_host_stars": 8214,
+  "target_column": "koi_disposition",
+  "classes": [
+    "False Positive",
+    "Candidate",
+    "Confirmed"
+  ],
+  "class_encoding": {
+    "0": "FALSE POSITIVE",
+    "1": "CANDIDATE",
+    "2": "CONFIRMED"
+  },
+  "n_features": 112,
+  "n_base_features": 79,
+  "n_engineered_features": 33,
+  "n_direct_leakage_columns_excluded": 24,
+  "n_indirect_leakage_columns_excluded": 22,
+  "split": {
+    "strategy": "StratifiedGroupKFold, grouped by kepid (host star)",
+    "development_rows": 7650,
+    "holdout_rows": 1914,
+    "group_overlap": 0
+  },
+  "selected_model": "Soft Voting ensemble",
+  "best_params": {
+    "XGBoost (tuned)": {
+      "subsample": 0.8,
+      "reg_lambda": 10.0,
+      "reg_alpha": 1.0,
+      "n_estimators": 700,
+      "min_child_weight": 3,
+      "max_depth": 8,
+      "learning_rate": 0.1,
+      "gamma": 0.5,
+      "colsample_bytree": 1.0
+    },
+    "LightGBM (tuned)": {
+      "subsample": 0.7,
+      "reg_lambda": 5.0,
+      "reg_alpha": 0.1,
+      "num_leaves": 31,
+      "n_estimators": 300,
+      "min_child_samples": 20,
+      "max_depth": 6,
+      "learning_rate": 0.04,
+      "colsample_bytree": 0.7
+    }
+  },
+  "cross_validation": {
+    "accuracy": 0.8621,
+    "f1_macro": 0.8287
+  },
+  "holdout": {
+    "accuracy": 0.8678,
+    "balanced_accuracy": 0.8334,
+    "precision_macro": 0.8424,
+    "recall_macro": 0.8334,
+    "f1_macro": 0.8366,
+    "f1_weighted": 0.8646,
+    "roc_auc_ovr_macro": 0.9613,
+    "roc_auc_ovr_weighted": 0.9668
+  },
+  "reference_points": {
+    "majority_class_floor": 0.506,
+    "logistic_regression_cv": 0.8292,
+    "shipped_ensemble_own_split": 0.72,
+    "production_recipe_retrained_on_holdout": 0.7351,
+    "leakage_only_model_rejected": 0.9995
+  },
+  "gate_passed": true
+}
