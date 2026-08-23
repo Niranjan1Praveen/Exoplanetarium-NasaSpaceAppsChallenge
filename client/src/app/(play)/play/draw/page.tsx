@@ -333,7 +333,9 @@ const Page = () => {
 
         hiddenCanvas.width = img.width;
         hiddenCanvas.height = img.height;
-        const ctx = hiddenCanvas.getContext("2d");
+        const ctx = hiddenCanvas.getContext("2d", {
+          willReadFrequently: true,
+        });
         if (!ctx) return;
 
         ctx.drawImage(img, 0, 0);
@@ -391,7 +393,7 @@ const Page = () => {
   const classifyWithGemini = async (percentages: ColorStats) => {
     try {
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-3.5-flash-lite",
       });
 
       const prompt = `
@@ -520,11 +522,10 @@ Only respond with the exact category name from above.
 
         <button
           onClick={toggleEraser}
-          className={`rounded-lg px-4 py-2 font-medium shadow-md transition-all ${
-            isEraser
+          className={`rounded-lg px-4 py-2 font-medium shadow-md transition-all ${isEraser
               ? "bg-primary text-primary-foreground hover:opacity-90"
               : "bg-secondary text-secondary-foreground hover:opacity-90"
-          }`}
+            }`}
         >
           {isEraser ? "Switch to Draw" : "Use Eraser"}
         </button>
@@ -573,13 +574,13 @@ Only respond with the exact category name from above.
 
           {(classification === "Unknown" ||
             classification === "Error classifying planet.") && (
-            <button
-              onClick={handleClear}
-              className="rounded-xl bg-primary px-6 py-3 font-bold text-primary-foreground shadow-lg transition-all hover:opacity-90"
-            >
-              Try Creating Another Planet
-            </button>
-          )}
+              <button
+                onClick={handleClear}
+                className="rounded-xl bg-primary px-6 py-3 font-bold text-primary-foreground shadow-lg transition-all hover:opacity-90"
+              >
+                Try Creating Another Planet
+              </button>
+            )}
 
           <div className="mt-4 text-sm text-muted-foreground">
             Keep drawing to update your 3D planet in real time.
