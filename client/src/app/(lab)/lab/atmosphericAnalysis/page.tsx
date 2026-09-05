@@ -48,6 +48,11 @@ const GLBLoader = dynamic(
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 
+// Base URL of the Atmosphere Flask service.
+// Set NEXT_PUBLIC_ATMOSPHERE_URL in client/.env.local (local) or in the
+// Vercel project settings (production). Inlined at build time by Next.js.
+const ATMOSPHERE_URL = process.env.NEXT_PUBLIC_ATMOSPHERE_URL;
+
 // Types
 interface PlanetData {
   transit: {
@@ -484,7 +489,7 @@ export default function Page() {
   useEffect(() => {
     const fetchTypes = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/types");
+        const response = await fetch(`${ATMOSPHERE_URL}/api/types`);
         const data = await response.json();
         setTypes(data.types);
         console.log(data.types);
@@ -519,7 +524,7 @@ export default function Page() {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:5000/api/data?planet=${encodeURIComponent(
+          `${ATMOSPHERE_URL}/api/data?planet=${encodeURIComponent(
             selectedPlanet
           )}`
         );

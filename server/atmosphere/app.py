@@ -6,7 +6,17 @@ import os, re, glob, csv, json
 
 APP_TITLE = "Exoplanet Atmospheres — Dark Demo"
 app = Flask(__name__)
-CORS(app)  # Enable CORS for Next.js frontend
+
+# ---------- CORS ----------
+# CORS_ORIGINS is a comma-separated allow-list of frontend origins, e.g.
+#   CORS_ORIGINS=https://my-app.vercel.app
+# When unset it defaults to "*", preserving the previous local behaviour.
+# In production set it to the deployed Vercel origin to restrict access.
+_cors_origins = os.environ.get("CORS_ORIGINS", "*").strip()
+if _cors_origins == "*":
+    CORS(app)  # Enable CORS for Next.js frontend
+else:
+    CORS(app, origins=[o.strip() for o in _cors_origins.split(",") if o.strip()])
 
 # ---------- CSV PATH ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -363,5 +373,14 @@ def data_for_planet():
     })
 
 # ---------- MAIN ----------
+# Local development entry point only.
+#
+#   Local dev : python app.py                (optionally FLASK_DEBUG=1)
+#   Production: gunicorn app:app --bind 0.0.0.0:$PORT
+#
+# Flask's built-in server below is NOT used in production; Render runs the
+# gunicorn command above against the module-level `app` object.
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "").lower() in ("1", "true", "yes")
+    app.run(host="0.0.0.0", port=port, debug=debug)

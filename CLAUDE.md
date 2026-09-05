@@ -38,7 +38,7 @@ statement *"A World Away: Hunting for Exoplanets with AI"*. It combines:
 ```
 
 > ⚠️ **`README.md` is a submission narrative, not a technical spec.** Several of its claims do not
-> match the code — notably a `server/requirements.txt` that does not exist, and an AI/ML stack listing
+> match the code — notably an AI/ML stack listing
 > CNN, PCA/t-SNE, K-Means, DBSCAN, Isolation Forest and Autoencoders, none of which appear anywhere in
 > the repository. Discrepancies are catalogued in [docs/DECISIONS.md](docs/DECISIONS.md#appendix--readmemd-vs-repository-reality).
 > **Trust the code over the README.**
@@ -55,10 +55,11 @@ statement *"A World Away: Hunting for Exoplanets with AI"*. It combines:
 
 **How they connect** — there is no API gateway and no shared client library:
 
-- Frontend → Atmosphere: two hardcoded `fetch("http://localhost:5000/...")` calls in
+- Frontend → Atmosphere: two `fetch()` calls built from `NEXT_PUBLIC_ATMOSPHERE_URL` in
   `client/src/app/(lab)/lab/atmosphericAnalysis/page.tsx`.
-- Frontend → Classifier: a plain hyperlink `<Link href="http://127.0.0.1:5003">` in
-  `client/src/components/labDashboard/sidebar.tsx`. The classifier is **navigated to**, never called as an API.
+- Frontend → Classifier: a plain hyperlink `<Link href={CLASSIFIER_URL}>` (from
+  `NEXT_PUBLIC_CLASSIFIER_URL`) in `client/src/components/labDashboard/sidebar.tsx`. The classifier is
+  **navigated to**, never called as an API.
 - The frontend has **no Next.js API routes** (`client/src/app/` contains no `route.ts`).
 
 Full detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/API.md](docs/API.md)
@@ -112,17 +113,30 @@ cd server/atmosphere && python app.py            # → http://localhost:5000
 cd server/classifier && python app.py            # → http://127.0.0.1:5003
 ```
 
-⚠️ **`pip install -r requirements.txt` will not work.** The only `requirements.txt` in the repository
-is `server/classifier/requirements.txt` and it is **0 bytes**. Install dependencies manually — see
-[docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+Each backend has its own pinned manifest (Python **3.12** recommended, pinned in `.python-version`):
+
+```bash
+pip install -r server/atmosphere/requirements.txt -r server/classifier/requirements.txt
+```
+
+⚠️ **macOS only:** `brew install libomp` is required for LightGBM/XGBoost. Not needed on Linux or
+Windows, and never put it in `requirements.txt`.
+
+The root `server/requirements.txt` is a pre-existing unpinned union and is **superseded** by the
+per-service files. See [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) and
+[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+
+**Production** (Render) runs gunicorn, not `python app.py`:
+`gunicorn app:app --bind 0.0.0.0:$PORT` from each service directory.
 
 ---
 
 ## Important constraints
 
-1. **Backend URLs are hardcoded to localhost.** No `NEXT_PUBLIC_API_URL` or equivalent exists. The
-   frontend cannot reach a deployed backend without a code change. This is the single largest
-   deployment blocker — see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#3-deployment-blockers).
+1. **Backend URLs come from `NEXT_PUBLIC_ATMOSPHERE_URL` and `NEXT_PUBLIC_CLASSIFIER_URL`**, set in
+   `client/.env.local` locally and in Vercel for production. There is deliberately **no localhost
+   fallback in source**, so an unset variable fails visibly rather than silently. These are inlined at
+   build time — changing one requires a rebuild. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 2. **No Python dependency manifest has content.** Reproducing either backend requires reading imports.
 3. **Training scripts hardcode `D:\exoplanet\...`** and read/write paths that are not the repository's
    own `data/` and `models/` directories. They cannot retrain the shipped models without edits.
@@ -147,6 +161,6 @@ is `server/classifier/requirements.txt` and it is **0 bytes**. Install dependenc
 | [docs/DATA.md](docs/DATA.md) | Every dataset, purpose, schema, runtime/training/research usage, deployment necessity |
 | [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) | Runtimes, dependencies, env vars, ports, manifest gaps |
 | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Fresh-clone setup, per-service startup, testing, training |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Prerequisites per service, blockers, unresolved decisions |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Vercel + two Render services: root dirs, build/start commands, env vars, what is verified vs untested |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Design decisions with evidence; rationale marked UNKNOWN where unsupported |
 | [research/README.md](research/README.md) | The research study and its measured results |

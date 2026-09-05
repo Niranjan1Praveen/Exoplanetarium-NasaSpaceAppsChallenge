@@ -16,13 +16,25 @@ cd Exoplanetarium-NasaSpaceAppsChallenge
 The repository ships all model artifacts and datasets — nothing needs downloading.
 Expect ~86 MB of committed data (see [DATA.md](DATA.md)).
 
-> ⚠️ **The root `README.md` setup instructions do not work as written.** They say
-> `cd server && pip install -r requirements.txt`, but no `server/requirements.txt` exists, and the one
-> at `server/classifier/requirements.txt` is empty. Use the explicit `pip install` commands below.
+Each backend now has its own pinned `requirements.txt`. Recommended Python: **3.12** (pinned in each
+service's `.python-version`).
 
 ---
 
 ## 2. Install dependencies
+
+### System dependencies (macOS only)
+
+LightGBM and XGBoost macOS wheels do **not** bundle an OpenMP runtime; they link `@rpath/libomp.dylib`
+with an rpath into Homebrew. Install it once:
+
+```bash
+brew install libomp
+```
+
+> ❗ **macOS only.** Do **not** run this on Linux or Windows, and never add `libomp` to
+> `requirements.txt`. On Linux the `manylinux` wheels link `libgomp`, already present in typical
+> distributions. See [ENVIRONMENT.md](ENVIRONMENT.md#3a-system-level-dependencies).
 
 ### Frontend
 
@@ -32,11 +44,11 @@ cd client && npm install
 
 ### Backends
 
-No manifest exists, so install explicitly. A shared virtualenv works for both services — their
-dependency sets are compatible (`server/.gitignore` already ignores `venv`).
+Each service has its own manifest. A single shared virtualenv works for both, since the pinned sets
+are compatible (`server/.gitignore` already ignores `venv`).
 
 ```bash
-python -m venv server/venv
+python3.12 -m venv server/venv
 ```
 
 Activate — macOS/Linux:
@@ -51,23 +63,35 @@ Activate — Windows (PowerShell):
 .\server\venv\Scripts\Activate.ps1
 ```
 
-Then install the union of both services' requirements:
+Install both services:
 
 ```bash
-pip install flask flask-cors pandas numpy joblib scikit-learn xgboost lightgbm
+pip install -r server/atmosphere/requirements.txt -r server/classifier/requirements.txt
 ```
 
 ⚠️ `scikit-learn`, `xgboost` and `lightgbm` are **not imported by `server/classifier/app.py`** but are
 required to unpickle its `.pkl` artifacts. Omitting them produces a `ModuleNotFoundError` at startup
-that names a module nowhere in the source. See [ENVIRONMENT.md](ENVIRONMENT.md#3-backend-dependencies--reconstructed-from-imports).
+that names a module nowhere in the source. They are included in the classifier manifest for exactly
+this reason.
+
+> The root `server/requirements.txt` is a pre-existing, unpinned union of both services. It is
+> **superseded** by the per-service manifests above.
 
 ---
 
 ## 3. Environment variables
 
-No `.env.example` is provided. Create `client/.env.local`:
+Copy the tracked template and fill in your own values:
 
 ```bash
+cp client/.env.example client/.env.local
+```
+
+`client/.env.local` (gitignored) — the backend URLs below are the local defaults:
+
+```bash
+NEXT_PUBLIC_ATMOSPHERE_URL=http://localhost:5000
+NEXT_PUBLIC_CLASSIFIER_URL=http://127.0.0.1:5003
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 CLERK_SECRET_KEY=sk_test_xxx
 NEXT_PUBLIC_GEMINI_API_KEY=xxx
@@ -75,10 +99,23 @@ NEXT_PUBLIC_GEMINI_API_KEY=xxx
 
 | Variable | Needed for | Without it |
 |---|---|---|
-| Clerk keys | `/explore`, `/lab`, `/play` | Protected routes fail; public pages still work |
+| `NEXT_PUBLIC_ATMOSPHERE_URL` | `/lab/atmosphericAnalysis` | Fetches go to `undefined/api/...`; dropdowns stay empty |
+| `NEXT_PUBLIC_CLASSIFIER_URL` | Classifier link in the lab sidebar | Link falls back to `#` |
+| Clerk keys | `/explore`, `/lab`, `/play` | Protected routes fail; **`npm run build` also fails** |
 | `NEXT_PUBLIC_GEMINI_API_KEY` | `/play/draw` classification | Page renders; the Gemini call fails |
 
-Backends need no environment variables. `EXO_DATA_PATH` optionally overrides the atmosphere CSV.
+> ⚠️ `NEXT_PUBLIC_*` values are inlined at **build** time. After changing one, restart `npm run dev`
+> (or rebuild) — editing the file alone will not update an already-built bundle.
+
+**Backend variables are all optional locally.** Defaults reproduce the previous behaviour:
+
+| Variable | Service | Local default |
+|---|---|---|
+| `PORT` | both | 5000 / 5003 |
+| `FLASK_DEBUG` | both | off — set `FLASK_DEBUG=1` for the auto-reloader |
+| `CORS_ORIGINS` | atmosphere | unset ⇒ all origins allowed |
+| `SECRET_KEY` | classifier | unset ⇒ ephemeral random key + warning |
+| `EXO_DATA_PATH` | atmosphere | unset ⇒ first `*.csv` in the service directory |
 
 ---
 
@@ -123,6 +160,24 @@ Verify by opening `http://127.0.0.1:5003` — a four-slider form should render.
 
 > **`cd` into the service directory matters.** The atmosphere service resolves its CSV by globbing its
 > own directory, and both services are written to be run as scripts, not as modules.
+
+### 4d. Optional — reproduce the production (gunicorn) startup locally
+
+`python app.py` uses Flask's development server. To exercise the same command Render runs:
+
+```bash
+cd server/atmosphere && PORT=5000 gunicorn app:app --bind 0.0.0.0:$PORT
+```
+
+```bash
+cd server/classifier && PORT=5003 SECRET_KEY=$(python -c "import secrets;print(secrets.token_hex(32))") gunicorn app:app --bind 0.0.0.0:$PORT
+```
+
+> Export `PORT` first (as above) rather than writing `PORT=5000 gunicorn ... :$PORT` on one line — in
+> the latter the shell expands `$PORT` *before* setting it, and gunicorn fails with
+> `Error: '' is not a valid port number.`
+
+Both remain available; `python app.py` is still the convenient local option.
 
 ### Which services does a given page need?
 

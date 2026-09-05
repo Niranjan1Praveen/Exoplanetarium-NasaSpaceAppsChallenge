@@ -73,17 +73,18 @@ No equivalent note explains why the classifier diverged.
 
 ---
 
-### D3 — Backend URLs hardcoded to localhost
+### D3 — Backend URLs hardcoded to localhost — ⚠️ SUPERSEDED by [D21](#d21--backend-urls-moved-to-build-time-environment-variables)
 
-**Decision.** Backend addresses are string literals in frontend source, not configuration.
+**Original decision.** Backend addresses were string literals in frontend source, not configuration.
 
 **Evidence.** `http://localhost:5000` (×2) in `atmosphericAnalysis/page.tsx`; `http://127.0.0.1:5003`
-in `sidebar.tsx`. No `NEXT_PUBLIC_*_URL` variable exists anywhere.
+in `sidebar.tsx`. No `NEXT_PUBLIC_*_URL` variable existed.
 
-**Rationale.** **UNKNOWN.** No comment or commit explains it. It is *consistent with* hackathon-speed
+**Rationale.** **UNKNOWN.** No comment or commit explained it. It is *consistent with* hackathon-speed
 development, but the repository does not say so.
 
-**Consequence.** 🔴 Primary deployment blocker — [DEPLOYMENT.md](DEPLOYMENT.md#blocker-1--backend-urls-are-hardcoded-to-localhost).
+**Status.** Resolved — the three literals were replaced by `NEXT_PUBLIC_ATMOSPHERE_URL` and
+`NEXT_PUBLIC_CLASSIFIER_URL`. See [D21](#d21--backend-urls-moved-to-build-time-environment-variables).
 
 ---
 
@@ -244,8 +245,13 @@ and does not label it.
 **Evidence.** `server/atmosphere/app.py`: `CORS(app)  # Enable CORS for Next.js frontend`.
 
 **Rationale.** **Evidenced** for *why CORS exists* (the inline comment names the Next.js frontend).
-Why it is unrestricted rather than origin-scoped: **UNKNOWN**. The classifier needs none because it is
-navigated to, not fetched ([D2](#d2--classifier-is-a-separate-site-not-an-api)).
+Why it was unrestricted rather than origin-scoped: **UNKNOWN**. The classifier needs none because it
+is navigated to, not fetched ([D2](#d2--classifier-is-a-separate-site-not-an-api)).
+
+**Update.** Atmosphere CORS is now driven by `CORS_ORIGINS`. It still defaults to `*` when unset, so
+local behaviour is unchanged; production sets it to the Vercel origin. The classifier still has no
+CORS, because it is still navigated to rather than fetched. See
+[D23](#d23--cors-restrictable-by-environment-default-unchanged).
 
 ---
 
@@ -361,6 +367,135 @@ files; no `.github/workflows/`.
 
 **Consequence.** No automated guard against the training/inference feature-formula drift described in
 [D7](#d7--six-hand-derived-physical-ratio-features).
+
+---
+
+## Deployment
+
+> Decisions D21–D26 were made **as part of the production-deployment task**, not inferred from
+> pre-existing repository history. Their rationale is recorded here explicitly. Where the repository
+> offers no evidence for an earlier intent, that is still marked **UNKNOWN**.
+
+### D21 — Backend URLs moved to build-time environment variables
+
+**Decision.** The three hardcoded backend literals were replaced by exactly two variables:
+`NEXT_PUBLIC_ATMOSPHERE_URL` and `NEXT_PUBLIC_CLASSIFIER_URL`.
+
+**Evidence of need.** `fetch("http://localhost:5000/api/types")`, the `/api/data` template literal,
+and `<Link href="http://127.0.0.1:5003">` — all unreachable from any non-local deployment.
+
+**Rationale.** Required for the frontend to address Render-hosted backends at all. `NEXT_PUBLIC_` is
+mandatory because both call sites execute in the browser (one client component, one server-rendered
+anchor whose `href` the browser follows).
+
+**Deliberately no localhost fallback in source.** An `?? "http://localhost:5000"` default would
+reintroduce a production-relevant literal that silently masks a misconfigured deployment. Local
+defaults live in `client/.env.local` instead. The classifier link falls back to `"#"` so an unset
+variable cannot produce an `href="undefined"`.
+
+**Consequence.** ⚠️ `NEXT_PUBLIC_*` is inlined at build time — changing a backend URL requires a
+redeploy, not just an env-var edit.
+
+---
+
+### D22 — Gunicorn as the production WSGI server, `python app.py` retained for development
+
+**Decision.** Both services keep their `if __name__ == "__main__":` block and gain a gunicorn start
+command: `gunicorn app:app --bind 0.0.0.0:$PORT`.
+
+**Evidence.** Both modules define a module-level `app = Flask(__name__)`, so `app:app` is the correct
+WSGI target for both. Neither has an application factory or a `wsgi.py`.
+
+**Rationale.** Flask's development server is explicitly unsuitable for production. Gunicorn was chosen
+as the minimal, conventional WSGI server for Flask on Render; no model-serving framework was
+introduced, as required. Keeping `python app.py` preserves the documented local workflow unchanged.
+
+**Verified.** ✅ Both services started under gunicorn 23.0.0 locally and served their endpoints.
+
+**Open.** ⬜ Worker count is unset (gunicorn default 1). Each worker loads ~11 MB of models at import,
+so raising it multiplies memory. Not tuned here — **REQUIRES PRODUCTION TESTING**.
+
+---
+
+### D23 — CORS restrictable by environment, default unchanged
+
+**Decision.** `CORS_ORIGINS` selects the allow-list; unset means `*`.
+
+**Rationale.** Production must be able to restrict the API to the Vercel origin. Defaulting to `*`
+keeps existing local behaviour byte-identical, satisfying "do not unnecessarily change current local
+CORS behavior". The alternative — defaulting to a restrictive list — would have broken local
+development silently.
+
+**Verified.** ✅ In a real browser: an allowed origin succeeds; a disallowed origin is blocked.
+
+---
+
+### D24 — Flask secret key from `SECRET_KEY`, ephemeral random fallback
+
+**Decision.** `app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)`, with a startup
+warning when the variable is absent.
+
+**Evidence.** The previous value was the committed literal `"exoplanet_secret"`. It is used only to
+sign the session cookie carrying `flash()` messages from `/predict`'s error path.
+
+**Rationale.** Removes a committed signing key without committing a replacement. A random fallback
+keeps local development working with no setup.
+
+**Known trade-off.** With more than one gunicorn worker and `SECRET_KEY` unset, each worker signs
+differently and flash messages can be dropped. Documented as **required in production** rather than
+silently worked around.
+
+---
+
+### D25 — Python pinned to 3.12; dependency versions pinned per service
+
+**Decision.** `.python-version` = `3.12` for both services; per-service pinned `requirements.txt`.
+
+**Rationale, from evidence.**
+- `scikit-learn==1.7.0` is pinned because that version is **recorded inside the artifacts**
+  (`InconsistentVersionWarning` names 1.7.0). Pinning it eliminates the warning class entirely.
+- `xgboost==3.0.5` / `lightgbm==4.7.0` are pinned as the **currently verified compatible** versions,
+  **not** as the training versions, which are **UNKNOWN**.
+- Python 3.12 was chosen because it is the interpreter the pinned set was actually verified on, and
+  because scikit-learn 1.7.0 publishes wheels for it. The training interpreter is **UNKNOWN**.
+
+**Verified.** ✅ Clean venv install → all four artifacts load warning-free → prediction identical to
+the pre-existing environment (max abs diff 3.75e-11).
+
+**Not done.** No model was retrained, modified, or re-serialized.
+
+---
+
+### D26 — Deployment topology: Vercel frontend + two separate Render services
+
+**Decision.**
+
+```
+Vercel  └── client/                Next.js frontend
+Render  ├── server/atmosphere/     Flask JSON API
+        └── server/classifier/     Flask HTML app
+```
+
+The two Flask applications are **not** merged.
+
+**Rationale — grounded in repository evidence, not invented history.**
+
+| Basis | Evidence in the repository |
+|---|---|
+| Independent code | No Python import crosses `server/atmosphere` ↔ `server/classifier`; they share no module, helper or config |
+| Independent dependencies | Atmosphere needs `flask-cors` and no ML stack; classifier needs `scikit-learn`/`xgboost`/`lightgbm` (~11 MB of artifacts) and no CORS. The manifests have four packages in common and four that differ |
+| Independent data/runtime needs | Atmosphere reads one 0.3 MB CSV co-located with `app.py`; classifier reads four `.pkl` files from `models/`. Neither reads the other's files |
+| Independent lifecycles | Separate entry points, separate ports, separate start commands; neither imports or supervises the other |
+| Independent deployability | Each has its own root directory, `requirements.txt`, `.python-version` and gunicorn command |
+| Different interaction models | Atmosphere is `fetch`-ed as JSON; the classifier is **navigated to** as HTML ([D2](#d2--classifier-is-a-separate-site-not-an-api)) — merging them would require redesigning one of the two |
+
+**What is NOT claimed.** The repository's earlier intent is **UNKNOWN**. `README.md` mentions
+"Vercel (Frontend) · Render (Backend)" and `client/.gitignore` ignores `.vercel`, but no deployment
+configuration ever existed to corroborate a prior plan. This topology is a **new decision**, recorded
+here; it is merely *consistent with* that README line.
+
+**Consequence.** Two Render services must be provisioned and their URLs supplied to Vercel as
+[D21](#d21--backend-urls-moved-to-build-time-environment-variables)'s variables.
 
 ---
 

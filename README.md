@@ -129,39 +129,79 @@ An **interactive 3D timeline** showcasing major telescope missions from *Hubble 
 
 ## 🧩 Code Execution Instructions
 
-### ▶️ How to Run the Frontend (Next.js)
+The project runs as **three independent processes** in **three separate terminals**. There is no
+orchestrator and no single command that starts everything.
+
+#### 0️⃣ Clone and install
+
 ```bash
-# 1. Clone the Repository
 git clone https://github.com/Niranjan1Praveen/Exoplanetarium-NasaSpaceAppsChallenge.git
-cd client
-
-# 2. Install Dependencies
-npm install
-
-# 3. Start the Development Server
-npm run dev
-
-# 4. Access the Application
-Visit http://localhost:3000 in your browser
+cd Exoplanetarium-NasaSpaceAppsChallenge
 ```
 
-### 🧠 How to Run the Backend (Flask API)
+**System dependency — macOS only.** LightGBM/XGBoost macOS wheels do not bundle an OpenMP runtime:
+
 ```bash
-# 1. Navigate to the Backend Folder
-cd server
+brew install libomp
+```
 
-# 2. Install Required Packages
-pip install -r requirements.txt
+> ❗ macOS only. **Linux** users need nothing extra (the `manylinux` wheels link `libgomp`, already
+> present). **Windows** users need nothing extra. Do **not** run Homebrew commands on Linux/Windows,
+> and never add `libomp` to `requirements.txt`.
 
-# 3. Start the Flask Server
-cd atmosphere
+Python dependencies (recommended: **Python 3.12**):
 
-python app.py
+```bash
+python3.12 -m venv server/venv
+source server/venv/bin/activate          # Windows: .\server\venv\Scripts\Activate.ps1
+pip install -r server/atmosphere/requirements.txt -r server/classifier/requirements.txt
+```
 
-cd classifier
+Frontend dependencies and environment variables:
 
+```bash
+cd client
+npm install
+cp .env.example .env.local               # then fill in your own keys
+```
+
+`client/.env.local` must contain at least:
+
+```bash
+NEXT_PUBLIC_ATMOSPHERE_URL=http://localhost:5000
+NEXT_PUBLIC_CLASSIFIER_URL=http://127.0.0.1:5003
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+CLERK_SECRET_KEY=sk_test_xxx
+NEXT_PUBLIC_GEMINI_API_KEY=xxx
+```
+
+#### 1️⃣ Terminal 1 — Atmosphere API → http://localhost:5000
+
+```bash
+cd server/atmosphere
 python app.py
 ```
+
+#### 2️⃣ Terminal 2 — Classifier → http://127.0.0.1:5003
+
+```bash
+cd server/classifier
+python app.py
+```
+
+#### 3️⃣ Terminal 3 — Frontend → http://localhost:3000
+
+```bash
+cd client
+npm run dev
+```
+
+Then visit **http://localhost:3000**.
+
+> Both backends must be started from **inside their own directory** — the Atmosphere service locates
+> its CSV by globbing its own folder.
+
+For production (Render/Vercel) start commands, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ---
 
