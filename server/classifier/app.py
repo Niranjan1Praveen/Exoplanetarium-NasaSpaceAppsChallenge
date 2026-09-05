@@ -34,7 +34,17 @@ feature_cols = joblib.load(os.path.join(MODEL_DIR, "feature_cols.pkl"))
 # Flask App
 # -----------------------------
 app = Flask(__name__)
-app.secret_key = "exoplanet_secret"
+
+# Flask secret key. Used only to sign the session cookie that carries flash()
+# messages (see the error path in /predict). Provide SECRET_KEY via the
+# environment; in production (Render) set it explicitly. When it is not set we
+# fall back to a per-process random value so that no secret is committed to the
+# repository. Note: with more than one gunicorn worker an unset SECRET_KEY means
+# each worker signs with a different key, so flash messages can be dropped.
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
+if not os.environ.get("SECRET_KEY"):
+    print("[WARN] SECRET_KEY is not set — using an ephemeral random key. "
+          "Set SECRET_KEY in production.")
 
 # Slider configuration with realistic units
 sliders = {
@@ -131,5 +141,17 @@ def predict():
 # -----------------------------
 # Run App
 # -----------------------------
+# Local development entry point only.
+#
+#   Local dev : python app.py                (optionally FLASK_DEBUG=1)
+#   Production: gunicorn app:app --bind 0.0.0.0:$PORT
+#
+# Flask's built-in server below is NOT used in production; Render runs the
+# gunicorn command above against the module-level `app` object.
 if __name__ == "__main__":
-    app.run(debug=True, port=5003)
+    # HOST defaults to 127.0.0.1, matching the previous local behaviour.
+    # Production binding is handled by gunicorn, not by this block.
+    host = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", 5003))
+    debug = os.environ.get("FLASK_DEBUG", "").lower() in ("1", "true", "yes")
+    app.run(host=host, port=port, debug=debug)

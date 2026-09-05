@@ -161,16 +161,21 @@ cd server
 # Windows:
 py -m pip install -r requirements.txt
 
-# macOS / Linux:
+# macOS:
 brew install libomp
 python3 -m pip install -r requirements.txt
 
+# Linux:
+python3 -m pip install -r requirements.txt
+
 # 3. Start the Flask Server
-cd atmosphere
+# Terminal 1
+cd server/atmosphere
 
 python app.py
 
-cd classifier
+# Terminal 2
+cd server/classifier
 
 python app.py
 ```

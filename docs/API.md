@@ -5,17 +5,23 @@ Every HTTP endpoint exposed by the repository's backends, as implemented today.
 The frontend (`client/`) exposes **no API routes of its own** — there is no `route.ts` anywhere under
 `client/src/app/`. All server endpoints belong to the two Flask applications.
 
-| Service | Base URL (as hardcoded in the frontend) | Style |
-|---|---|---|
-| Atmosphere | `http://localhost:5000` | JSON REST |
-| Classifier | `http://127.0.0.1:5003` | HTML form (server-rendered) |
+| Service | Base URL (frontend configuration) | Local default | Style |
+|---|---|---|---|
+| Atmosphere | `NEXT_PUBLIC_ATMOSPHERE_URL` | `http://localhost:5000` | JSON REST |
+| Classifier | `NEXT_PUBLIC_CLASSIFIER_URL` | `http://127.0.0.1:5003` | HTML form (server-rendered) |
+
+Base URLs are supplied by environment variables (no trailing slash) and inlined at build time.
+**Endpoint paths, request formats and response shapes are unchanged.** The `curl` examples below use
+the local defaults.
 
 ---
 
 # 1. Atmosphere API — `server/atmosphere/app.py`
 
 Read-only. All data derives from the module-level DataFrame `DF`, loaded once at import.
-**CORS: `CORS(app)` with no arguments — all origins, all methods.**
+**CORS: driven by the `CORS_ORIGINS` environment variable.** Unset ⇒ `CORS(app)` — all origins, all
+methods (the previous behaviour, and still the local default). When set to a comma-separated
+allow-list, only those origins receive `Access-Control-Allow-Origin`.
 
 ---
 
@@ -231,12 +237,13 @@ exists in the repository.** NASA data is present only as committed CSV files —
 
 | Service | CORS | Configured where | Adequate for current use? |
 |---|---|---|---|
-| Atmosphere | Enabled, unrestricted (`CORS(app)`) | `server/atmosphere/app.py` | ✅ Yes — required for the browser `fetch` from `:3000` |
+| Atmosphere | Configurable via `CORS_ORIGINS`; unrestricted when unset | `server/atmosphere/app.py` | ✅ Yes — permissive locally, restrictable in production |
 | Classifier | None | — | ✅ Yes — only same-origin form posts occur |
 
-⚠️ Unrestricted CORS on atmosphere permits any origin. Acceptable for read-only public data on
-localhost; revisit before public deployment. Listed as an unresolved decision in
-[DEPLOYMENT.md](DEPLOYMENT.md#5-unresolved-deployment-decisions).
+In production set `CORS_ORIGINS` to the deployed Vercel origin, e.g.
+`CORS_ORIGINS=https://your-app.vercel.app`. Verified in a real browser: an allowed origin succeeds
+and a disallowed origin is blocked. See
+[DEPLOYMENT.md](DEPLOYMENT.md#1-render--atmosphere-service).
 
 ---
 

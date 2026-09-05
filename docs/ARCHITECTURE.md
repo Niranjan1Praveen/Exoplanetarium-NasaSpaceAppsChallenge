@@ -33,7 +33,7 @@ build-time coupling**. Each has its own dependency set and its own lifecycle.
 └───────────────┬──────────────┘          │    scaler.pkl                    │
                 │                         │    feature_cols.pkl              │
                 │ (2) fetch()             └──────────────────────────────────┘
-                │ hardcoded localhost:5000
+                │ NEXT_PUBLIC_ATMOSPHERE_URL
                 ▼
 ┌──────────────────────────────────────────┐
 │ server/atmosphere/ — Flask + Flask-CORS  │
@@ -55,8 +55,8 @@ build-time coupling**. Each has its own dependency set and its own lifecycle.
 | # | From | To | Mechanism | Coupling |
 |---|---|---|---|---|
 | 1 | Browser | `client` | HTTP page load | normal |
-| 2 | Browser (client JS) | `atmosphere` | `fetch()` to **hardcoded** `http://localhost:5000` | ⚠️ hardcoded |
-| 3 | Browser | `classifier` | `<Link href="http://127.0.0.1:5003">` — leaves the SPA | ⚠️ hardcoded |
+| 2 | Browser (client JS) | `atmosphere` | `fetch()` to `${NEXT_PUBLIC_ATMOSPHERE_URL}/api/...` | ✅ configurable (build-time env) |
+| 3 | Browser | `classifier` | `<Link href={NEXT_PUBLIC_CLASSIFIER_URL}>` — leaves the SPA | ✅ configurable (build-time env) |
 | — | Browser (client JS) | Google Generative AI | `@google/generative-ai` SDK, client-side | external |
 
 ---
@@ -67,11 +67,12 @@ build-time coupling**. Each has its own dependency set and its own lifecycle.
 |---|---|---|---|
 | Frontend | `client/src/app/layout.tsx` | Next.js App Router root layout | `next dev` → `:3000` |
 | Frontend auth | `client/src/middleware.ts` | `clerkMiddleware`, `createRouteMatcher` | edge middleware |
-| Atmosphere | `server/atmosphere/app.py` | `app.run(host="0.0.0.0", port=5000, debug=True)` | `0.0.0.0:5000` |
-| Classifier | `server/classifier/app.py` | `app.run(debug=True, port=5003)` | `127.0.0.1:5003` (Flask default host) |
+| Atmosphere | `server/atmosphere/app.py` | WSGI callable `app` — prod: `gunicorn app:app --bind 0.0.0.0:$PORT` | `0.0.0.0:$PORT` |
+| Classifier | `server/classifier/app.py` | WSGI callable `app` — prod: `gunicorn app:app --bind 0.0.0.0:$PORT` | `0.0.0.0:$PORT` |
 
-> Note the **host asymmetry**: atmosphere binds `0.0.0.0` (reachable externally), classifier binds the
-> Flask default `127.0.0.1` (loopback only). Both run with `debug=True` hardcoded.
+Both modules still expose an `if __name__ == "__main__":` block for local development
+(`python app.py`), defaulting to ports 5000 and 5003 with debug **off** unless `FLASK_DEBUG` is set.
+In production neither uses Flask's development server.
 
 ---
 
@@ -80,8 +81,10 @@ build-time coupling**. Each has its own dependency set and its own lifecycle.
 | Port | Service | Configurable? |
 |---|---|---|
 | 3000 | Next.js dev/start | Yes — `next dev -p` |
-| 5000 | Atmosphere Flask | ❌ No — literal in `app.run(...)`; no env var |
-| 5003 | Classifier Flask | ❌ No — literal in `app.run(...)`; no env var |
+| 5000 | Atmosphere Flask (local default) | ✅ Yes — `PORT` env var; gunicorn `--bind` in production |
+| 5003 | Classifier Flask (local default) | ✅ Yes — `PORT` env var; gunicorn `--bind` in production |
+
+On Render the platform injects `PORT` and the start command binds to it.
 
 ---
 
@@ -168,7 +171,7 @@ This is a property of the current code, not a claim about intent. See [DATA.md](
 |---|---|
 | Framework | Flask + Jinja2 templates. **No CORS.** |
 | Artifact load | At **import time** via `joblib.load()` from `MODEL_DIR = <app.py dir>/models` |
-| Session | `app.secret_key = "exoplanet_secret"` — hardcoded literal, used by `flash()` |
+| Session | `app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)`, used by `flash()` |
 | UI inputs | 4 sliders: `orbital_period`, `transit_depth`, `planet_radius`, `stellar_radius` |
 | Model inputs | 19 features (`feature_cols.pkl`) |
 
@@ -203,8 +206,8 @@ See [DATA.md](DATA.md#8-deployment-requirement-summary).
 
 | Dependency | Direction | Nature | Risk |
 |---|---|---|---|
-| `client` → `server/atmosphere` | runtime HTTP | Hardcoded `http://localhost:5000` in `atmosphericAnalysis/page.tsx` (2 sites) | ⚠️ breaks off-localhost |
-| `client` → `server/classifier` | runtime hyperlink | Hardcoded `http://127.0.0.1:5003` in `labDashboard/sidebar.tsx` | ⚠️ breaks off-localhost |
+| `client` → `server/atmosphere` | runtime HTTP | `NEXT_PUBLIC_ATMOSPHERE_URL` in `atmosphericAnalysis/page.tsx` (2 sites) | ✅ configurable per environment |
+| `client` → `server/classifier` | runtime hyperlink | `NEXT_PUBLIC_CLASSIFIER_URL` in `labDashboard/sidebar.tsx` | ✅ configurable per environment |
 | `research` → `server/classifier` | **read-only, offline** | Notebook reads `data/raw/*.csv`, `data/processed/**`, `models/*.pkl` | none at runtime |
 | `server/classifier/training` → filesystem | offline | Hardcoded `D:\exoplanet\...`, **not** the repo's own dirs | ⚠️ scripts non-portable |
 
@@ -221,13 +224,27 @@ OpenAPI schema, no shared types. The response shape is duplicated by hand as Typ
 
 | Service | Independently deployable? | Reasoning |
 |---|---|---|
-| `server/atmosphere` | ✅ **Yes** | Self-contained: one CSV beside `app.py`, no imports from elsewhere, `EXO_DATA_PATH` override exists, binds `0.0.0.0`, CORS enabled. Only blocker is the missing dependency manifest. |
-| `server/classifier` | ✅ **Yes, functionally** | Self-contained: repo-relative model paths, no cross-imports. Needs only `app.py`, `models/*.pkl` (4 files) and `templates/`. Blockers: missing manifest, binds loopback, `debug=True`. |
-| `client` | ⚠️ **Deployable, but non-functional in part** | Builds and deploys standalone (Vercel-shaped). However `/lab/atmosphericAnalysis` and the classifier sidebar link point at `localhost`, so those features break in any non-local deployment. |
+| `server/atmosphere` | ✅ **Yes** | Self-contained: one CSV beside `app.py`, no imports from elsewhere, `EXO_DATA_PATH` override, own pinned `requirements.txt` and `.python-version`, own gunicorn start command. |
+| `server/classifier` | ✅ **Yes** | Self-contained: repo-relative model paths, no cross-imports, own pinned `requirements.txt` and `.python-version`, own gunicorn start command. Needs only `app.py`, `models/*.pkl` (4 files) and `templates/`. |
+| `client` | ✅ **Yes** | Builds and deploys standalone; reaches both backends purely through build-time environment variables. |
 
-**Conclusion:** the two backends are genuinely independent services. The frontend is independently
-*deployable* but not independently *functional* — it has an unconfigurable runtime dependency on
-backends reachable at localhost. See [DEPLOYMENT.md](DEPLOYMENT.md).
+**Conclusion:** all three are independently deployable. The two backends remain **separate services**
+— they share no code, no configuration, no data and no dependency manifest, and neither imports the
+other. The frontend's only coupling is two environment variables. See
+[DEPLOYMENT.md](DEPLOYMENT.md).
+
+### Deployment topology
+
+```
+Local development                      Production
+─────────────────                      ──────────
+localhost:3000   next dev              Vercel      client/            (Next.js)
+localhost:5000   python app.py         Render      server/atmosphere  (gunicorn)
+127.0.0.1:5003   python app.py         Render      server/classifier  (gunicorn)
+```
+
+The topology is identical in both environments — three processes, no gateway, no shared runtime.
+Only the URLs and the WSGI server differ, and the URLs are supplied as environment variables.
 
 ---
 

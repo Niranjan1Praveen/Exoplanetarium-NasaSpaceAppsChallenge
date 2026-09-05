@@ -1,0 +1,16 @@
+# Atmosphere Flask service — runtime dependencies.
+#
+# These are the versions verified locally against this service on
+# Python 3.12.13 (see docs/ENVIRONMENT.md). They are NOT known to be the
+# versions the service was originally developed with.
+#
+# Direct imports in app.py: flask, flask_cors, pandas, numpy
+# (os, re, glob, csv, json are stdlib).
+
+Flask==3.1.3
+flask-cors==6.0.5
+pandas==2.3.3
+numpy==2.3.4
+
+# Production WSGI server (not imported by app.py; used by the start command).
+gunicorn==23.0.0

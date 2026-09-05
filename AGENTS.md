@@ -1,6 +1,6 @@
-# CLAUDE.md — Exoplanetarium
+# AGENTS.md — Exoplanetarium
 
-Entry point for Claude Code sessions and engineers new to this repository.
+Entry point for Codex sessions and engineers new to this repository.
 It describes the repository **as it currently exists**, not an intended or idealized design.
 
 > **Conventions used throughout `docs/`**
@@ -25,7 +25,7 @@ statement *"A World Away: Hunting for Exoplanets with AI"*. It combines:
 
 ```
 .
-├── CLAUDE.md                  ← this file
+├── AGENTS.md                  ← this file
 ├── README.md                  ← hackathon submission overview (see caveat below)
 ├── docs/                      ← durable documentation layer
 ├── client/                    ← Next.js 15 frontend (App Router, TypeScript)

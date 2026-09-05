@@ -35,6 +35,12 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 
+// Base URL of the Classifier Flask service. The classifier is a separate
+// server-rendered app that is navigated to, not called as an API.
+// Set NEXT_PUBLIC_CLASSIFIER_URL in client/.env.local (local) or in the
+// Vercel project settings (production).
+const CLASSIFIER_URL = process.env.NEXT_PUBLIC_CLASSIFIER_URL;
+
 const AppSidebar = async () => {
   const user = await currentUser();
   return (
@@ -72,7 +78,7 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="http://127.0.0.1:5003">
+                  <Link href={CLASSIFIER_URL ?? "#"}>
                     <Earth />
                     <span>Exoplanet Classifier</span>
                   </Link>
