@@ -1,13 +1,26 @@
 """Loads the trained models once and turns user input into an ensemble prediction."""
+import ctypes
 import os
+import sys
 
-import joblib
-import numpy as np
-import pandas as pd
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-from .config import CLASSES, DEFAULTS, PHYSICAL
+# LightGBM needs the OpenMP runtime (libgomp.so.1), which Vercel's Linux image lacks.
+# Loading our bundled copy first lets LightGBM's own library find it.
+GOMP = os.path.join(BASE, "lib", "libgomp.so.1")
+if sys.platform.startswith("linux") and os.path.exists(GOMP):
+    try:
+        ctypes.CDLL("libgomp.so.1", mode=ctypes.RTLD_GLOBAL)  # a system copy, if there is one
+    except OSError:
+        ctypes.CDLL(GOMP, mode=ctypes.RTLD_GLOBAL)
 
-MODEL_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "models")
+import joblib  # noqa: E402  (must come after the preload above)
+import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
+
+from .config import CLASSES, DEFAULTS, PHYSICAL  # noqa: E402
+
+MODEL_DIR = os.path.join(BASE, "models")
 EPS = 1e-6  # keeps divisions safe when a value is zero
 
 
