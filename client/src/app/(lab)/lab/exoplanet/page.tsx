@@ -1,144 +1,111 @@
 "use client";
+// 3D Exoplanet Viewer: pick a planet type and fly in to a spinning model of it.
 
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { GLTF } from "three-stdlib";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { StarsBackground } from "@/components/reusableComponents/starsBackground";
+import { PLANET_TYPES } from "@/utils/planetTypes";
 
-type GLTFResult = GLTF & {
-  scene: THREE.Group;
-  cameras: THREE.Camera[];
-  animations: THREE.AnimationClip[];
-};
+const SIZE = 2.6; // every model is scaled so its widest side is this many units
+const DROP = -0.35; // nudge planets down a little so they clear the title text
 
-function Model({
-  onCameraAnimFinished,
-  enableSpin,
-}: {
-  onCameraAnimFinished: () => void;
-  enableSpin: boolean;
-}) {
-  const { scene } = useGLTF("/models/rocky.glb") as GLTFResult;
-  const planetRef = useRef<THREE.Object3D | null>(null);
-  const { camera } = useThree();
-  const animationFinished = useRef(false);
-  const animationProgress = useRef(0);
-  const initialCameraPosition = useRef(new THREE.Vector3());
-  const initialCameraRotation = useRef(new THREE.Euler());
+// Loads one model, centres it, scales it to a common size and spins it slowly
+function Planet({ url, spin }: { url: string; spin: boolean }) {
+  const { scene } = useGLTF(url);
+  const ref = useRef<THREE.Group>(null);
 
-  // Store initial camera position and rotation
-  useEffect(() => {
-    initialCameraPosition.current.copy(camera.position);
-    initialCameraRotation.current.copy(camera.rotation);
-  }, [camera]);
-
-  // Handle camera animation
-  useEffect(() => {
-    if (!animationFinished.current) {
-      // Start the camera animation after a brief delay
-      const timer = setTimeout(() => {
-        animationFinished.current = true;
-        onCameraAnimFinished();
-      }, 3000); // 3 second animation
-
-      return () => clearTimeout(timer);
-    }
-  }, [onCameraAnimFinished]);
-
-  // Update camera animation
-  useFrame((_, delta) => {
-    if (!animationFinished.current) {
-      // Animate the camera moving back and scaling up
-      animationProgress.current = Math.min(animationProgress.current + delta / 3, 1);
-      
-      // Smooth easing function
-      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-      const progress = easeOutCubic(animationProgress.current);
-      
-      // Move camera back to about 10 meters
-      const targetPosition = new THREE.Vector3(0, 0, 10);
-      camera.position.lerpVectors(initialCameraPosition.current, targetPosition, progress);
-      
-      // Scale the camera view (by adjusting FOV)
-      if (camera instanceof THREE.PerspectiveCamera) {
-        const initialFov = 50; // Default FOV
-        const targetFov = 30; // Wider view to see more of the planet
-        camera.fov = initialFov + (targetFov - initialFov) * progress;
-        camera.updateProjectionMatrix();
-      }
-    }
-
-    // Rotate the planet after animation completes
-    if (enableSpin && planetRef.current) {
-      planetRef.current.rotation.y += delta * 0.1;
-    }
-  });
-
-  // Find the planet mesh in the scene
-  useEffect(() => {
-    // Try common names for planets/meshes
-    const planetNames = ["Sphere", "planet", "Planet", "mesh", "Mesh", "object"];
-    for (const name of planetNames) {
-      const planetNode = scene.getObjectByName(name);
-      if (planetNode) {
-        planetRef.current = planetNode;
-        break;
-      }
-    }
-    
-    // If no named object found, try to find by geometry type
-    if (!planetRef.current) {
-      scene.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.geometry instanceof THREE.SphereGeometry) {
-          planetRef.current = child;
-        }
-      });
-    }
+  // Clone so switching back and forth never shares (or re-scales) the cached scene
+  const model = useMemo(() => {
+    const obj = scene.clone(true);
+    const box = new THREE.Box3().setFromObject(obj);
+    const size = box.getSize(new THREE.Vector3());
+    obj.position.sub(box.getCenter(new THREE.Vector3()));
+    const wrap = new THREE.Group();
+    wrap.add(obj);
+    wrap.scale.setScalar(SIZE / Math.max(size.x, size.y, size.z, 1e-6));
+    return wrap;
   }, [scene]);
 
-  return <primitive object={scene} />;
+  useFrame((_, dt) => {
+    if (spin && ref.current) ref.current.rotation.y += dt * 0.1;
+  });
+
+  return <group ref={ref} position={[0, DROP, 0]}><primitive object={model} /></group>;
 }
 
-export default function Page() {
-  const [showText, setShowText] = useState(false);
-  const [enableSpin, setEnableSpin] = useState(false);
+// One-time camera fly-in: pull back and narrow the field of view over ~3 seconds
+function CameraIntro({ onDone }: { onDone: () => void }) {
+  const { camera } = useThree();
+  const t = useRef(0);
+  const start = useRef(camera.position.clone());
+  const done = useRef(false);
+
+  useFrame((_, dt) => {
+    if (done.current) return;
+    t.current = Math.min(t.current + dt / 3, 1);
+    const ease = 1 - Math.pow(1 - t.current, 3);
+    camera.position.lerpVectors(start.current, new THREE.Vector3(0, 0, 10), ease);
+    if (camera instanceof THREE.PerspectiveCamera) {
+      camera.fov = 50 - 20 * ease;
+      camera.updateProjectionMatrix();
+    }
+    if (t.current >= 1) {
+      done.current = true;
+      onDone();
+    }
+  });
+  return null;
+}
+
+export default function ExoplanetViewer() {
+  const [typeId, setTypeId] = useState(PLANET_TYPES[0].id);
+  const [ready, setReady] = useState(false);
+  const type = PLANET_TYPES.find((p) => p.id === typeId) ?? PLANET_TYPES[0];
+
+  // Start fetching the other models in the background so switching feels instant
+  useEffect(() => {
+    PLANET_TYPES.forEach((p) => useGLTF.preload(p.model));
+  }, []);
 
   return (
-    <div style={{ position: "relative", height: "100vh", background: "black" }}>
+    // Fill the window below the site header and lab toolbar instead of overflowing it
+    <div className="relative h-[calc(100vh-7.5rem)] min-h-[420px] overflow-hidden rounded-lg bg-black">
       <Canvas>
-        {/* Stars and space clusters in the background */}
         <StarsBackground />
-        
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
-        <Model
-          onCameraAnimFinished={() => {
-            setShowText(true);
-            setEnableSpin(true);
-          }}
-          enableSpin={enableSpin}
-        />
+        <CameraIntro onDone={() => setReady(true)} />
+        <Suspense fallback={null}>
+          <Planet key={type.model} url={type.model} spin={ready} />
+        </Suspense>
       </Canvas>
 
-      {showText && (
-        <div
-          style={{
-            position: "absolute",
-            top: "20px",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            color: "white",
-            fontSize: "2rem",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
-          }}
-        >
-          <TypingAnimation className="italic font-extralight">A Rocky Exoplanet</TypingAnimation>
-        </div>
-      )}
+      {/* Type picker floats over the scene */}
+      <div className="absolute left-0 right-0 top-5 flex flex-col items-center gap-3 px-4 text-center text-white">
+        <Select value={typeId} onValueChange={setTypeId}>
+          <SelectTrigger className="w-64 bg-black/60 backdrop-blur" aria-label="Exoplanet type">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PLANET_TYPES.map((p) => (
+              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {ready && (
+          <>
+            {/* key restarts the typing effect for each new type */}
+            <TypingAnimation key={type.id} className="text-3xl font-extralight italic drop-shadow-lg">
+              {type.name}
+            </TypingAnimation>
+            <p className="max-w-xl text-sm text-white/70">{type.blurb}</p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
