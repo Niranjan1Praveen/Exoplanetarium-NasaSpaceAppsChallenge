@@ -1,21 +1,12 @@
 "use client";
+// Lab toolbar: just the sidebar toggle (the site header already has the user menu).
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { UserButton } from "@clerk/nextjs";
 
-const AppNavbar: React.FC = () => {
-  return (
-    <nav className="p-4 flex items-center justify-between z-10">
-      {/* LEFT */}
-      <SidebarTrigger />
-
-      {/* RIGHT */}
-      <div className="flex items-center gap-4">
-        {/* USER MENU */}
-        <UserButton />
-      </div>
-    </nav>
-  );
-};
+const AppNavbar: React.FC = () => (
+  <nav className="z-10 flex items-center p-4">
+    <SidebarTrigger />
+  </nav>
+);
 
 export default AppNavbar;

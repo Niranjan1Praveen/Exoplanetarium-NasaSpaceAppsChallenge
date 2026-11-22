@@ -1,200 +1,67 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { motion, Variants } from 'framer-motion';
-import { Orbit, Target, Sparkles } from 'lucide-react';
+// Lab home: one card per working lab tool.
 
-interface Model {
-  id: number;
-  name: string;
-  icon: React.ElementType;
-  description: string;
-  accuracy: string;
-  planets: string;
-}
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, Globe2, Orbit, Target } from "lucide-react";
 
-interface Particle {
-  id: number;
-  top: string;
-  left: string;
-}
+const TOOLS = [
+  {
+    href: "/lab/classifier",
+    name: "Exoplanet Classifier",
+    icon: Target,
+    text: "Enter orbital period, transit depth, planet radius and stellar radius. A LightGBM + XGBoost ensemble labels the signal as a False Positive, Candidate or Confirmed planet.",
+    tag: "Saves to your history",
+  },
+  {
+    href: "/lab/atmosphericAnalysis",
+    name: "Atmospheric Analysis",
+    icon: Orbit,
+    text: "Pick a planet to see its transit light curve, morning vs evening transmission spectra and the molecules detected in its atmosphere.",
+    tag: "IAC exoplanet atmospheres catalogue",
+  },
+  {
+    href: "/lab/exoplanet",
+    name: "3D Exoplanet Viewer",
+    icon: Globe2,
+    text: "Fly in to an interactive 3D rocky exoplanet and spin it around to explore its surface.",
+    tag: "Interactive 3D model",
+  },
+];
 
-const ExoplanetDashboard: React.FC = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Initialize particles only on client side
-  useEffect(() => {
-    setIsMounted(true);
-    const initialParticles = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-    }));
-    setParticles(initialParticles);
-  }, []);
-
-  const models: Model[] = [
-    {
-      id: 1,
-      name: "Exoplanet Classifier",
-      icon: Target,
-      description: "Detects exoplanets by measuring the dimming of a star's light as a planet passes in front of it. This method has discovered thousands of exoplanets and provides crucial data about planetary size and orbital period.",
-      accuracy: "95%",
-      planets: "4,000+"
-    },
-    {
-      id: 2,
-      name: "Atmospheric Analysis",
-      icon: Orbit,
-      description: "Identifies exoplanets by detecting the wobble in a star's motion caused by gravitational pull. This technique reveals planetary mass and orbital characteristics with remarkable precision.",
-      accuracy: "92%",
-      planets: "1,000+"
-    },
-    {
-      id: 3,
-      name: "Habitibility Estimator",
-      icon: Sparkles,
-      description: "Captures actual images of exoplanets by blocking out the star's light. While challenging, this method provides direct visual confirmation and spectroscopic data about distant worlds.",
-      accuracy: "88%",
-      planets: "100+"
-    }
-  ];
-
-  const orbitVariants: Variants = {
-    animate: {
-      rotate: 360,
-      transition: {
-        duration: 20,
-        repeat: Infinity,
-        ease: "linear"
-      }
-    }
-  };
-
+export default function LabHome() {
   return (
-    <div className="min-h-screen p-8 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <motion.h1
-            className="text-5xl font-bold mb-4 bg-clip-text"
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-            }}
-            transition={{ duration: 5, repeat: Infinity }}
-          >
-            Exoplanet Models
-          </motion.h1>
-          <p className="text-xl text-muted-foreground">
-            Classify and analyze exoplanets with cutting-edge AI models
-          </p>
+    <div className="relative min-h-screen overflow-hidden p-8">
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
+          className="mb-16 text-center">
+          <h1 className="mb-4 text-5xl font-bold">Exoplanet Lab</h1>
+          <p className="text-xl text-muted-foreground">Classify and analyze exoplanets with AI models and real catalogue data</p>
         </motion.div>
 
-        {/* Models Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {models.map((model, index) => {
-            const Icon = model.icon;
-            return (
-              <motion.div
-                key={model.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                onHoverStart={() => setHoveredCard(model.id)}
-                onHoverEnd={() => setHoveredCard(null)}
-                className="relative group"
-              >
-                <motion.div
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 h-full border border-white/10 relative overflow-hidden"
-                  transition={{ duration: 0.3 }}
-                >
-                  
-
-                  {/* Icon */}
-                  <motion.div
-                    className="mb-6 relative"
-                    animate={{
-                      rotate: hoveredCard === model.id ? 360 : 0
-                    }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
-                      {/* <Icon className="w-8 h-8" /> */}
-                    </div>
-                  </motion.div>
-
-                  {/* Content */}
-                  <h3 className="text-2xl font-bold mb-4">{model.name}</h3>
-                  <p className="text-gray-400 mb-6 leading-relaxed">
-                    {model.description}
-                  </p>
-
-                  {/* Stats */}
-                  <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                        Accuracy
-                      </p>
-                      <p className="text-lg font-semibold">{model.accuracy}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                        Discovered
-                      </p>
-                      <p className="text-lg font-semibold">{model.planets}</p>
-                    </div>
-                  </div>
-
-                  {/* Hover indicator */}
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent"
-                    initial={{ opacity: 0, scaleX: 0 }}
-                    animate={{
-                      opacity: hoveredCard === model.id ? 1 : 0,
-                      scaleX: hoveredCard === model.id ? 1 : 0
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
-              </motion.div>
-            );
-          })}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {TOOLS.map(({ href, name, icon: Icon, text, tag }, i) => (
+            // Each card fades up one after another
+            <motion.div key={href} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.2 }}>
+              <Link href={href}
+                className="group relative flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition hover:border-white/30 hover:bg-white/10">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 transition-transform duration-500 group-hover:rotate-[360deg]">
+                  <Icon className="h-8 w-8" />
+                </div>
+                <h3 className="mb-4 text-2xl font-bold">{name}</h3>
+                <p className="mb-6 flex-1 leading-relaxed text-muted-foreground">{text}</p>
+                <div className="flex items-center justify-between border-t border-white/10 pt-6 text-sm">
+                  <span className="text-muted-foreground">{tag}</span>
+                  <span className="inline-flex items-center gap-1 font-medium">
+                    Open <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
         </div>
-
-        {/* Footer Stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-16 text-center"
-        >
-          <div className="inline-flex items-center gap-8 bg-white/5 backdrop-blur-sm rounded-full px-8 py-4 border border-white/10">
-            <div>
-              <p className="text-3xl font-bold">5,500+</p>
-              <p className="text-sm text-muted-foreground">Total Exoplanets</p>
-            </div>
-            <div className="w-px h-12 bg-white/20" />
-            <div>
-              <p className="text-3xl font-bold">3</p>
-              <p className="text-sm text-muted-foreground">Detection Methods</p>
-            </div>
-            <div className="w-px h-12 bg-white/20" />
-            <div>
-              <p className="text-3xl font-bold">92%</p>
-              <p className="text-sm text-muted-foreground">Avg. Accuracy</p>
-            </div>
-          </div>
-        </motion.div>
       </div>
-
     </div>
   );
-};
-
-export default ExoplanetDashboard;
+}

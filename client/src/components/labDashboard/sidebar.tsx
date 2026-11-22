@@ -1,17 +1,4 @@
-import {
-  Home,
-  FlaskConical,
-  User2,
-  ChevronUp,
-  Grid,
-  Mic,
-  SwordsIcon,
-  History,
-  Cloud,
-  Brain,
-  Earth,
-  Leaf,
-} from "lucide-react";
+import { Home, User2, ChevronUp, Cloud, Earth, Globe2 } from "lucide-react";
 
 import {
   Sidebar,
@@ -33,13 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { currentUser } from "@clerk/nextjs/server";
-import Image from "next/image";
-
-// Base URL of the Classifier Flask service. The classifier is a separate
-// server-rendered app that is navigated to, not called as an API.
-// Set NEXT_PUBLIC_CLASSIFIER_URL in client/.env.local (local) or in the
-// Vercel project settings (production).
-const CLASSIFIER_URL = process.env.NEXT_PUBLIC_CLASSIFIER_URL;
 
 const AppSidebar = async () => {
   const user = await currentUser();
@@ -50,7 +30,7 @@ const AppSidebar = async () => {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <img
-                src={user?.imageUrl || "/default-avatar.png"} 
+                src={user?.imageUrl || "/logo.png"} 
                 alt="User Avatar"
                 width={30}
                 height={30}
@@ -78,7 +58,7 @@ const AppSidebar = async () => {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={CLASSIFIER_URL ?? "#"}>
+                  <Link href="/lab/classifier">
                     <Earth />
                     <span>Exoplanet Classifier</span>
                   </Link>
@@ -89,6 +69,14 @@ const AppSidebar = async () => {
                   <Link href="/lab/atmosphericAnalysis">
                     <Cloud />
                     <span>Atmospheric Analysis</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/lab/exoplanet">
+                    <Globe2 />
+                    <span>3D Exoplanet Viewer</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

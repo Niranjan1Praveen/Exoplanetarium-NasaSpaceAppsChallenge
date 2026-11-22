@@ -1,2 +1,6 @@
 .DS_Store
 .vscode/
+# Local env files (examples stay tracked)
+.env
+.env.*
+!.env.example

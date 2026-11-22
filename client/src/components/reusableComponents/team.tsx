@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 const teamMembers = [
   {
     name: "Debshata Choudhury",
-    role: "Team Lead / Data Analyst",
+    role: "Team Leader / Technical Lead – Data Engineering, ML & Backend",
     image: "/team/debshata.jpeg",
   },
   {

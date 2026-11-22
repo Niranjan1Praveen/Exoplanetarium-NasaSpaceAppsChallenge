@@ -136,7 +136,7 @@ export default function Page() {
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
           }}
         >
-          <TypingAnimation className="italic font-extralight">Exoplanet Name</TypingAnimation>
+          <TypingAnimation className="italic font-extralight">A Rocky Exoplanet</TypingAnimation>
         </div>
       )}
     </div>

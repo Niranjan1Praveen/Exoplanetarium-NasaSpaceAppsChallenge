@@ -10,8 +10,7 @@ import Link from "next/link";
 import {
   SignInButton,
   SignUpButton,
-  SignedIn,
-  SignedOut,
+  Show,
   UserButton,
 } from "@clerk/nextjs";
 import Logo from "./logo";
@@ -44,15 +43,15 @@ export default function Navbar() {
 
           <div className="hidden lg:flex lg:items-center lg:gap-3">
             <NavigationMenuDemo />
-            <SignedOut>
+            <Show when="signed-out">
               <Button variant="ghost" size="sm" asChild>
                 <SignInButton />
               </Button>
               <Button size="sm" asChild>
                 <SignUpButton />
               </Button>
-            </SignedOut>
-            <SignedIn>
+            </Show>
+            <Show when="signed-in">
               <Button size="sm" asChild>
                 <Link href="/explore">
                   Explore
@@ -60,13 +59,13 @@ export default function Navbar() {
                 </Link>
               </Button>
               <UserButton />
-            </SignedIn>
+            </Show>
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <SignedIn>
+            <Show when="signed-in">
               <UserButton />
-            </SignedIn>
+            </Show>
             <button
               type="button"
               onClick={() => setIsOpen((v) => !v)}
@@ -93,22 +92,22 @@ export default function Navbar() {
               <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-4 py-4 sm:px-6">
                 <NavigationMenuDemo stacked />
                 <div className="mt-6 flex flex-col gap-2 border-t pt-4">
-                  <SignedOut>
+                  <Show when="signed-out">
                     <Button variant="ghost" className="w-full" asChild>
                       <SignInButton />
                     </Button>
                     <Button className="w-full" asChild>
                       <SignUpButton />
                     </Button>
-                  </SignedOut>
-                  <SignedIn>
+                  </Show>
+                  <Show when="signed-in">
                     <Button className="w-full" asChild>
                       <Link href="/explore">
                         Explore
                         <ArrowRight className="ml-1 size-4" />
                       </Link>
                     </Button>
-                  </SignedIn>
+                  </Show>
                 </div>
               </div>
             </motion.div>
