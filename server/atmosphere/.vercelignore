@@ -1,0 +1,5 @@
+# Not needed at runtime (app.py returns JSON only)
+templates/
+static/
+m.py
+__pycache__/

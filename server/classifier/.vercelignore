@@ -1,0 +1,6 @@
+# Not needed at runtime; keeps the Vercel function small
+data/
+training/
+__pycache__/
+README.md
+models/ensemble_probs.npy

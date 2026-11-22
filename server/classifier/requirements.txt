@@ -16,7 +16,7 @@ pandas==2.3.3
 numpy==2.3.4
 joblib==1.5.3
 scikit-learn==1.7.0
-xgboost==3.0.5
+xgboost-cpu==3.0.5  # CPU-only build of xgboost (same module), small enough for Vercel
 lightgbm==4.7.0
 
 # Production WSGI server (not imported by app.py; used by the start command).
