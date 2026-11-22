@@ -103,12 +103,15 @@ An **interactive 3D timeline** showcasing major telescope missions from *Hubble 
 
 | Layer | Technologies |
 |-------|-------------|
-| **Frontend** | Next.js · TypeScript · Tailwind CSS · ShadCN UI · Three.js · Plotly.js · Framer Motion |
-| **Backend** | Flask · Flask-CORS |
-| **Authentication** | Clerk Auth |
-| **AI & ML** | CNN · XGBoost · LightGBM · PCA / t-SNE · K-Means · DBSCAN · Isolation Forest · Autoencoders |
-| **APIs & Add-Ons** | NASA Exoplanet Archive API · WebGL (3D Rendering) |
-| **Deployment** | Vercel (Frontend) · Render (Backend) |
+| **Frontend** | Next.js 15 (Turbopack) · React 19 · TypeScript · Tailwind CSS · ShadCN UI · Framer Motion |
+| **3D & Charts** | Three.js · React Three Fiber · Drei · Recharts · Plotly.js |
+| **Backend** | Python 3.12 · Flask · Flask-CORS (Atmosphere API + Classifier) · Next.js API routes |
+| **Database** | Supabase (PostgreSQL) with Row Level Security — `predictions`, `drawings`, `planet_views` |
+| **Authentication** | Clerk (Supabase third-party auth via Clerk session tokens) |
+| **AI & ML** | XGBoost · LightGBM ensemble · scikit-learn · pandas · NumPy · Google Gemini (drawing classifier) |
+| **Research** | Jupyter notebook — EDA → Feature Engineering → Model comparison with metrics |
+| **Data** | NASA Exoplanet Archive |
+| **Deployment** | Vercel (frontend + both Flask services as Python functions) |
 
 ---
 
@@ -116,7 +119,7 @@ An **interactive 3D timeline** showcasing major telescope missions from *Hubble 
 
 | Member | Role |
 |--------|------|
-| **Debshata Choudhury** | Team Lead / Data Analyst |
+| **Debshata Choudhury** | Team Leader / Technical Lead – Data Engineering, ML & Backend |
 | **Niranjan Praveen** | Frontend Engineer / Version Control Specialist |
 | **Vaibhav Jain** | Frontend Engineer / API Engineer |
 | **Abhishek Chaubey** | 3D Visualization Specialist |
@@ -172,7 +175,15 @@ NEXT_PUBLIC_ATMOSPHERE_URL=http://localhost:5000
 NEXT_PUBLIC_CLASSIFIER_URL=http://127.0.0.1:5003
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 CLERK_SECRET_KEY=sk_test_xxx
-NEXT_PUBLIC_GEMINI_API_KEY=xxx
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_KEY=sb_publishable_xxx
+```
+
+Gemini keys are server-only and go in `client/.env` (never `NEXT_PUBLIC_`):
+
+```bash
+GEMINI_API_KEYS=key1,key2
+GEMINI_MODELS=gemini-2.5-flash
 ```
 
 #### 1️⃣ Terminal 1 — Atmosphere API → http://localhost:5000
